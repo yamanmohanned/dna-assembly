@@ -42,7 +42,7 @@ Independent checks of these numbers:
 `make check` exit code 0:
 - `ruff check`: all checks passed; `ruff format --check`: 21 files formatted
 - `mypy genomeasm tests`: no issues in 12 source files
-- `pytest`: **124 passed** (27 from Phase 0, 97 new), 7 s
+- `pytest`: **126 passed** (27 from Phase 0, 99 new), 8 s
 - Coverage of `genomeasm`: 97 % (364 statements, 12 not run). Not exercised by tests: the `if __name__ == "__main__"` guards, the `cards` error path in the CLI, and three rarely reached branches in `io.py`.
 
 Test areas (new in this phase):
@@ -57,6 +57,7 @@ Test areas (new in this phase):
 
 ## Bugs found and fixed during the phase (R10: investigate surprises)
 - Biopython's "email not specified" warning was still printed because its message starts with a newline and my filter pattern used `.`. Fixed with `(?s)` and a test that fails if the warning leaks.
+- **Line endings (found after the first commit).** On Windows `Path.write_text` wrote the data cards with `\r\n`, and git's `text=auto` would also have rewritten the checksummed FASTA files on a Windows checkout, which would make `SHA256SUMS` fail on a fresh clone. Fixed in commit `58a488f`: `data/raw/** -text` in `.gitattributes`, cards written with `newline="\n"`, and a test that fails if any saved file contains a carriage return. `git ls-files --eol data` confirms LF in the index and the working tree.
 - I had assumed NCBI's summary has a `status` field. The real record has none (`status` came back `null`). The cached metadata now stores `sourcedb` and `completeness` instead, and the cards show them. Both genomes were downloaded again with the corrected code.
 
 ## Not verified (honest gaps)
@@ -80,5 +81,5 @@ Test areas (new in this phase):
 
 ## Test output
 ```
-124 passed in 7.07s     (make check: ruff, ruff format --check, mypy, pytest all exit 0)
+126 passed in 7.65s     (make check: ruff, ruff format --check, mypy, pytest all exit 0)
 ```
