@@ -1,0 +1,18 @@
+# Direct dependencies of the project (loose). The exact resolved set is in requirements.lock.
+# Stack from docs/MASTER_PROMPT.md. Add a package here only when a phase needs it.
+numpy
+numba
+pandas
+scipy
+biopython
+plotly
+kaleido
+matplotlib
+streamlit
+pyyaml
+python-pptx
+pytest
+pytest-cov
+hypothesis
+ruff
+mypy
