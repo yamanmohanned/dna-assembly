@@ -1,0 +1,63 @@
+{
+  "accession": "NC_001422.1",
+  "genome_length": 5386,
+  "simulation": {
+    "coverage": 10.0,
+    "read_length": {
+      "kind": "fixed",
+      "low": 100,
+      "high": 100,
+      "mu": 0.0,
+      "sigma": 0.0
+    },
+    "substitution_rate": 0.0,
+    "insertion_rate": 0.0,
+    "deletion_rate": 0.0,
+    "seed": 1
+  },
+  "instance": {
+    "n_input_reads": 539,
+    "n_duplicates_removed": 23,
+    "n_contained_removed": 0,
+    "n_reads": 516,
+    "min_overlap": 10,
+    "tolerance": 0.0,
+    "total_read_length": 51600,
+    "n_overlap_edges": 4567
+  },
+  "order": "true",
+  "fitness_F": 46235,
+  "merged_length_L": 5365,
+  "n_contigs": 1,
+  "contig_lengths": [
+    5365
+  ],
+  "contigs_exact_in_genome": [
+    true
+  ],
+  "provenance": {
+    "config_hash": "c69ce83bc9bb21cecc1944bc0801177de5b31b400e1920db7cce5514df1e2cc2",
+    "git": {
+      "commit": "460ea19aa50ec69e15e3c02053c2de03db9bb2de",
+      "dirty": false
+    },
+    "seed": 1,
+    "library_versions": {
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "pandas": "3.1.0",
+      "numba": "0.68.0",
+      "biopython": "1.88",
+      "matplotlib": "3.11.2",
+      "plotly": "7.1.0",
+      "PyYAML": "6.0.3"
+    },
+    "machine": {
+      "platform": "Windows-10-10.0.19045-SP0",
+      "processor": "Intel64 Family 6 Model 60 Stepping 3, GenuineIntel",
+      "python": "3.12.7",
+      "cpu_count": 8
+    },
+    "timestamp_utc": "2026-10-22T21:25:36+00:00"
+  }
+}

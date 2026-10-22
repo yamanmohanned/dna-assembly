@@ -1,0 +1,11 @@
+{
+  "figure": "fig03_overlap_heatmap",
+  "caption": "Overlap matrix of the 69 simulated error-free reads that start in the first 1500 bases of phiX174, sorted by their true start. Entry (i, j) is the longest suffix of read i that equals a prefix of read j (minimum overlap 9); white means no overlap. The band lies above the diagonal only: overlaps are directional, ov(i, j) is not ov(j, i).",
+  "source": "results/phase3/overlap_validation.json",
+  "config_hash": "fa46e30d56b8e55faec02341b39eab88d1d65cc4497095b937389c5f0729775f",
+  "files": [
+    "fig03_overlap_heatmap.svg",
+    "fig03_overlap_heatmap.pdf",
+    "fig03_overlap_heatmap.png"
+  ]
+}

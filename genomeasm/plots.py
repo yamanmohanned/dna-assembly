@@ -332,6 +332,7 @@ def figure_overlap_length_distribution(results: dict[str, Any]) -> tuple[Figure,
             label=f"minimum overlap tau = {panel['tau']}",
         )
         ax.set_yscale("log")
+        ax.set_ylim(top=float(max(true.max(), other.max())) * 25)  # headroom for the legend
         ax.set_xlabel("Overlap length k (bases)")
         ax.set_ylabel("Number of edges per run (log scale)")
         name = labels.get(panel["accession"], panel["accession"])

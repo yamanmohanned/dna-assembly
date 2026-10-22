@@ -231,6 +231,103 @@ terms:
       Checks in this project pass when the observed value is within a stated number of standard
       errors of the expected value.
 
+  - term: overlap (suffix-prefix)
+    phase: 3
+    plain: >-
+      How far the end of one read matches the beginning of another, like the matching edge of two
+      jigsaw pieces. It depends on the direction: A then B is not the same as B then A.
+    precise: >-
+      ov(i, j) is the largest k with tau <= k < min(len_i, len_j) such that the last k letters of
+      read i equal the first k letters of read j; 0 if there is none.
+
+  - term: minimum overlap (tau)
+    phase: 3
+    plain: >-
+      The shortest matching edge we trust. Very short matches happen by luck between reads that
+      have nothing to do with each other.
+    precise: >-
+      The parameter tau in the overlap definition. The project picks the smallest tau for which
+      fewer than one chance overlap is expected among n(n-1) ordered pairs in a random-sequence
+      model, namely below n(n-1) * (4/3) * 4^(-tau).
+
+  - term: substring-free reads
+    phase: 3
+    plain: >-
+      A set of reads where no read is a copy of another or sits completely inside another, because
+      such reads add no new letters.
+    precise: >-
+      Duplicates are removed (the first copy is kept) and every read that is a substring of a longer
+      read is removed. The numbers removed are always recorded.
+
+  - term: Hamming distance and error-tolerant overlap
+    phase: 3
+    plain: >-
+      The Hamming distance counts the places where two equally long texts differ. An
+      error-tolerant overlap accepts a matching edge that has a few typing mistakes in it.
+    precise: >-
+      The largest k >= tau whose suffix and prefix differ in at most floor(tolerance * k) places; its
+      score is k itself. Insertions and deletions are not handled.
+
+  - term: permutation (solution)
+    phase: 3
+    plain: A list that puts every read in some order, each read used exactly once.
+    precise: >-
+      A bijection pi of the n reads. The search space has n! elements; a solution is valid exactly
+      when it is a permutation.
+
+  - term: objective (fitness) function F and merged length L
+    phase: 3
+    plain: >-
+      The score of an order: how many letters we save by gluing neighbouring reads. Bigger is better.
+      Equivalently, how short the glued text becomes.
+    precise: >-
+      F(pi) = sum of ov(pi_k, pi_(k+1)) over k = 1..n-1, to be maximised. L(pi) = (sum of all read
+      lengths) - F(pi), the length of the merged sequence, to be minimised.
+
+  - term: travelling salesman problem (TSP, ATSP)
+    phase: 3
+    plain: >-
+      Find the cheapest round trip through a list of towns that visits each town once. In the
+      asymmetric version, the price from A to B can differ from the price from B to A.
+    precise: >-
+      Find a Hamiltonian cycle of minimum total cost in a complete directed graph. Here town j after
+      town i costs len_j - ov(i, j), plus a dummy node so that the cycle through all reads costs
+      exactly L(pi).
+
+  - term: dummy node
+    phase: 3
+    plain: >-
+      An extra imaginary read, a start-and-finish point, that turns the chain of reads into a
+      closed loop.
+    precise: >-
+      Node 0 with c(0, j) = len_j and c(i, 0) = 0. It is what makes the cycle cost equal to L.
+
+  - term: TSPLIB file
+    phase: 3
+    plain: >-
+      A standard text file format for travelling-salesman problems that many solvers, such as LKH-3,
+      can read.
+    precise: >-
+      A file with TYPE: ATSP, EDGE_WEIGHT_TYPE: EXPLICIT, EDGE_WEIGHT_FORMAT: FULL_MATRIX and the
+      integer cost matrix in the EDGE_WEIGHT_SECTION.
+
+  - term: layout and consensus
+    phase: 3
+    plain: >-
+      Layout: slide each read along so it sits on top of the one before it. Consensus: where several
+      reads lie on top of each other, let them vote on each letter and keep the most common one.
+    precise: >-
+      offset(pi_(k+1)) = offset(pi_k) + len(pi_k) - ov(pi_k, pi_(k+1)); a contig ends where an
+      overlap is 0. Each column takes the most frequent letter, ties going to the first of A, C, G, T.
+
+  - term: true ordering
+    phase: 3
+    plain: >-
+      The order the reads really have along the genome, which we know because we simulated them.
+    precise: >-
+      The reads sorted by their true start position. Its fitness F is the reference line against
+      which the solvers are compared.
+
   - term: provenance
     phase: 2
     plain: The label on a result that says exactly how and when it was made.

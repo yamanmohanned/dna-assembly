@@ -1,0 +1,11 @@
+{
+  "figure": "fig02_overlap_length_distribution",
+  "caption": "Overlap lengths between simulated error-free reads of length 100. Blue: pairs whose real positions overlap by that many bases. Red: all other edges, which are chance matches or repeats. Dashed line: the minimum overlap tau chosen by the random-sequence bound. phiX174: 4509 true and 0.8 other edges per run; lambda: 38232 true and 1.6 other edges per run.",
+  "source": "results/phase3/overlap_validation.json",
+  "config_hash": "fa46e30d56b8e55faec02341b39eab88d1d65cc4497095b937389c5f0729775f",
+  "files": [
+    "fig02_overlap_length_distribution.svg",
+    "fig02_overlap_length_distribution.pdf",
+    "fig02_overlap_length_distribution.png"
+  ]
+}
