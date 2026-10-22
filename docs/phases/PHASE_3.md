@@ -119,7 +119,7 @@ Building the whole overlap graph (preprocessing plus prefix-index overlaps) take
 - Decision D-025 stands: the LKH-3 call is made at the start of Phase 4. The TSPLIB writer is ready.
 
 ## Open risks
-- **R-02, LKH-3: still open** (not retried again today beyond the end of Phase 2; `tools/` is empty). Needed now at the start of Phase 4.
+- **R-02, LKH-3: still open.** Retried at the end of this phase: both official hosts still time out (curl exit 28) and `tools/` is empty. The decision is due at the start of Phase 4 (D-025).
 - R-01 (schedule): Phase 3 is done about 1.5 days before the end of its planned window (planned end: Oct 24, 80% of the day); that is the slack carried into Phase 4.
 - Q3 and Q5 (slide software, presenting laptop) unanswered; neither blocks Phase 4.
 
