@@ -1,0 +1,9 @@
+# Genomes used by the project: real NCBI RefSeq records, always named by versioned accession.
+# Lengths, checksums and GC content are NOT stored here. They come from the downloaded files
+# (data/raw/) and the data cards (data/processed/), so nothing is typed by hand (rule R3).
+# Which genome is used for tuning and which for evaluation is decided in Phase 5.
+genomes:
+  - accession: NC_001422.1
+    name: phiX174
+  - accession: NC_001416.1
+    name: lambda

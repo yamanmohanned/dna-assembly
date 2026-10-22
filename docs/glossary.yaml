@@ -1,0 +1,114 @@
+# Single source of truth for definitions. The report, the slides and the application read this
+# file instead of retyping definitions (master prompt, Phase 6). Every entry has a plain-language
+# explanation first ("plain", written for a 13-year-old) and then the precise definition.
+# New terms are added in the phase where they first appear.
+terms:
+  - term: DNA
+    phase: 1
+    plain: >-
+      The instruction book of a living thing, written as a very long chain of four kinds of
+      building blocks.
+    precise: >-
+      A molecule made of two strands of nucleotides. Each nucleotide carries one of four bases:
+      adenine (A), cytosine (C), guanine (G) or thymine (T).
+
+  - term: base (nucleotide letter)
+    phase: 1
+    plain: One of the four letters, A, C, G or T, that spell out DNA.
+    precise: >-
+      A single symbol of the alphabet {A, C, G, T}. In this project a sequence is a string over
+      this alphabet.
+
+  - term: genome
+    phase: 1
+    plain: The complete text of the instruction book of one organism or virus.
+    precise: >-
+      The full DNA sequence of an organism or virus. Here, one string over {A, C, G, T} of
+      length G, taken from an NCBI record.
+
+  - term: NCBI
+    phase: 1
+    plain: A large public library in the United States that stores DNA sequences for scientists.
+    precise: >-
+      The National Center for Biotechnology Information. It hosts GenBank, RefSeq and the
+      Entrez search and download system.
+
+  - term: accession and version
+    phase: 1
+    plain: >-
+      The catalogue number of a sequence in the library. The number after the dot says which
+      edition it is, so the same number always gives the same letters.
+    precise: >-
+      An identifier such as NC_001422.1. The part before the dot names the record, the part
+      after it is the version; a changed sequence gets a new version number.
+
+  - term: RefSeq
+    phase: 1
+    plain: A shelf in the NCBI library with carefully checked reference copies.
+    precise: >-
+      NCBI's curated collection of reference sequences. Accessions starting with NC_ are
+      RefSeq records of complete molecules.
+
+  - term: Entrez
+    phase: 1
+    plain: The website service that lets a program ask the NCBI library for a sequence.
+    precise: >-
+      The NCBI search and retrieval system. Programs use its E-utilities (for example
+      esummary and efetch) through Biopython's Bio.Entrez module.
+
+  - term: FASTA
+    phase: 1
+    plain: >-
+      A very simple text format for DNA: one line that starts with ">" and names the sequence,
+      followed by lines of letters.
+    precise: >-
+      A text format with a header line beginning with ">" followed by one or more lines of
+      sequence. Parsing rules used here are in genomeasm/io.py and docs/DATA_LOADING.md.
+
+  - term: parser
+    phase: 1
+    plain: A small program that reads a file and checks that it follows the rules of its format.
+    precise: >-
+      A function that turns text into structured data and rejects text that violates the
+      format. genomeasm.io.parse_fasta is the FASTA parser.
+
+  - term: GC content
+    phase: 1
+    plain: Out of all the letters, the share that are G or C.
+    precise: >-
+      (number of G + number of C) / sequence length, a number between 0 and 1, usually shown
+      as a percentage.
+
+  - term: ambiguity code (IUPAC)
+    phase: 1
+    plain: >-
+      A letter that means "not sure which one", for example N for "any of the four". Real data
+      sometimes contains it where the machine could not decide.
+    precise: >-
+      An IUPAC nucleotide symbol other than A, C, G, T: R, Y, S, W, K, M, B, D, H, V or N.
+      This project rejects genomes that contain any (decision D-016) rather than guessing.
+
+  - term: checksum (SHA-256)
+    phase: 1
+    plain: >-
+      A fingerprint of a file. If even one letter changes, the fingerprint changes completely,
+      so we can tell that a file is untouched.
+    precise: >-
+      The 256-bit output of the SHA-256 hash function, written as 64 hexadecimal digits. The
+      same bytes always give the same value.
+
+  - term: cache
+    phase: 1
+    plain: >-
+      A saved copy kept close by, so we do not have to download it again and can work without
+      internet.
+    precise: >-
+      Here, the folder data/raw/ holding the FASTA file, its NCBI metadata and SHA256SUMS for
+      each genome. Loading reads only the cache unless a download is explicitly requested.
+
+  - term: data card
+    phase: 1
+    plain: A one-page fact sheet about a data set, like the label on a food package.
+    precise: >-
+      A JSON and Markdown summary generated from the cached files: accession, version,
+      organism, length, base counts, GC content and checksums.

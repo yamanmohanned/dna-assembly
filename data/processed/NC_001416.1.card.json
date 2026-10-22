@@ -1,0 +1,39 @@
+{
+  "accession": "NC_001416",
+  "accession_version": "NC_001416.1",
+  "base_counts": {
+    "A": 12334,
+    "C": 11362,
+    "G": 12820,
+    "T": 11986
+  },
+  "downloaded_utc": "2026-10-22T15:48:32+00:00",
+  "fasta_description": "Enterobacteria phage lambda, complete genome",
+  "file": "NC_001416.1.fasta",
+  "file_sha256": "78a78913d3585570fa28b7cec05e4fcf067c1aaa3740d37a377f2babda70618c",
+  "gc_count": 24182,
+  "gc_fraction": 0.4985773782524432,
+  "gc_percent": 49.85773782524432,
+  "length_bp": 48502,
+  "length_matches_ncbi": true,
+  "lowercase_symbols_in_file": 0,
+  "molecule_type": "dna",
+  "ncbi_completeness": "complete",
+  "ncbi_reported_length_bp": 48502,
+  "ncbi_source_database": "refseq",
+  "ncbi_update_date": "2023/01/11",
+  "non_acgt_symbols": 0,
+  "organism": "Escherichia phage Lambda",
+  "provenance": {
+    "biopython_version": "1.88",
+    "database": "nuccore",
+    "email_sent": "no",
+    "entrez_tool": "genomeasm"
+  },
+  "schema_version": 1,
+  "sequence_sha256": "36432a40f602258d19ae7c8152ddbc30390b559f2859c01d7047c77b048c71b3",
+  "strand_reported_by_ncbi": "ds",
+  "title": "Enterobacteria phage lambda, complete genome",
+  "topology_reported_by_ncbi": "linear",
+  "version": 1
+}

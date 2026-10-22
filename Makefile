@@ -24,6 +24,7 @@ help:
 venv:
 	$(PYTHON) -m venv .venv
 	$(PY) -m pip install -r requirements.lock
+	$(PY) -m pip install -e . --no-deps
 
 test:
 	$(PY) -m pytest
@@ -35,9 +36,9 @@ lint:
 format:
 	$(PY) -m ruff format .
 
-# Phase 0: only tests exist. Phase 1 extends this to genomeasm and app.
+# Phase 1: package and tests. The app folder is added when it has code (Phase 6).
 typecheck:
-	$(PY) -m mypy tests
+	$(PY) -m mypy genomeasm tests
 
 check: lint typecheck test
 

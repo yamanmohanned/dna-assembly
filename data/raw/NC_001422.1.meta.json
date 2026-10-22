@@ -1,0 +1,55 @@
+{
+  "accession_version": "NC_001422.1",
+  "completeness": "complete",
+  "downloaded_utc": "2026-10-22T15:48:31+00:00",
+  "esummary": {
+    "accessionversion": "NC_001422.1",
+    "assemblyacc": "J02482",
+    "assemblygi": 216019,
+    "biomol": "genomic",
+    "caption": "NC_001422",
+    "completeness": "complete",
+    "createdate": "1993/04/28",
+    "extra": "gi|9626372|ref|NC_001422.1|",
+    "flags": 768,
+    "geneticcode": "11",
+    "genome": "genomic",
+    "gi": 9626372,
+    "moltype": "dna",
+    "organism": "Escherichia phage phiX174",
+    "oslt": {
+      "indexed": true,
+      "value": "NC_001422.1"
+    },
+    "projectid": "485481",
+    "properties": {
+      "na": "1",
+      "value": "1"
+    },
+    "slen": 5386,
+    "sourcedb": "refseq",
+    "statistics": "",
+    "strand": "ss",
+    "subname": "BACTERIOPHAGE PHI-X174",
+    "subtype": "old_name",
+    "taxid": 2886930,
+    "term": "9626372",
+    "title": "Escherichia phage phiX174, complete genome",
+    "topology": "circular",
+    "uid": "9626372",
+    "updatedate": "2023/01/11"
+  },
+  "moltype": "dna",
+  "ncbi_reported_length": 5386,
+  "ncbi_uid": "9626372",
+  "organism": "Escherichia phage phiX174",
+  "provenance": {
+    "biopython_version": "1.88",
+    "database": "nuccore",
+    "email_sent": "no",
+    "entrez_tool": "genomeasm"
+  },
+  "source": "NCBI nuccore via Entrez (esummary + efetch)",
+  "source_database": "refseq",
+  "title": "Escherichia phage phiX174, complete genome"
+}

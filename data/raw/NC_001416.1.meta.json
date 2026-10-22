@@ -1,0 +1,55 @@
+{
+  "accession_version": "NC_001416.1",
+  "completeness": "complete",
+  "downloaded_utc": "2026-10-22T15:48:32+00:00",
+  "esummary": {
+    "accessionversion": "NC_001416.1",
+    "assemblyacc": "J02459",
+    "assemblygi": 215104,
+    "biomol": "genomic",
+    "caption": "NC_001416",
+    "completeness": "complete",
+    "createdate": "1993/04/28",
+    "extra": "gi|9626243|ref|NC_001416.1||gnl|NCBI_GENOMES|10119",
+    "flags": 512,
+    "geneticcode": "11",
+    "genome": "genomic",
+    "gi": 9626243,
+    "moltype": "dna",
+    "organism": "Escherichia phage Lambda",
+    "oslt": {
+      "indexed": true,
+      "value": "NC_001416.1"
+    },
+    "projectid": "485481",
+    "properties": {
+      "na": "1",
+      "value": "1"
+    },
+    "slen": 48502,
+    "sourcedb": "refseq",
+    "statistics": "",
+    "strand": "ds",
+    "subname": "Escherichia coli|Bacteriophage lambda",
+    "subtype": "host|old_name",
+    "taxid": 2681611,
+    "term": "9626243",
+    "title": "Enterobacteria phage lambda, complete genome",
+    "topology": "linear",
+    "uid": "9626243",
+    "updatedate": "2023/01/11"
+  },
+  "moltype": "dna",
+  "ncbi_reported_length": 48502,
+  "ncbi_uid": "9626243",
+  "organism": "Escherichia phage Lambda",
+  "provenance": {
+    "biopython_version": "1.88",
+    "database": "nuccore",
+    "email_sent": "no",
+    "entrez_tool": "genomeasm"
+  },
+  "source": "NCBI nuccore via Entrez (esummary + efetch)",
+  "source_database": "refseq",
+  "title": "Enterobacteria phage lambda, complete genome"
+}

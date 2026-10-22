@@ -1,4 +1,33 @@
-# Tool configuration only. The package metadata ([project]) is added in Phase 1, when genomeasm gets code.
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "genomeasm"
+version = "0.1.0"
+description = "DNA fragment assembly as an asymmetric TSP, with a learning-based ALNS"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "numba",
+    "pandas",
+    "scipy",
+    "biopython",
+    "pyyaml",
+    "matplotlib",
+    "plotly",
+]
+
+[project.optional-dependencies]
+app = ["streamlit", "kaleido"]
+report = ["python-pptx"]
+dev = ["pytest", "pytest-cov", "hypothesis", "ruff", "mypy"]
+
+[project.scripts]
+genomeasm = "genomeasm.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["genomeasm*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

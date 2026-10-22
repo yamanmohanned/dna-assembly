@@ -1,0 +1,39 @@
+{
+  "accession": "NC_001422",
+  "accession_version": "NC_001422.1",
+  "base_counts": {
+    "A": 1291,
+    "C": 1157,
+    "G": 1254,
+    "T": 1684
+  },
+  "downloaded_utc": "2026-10-22T15:48:31+00:00",
+  "fasta_description": "Escherichia phage phiX174, complete genome",
+  "file": "NC_001422.1.fasta",
+  "file_sha256": "caa155c83967cc080f4f188f14f1f28c18d77448e87c3d00d3579ed348f4de2a",
+  "gc_count": 2411,
+  "gc_fraction": 0.44764203490531007,
+  "gc_percent": 44.76420349053101,
+  "length_bp": 5386,
+  "length_matches_ncbi": true,
+  "lowercase_symbols_in_file": 0,
+  "molecule_type": "dna",
+  "ncbi_completeness": "complete",
+  "ncbi_reported_length_bp": 5386,
+  "ncbi_source_database": "refseq",
+  "ncbi_update_date": "2023/01/11",
+  "non_acgt_symbols": 0,
+  "organism": "Escherichia phage phiX174",
+  "provenance": {
+    "biopython_version": "1.88",
+    "database": "nuccore",
+    "email_sent": "no",
+    "entrez_tool": "genomeasm"
+  },
+  "schema_version": 1,
+  "sequence_sha256": "97038c7e1edea2297667d7f0426ba942b322c74cb30e072ec66ba47f9c0448d0",
+  "strand_reported_by_ncbi": "ss",
+  "title": "Escherichia phage phiX174, complete genome",
+  "topology_reported_by_ncbi": "circular",
+  "version": 1
+}
