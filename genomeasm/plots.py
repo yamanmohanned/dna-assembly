@@ -308,6 +308,89 @@ def figure_validation_curves(results: dict[str, Any]) -> tuple[Figure, str]:
     return fig, caption
 
 
+def figure_overlap_length_distribution(results: dict[str, Any]) -> tuple[Figure, str]:
+    """Figure 2: lengths of the overlaps found, split into true neighbours and other pairs."""
+    apply_style()
+    labels = _labels(results)
+    panels = results["figure_data"]["overlap_length"]
+    fig, axes = plt.subplots(1, len(panels), figsize=(6.2 * len(panels), 4.4), squeeze=False)
+    summary: list[str] = []
+    for ax, panel in zip(axes[0], panels, strict=True):
+        runs = panel["runs"]
+        true = np.array(panel["hist_true"], dtype=float) / runs
+        other = np.array(panel["hist_other"], dtype=float) / runs
+        k = np.arange(true.size)
+        ax.bar(k, np.where(true > 0, true, np.nan), width=0.9, color=OKABE_ITO["blue"],
+               label="true neighbours (positions overlap)")  # fmt: skip
+        ax.bar(k, np.where(other > 0, other, np.nan), width=0.9, color=OKABE_ITO["vermillion"],
+               label="other pairs (chance or repeat)")  # fmt: skip
+        ax.axvline(
+            panel["tau"],
+            color="#444444",
+            lw=1,
+            ls="--",
+            label=f"minimum overlap tau = {panel['tau']}",
+        )
+        ax.set_yscale("log")
+        ax.set_xlabel("Overlap length k (bases)")
+        ax.set_ylabel("Number of edges per run (log scale)")
+        name = labels.get(panel["accession"], panel["accession"])
+        ax.set_title(f"{name}, c = {panel['coverage']:g}, mean of {runs} runs")
+        ax.legend(fontsize=9, loc="upper right")
+        summary.append(f"{name}: {true.sum():.0f} true and {other.sum():.1f} other edges per run")
+    fig.tight_layout(rect=(0, 0.03, 1, 1))
+    caption = (
+        "Overlap lengths between simulated error-free reads of length 100. Blue: pairs whose real "
+        "positions overlap by that many bases. Red: all other edges, which are chance matches or "
+        "repeats. Dashed line: the minimum overlap tau chosen by the random-sequence bound. "
+        + "; ".join(summary)
+        + "."
+    )
+    return fig, caption
+
+
+def figure_overlap_heatmap(results: dict[str, Any]) -> tuple[Figure, str]:
+    """Figure 3: overlap matrix of a small set of reads sorted by their true position."""
+    apply_style()
+    data = results["figure_data"]["heatmap"]
+    labels = _labels(results)
+    matrix = np.array(data["matrix"], dtype=float)
+    shown = np.where(matrix > 0, matrix, np.nan)
+    fig, ax = plt.subplots(figsize=(6.4, 5.6))
+    image = ax.imshow(shown, cmap="viridis", origin="upper", interpolation="nearest")
+    colorbar = fig.colorbar(image, ax=ax)
+    colorbar.set_label("Overlap length ov(i, j) (bases)")
+    ax.set_xlabel("Second read j (reads sorted by true position)")
+    ax.set_ylabel("First read i (reads sorted by true position)")
+    ax.grid(False)
+    name = labels.get(data["accession"], data["accession"])
+    ax.set_title(f"{name}: overlaps of {data['n_shown']} reads, c = {data['coverage']:g}")
+    fig.tight_layout(rect=(0, 0.03, 1, 1))
+    caption = (
+        f"Overlap matrix of the {data['n_shown']} simulated error-free reads that start in the "
+        f"first {results['config']['figure_heatmap']['max_start']} bases of {name}, sorted by "
+        "their true start. Entry (i, j) is the longest suffix of read i that equals a prefix of "
+        f"read j (minimum overlap {data['tau']}); white means no overlap. The band lies above the "
+        "diagonal only: overlaps are directional, ov(i, j) is not ov(j, i)."
+    )
+    return fig, caption
+
+
+def make_phase3_figures(results: dict[str, Any], out_dir: Path, source: str) -> list[Path]:
+    """Create and save the Phase 3 figures from an overlap validation results dictionary."""
+    config_hash = results["provenance"]["config_hash"]
+    paths: list[Path] = []
+    for stem, builder in (
+        ("fig02_overlap_length_distribution", figure_overlap_length_distribution),
+        ("fig03_overlap_heatmap", figure_overlap_heatmap),
+    ):
+        fig, caption = builder(results)
+        paths += save_figure(
+            fig, stem, out_dir, caption=caption, source=source, config_hash=config_hash
+        )
+    return paths
+
+
 def make_phase2_figures(results: dict[str, Any], out_dir: Path, source: str) -> list[Path]:
     """Create and save the Phase 2 figures from a validation results dictionary."""
     config_hash = results["provenance"]["config_hash"]

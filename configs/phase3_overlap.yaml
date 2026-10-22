@@ -1,0 +1,42 @@
+# Phase 3: validation of the overlap graph, the objective identities and layout/consensus against
+# the ground truth of simulated reads. Pass/fail rules are written here BEFORE the run.
+name: phase3_overlap_validation
+seed: 20261023
+
+genomes: [NC_001422.1, NC_001416.1]
+genome_labels:
+  NC_001422.1: phiX174
+  NC_001416.1: lambda
+
+read_length: 100
+coverages: [5, 10, 20]
+replicates: 5
+# Minimum overlap tau: fixed values, and "auto" = genomeasm.overlap.recommend_min_overlap (the
+# smallest tau for which fewer than 1 chance overlap is expected in a random-sequence model).
+min_overlaps: [8, 10, 12, 16, 20, 30, auto]
+# Building the dense (n+1) x (n+1) cost matrix for the cycle-cost identity needs 8 bytes per entry;
+# above this many reads the identity is only checked through the layout and the plain merge.
+cost_matrix_max_reads: 5000
+
+# Figures: which runs are drawn (the "auto" setting, first replicate for the heatmap)
+figure_overlap_length: {coverage: 10}
+figure_heatmap: {genome: NC_001422.1, coverage: 5, max_start: 1500}
+
+# Equivalence checks of the fast overlap code on the first phiX174 read set (coverage 5)
+equivalence: {genome: NC_001422.1, coverage: 5, min_overlap: 12}
+
+# Noise: why the error-tolerant overlap exists. Substitution errors destroy exact overlaps.
+noise:
+  genome: NC_001422.1
+  coverage: 10
+  substitution_rate: 0.01
+  min_overlap: 20
+  tolerance: 0.05
+  replicates: 5
+
+tolerances:
+  # Poisson model of the number of differences inside a true overlap of length k: both reads carry
+  # errors, so about 2 * 0.01 * k differences (1.4 at k = 70). Exact overlaps survive only with
+  # zero differences, tolerant overlaps with at most floor(0.05 * k) of them.
+  noise_exact_recall_max: 0.60      # exact overlaps must lose at least 40% of the true overlaps
+  noise_tolerant_recall_min: 0.85   # tolerant overlaps must recover at least 85%

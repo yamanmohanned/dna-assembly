@@ -15,6 +15,7 @@ import yaml
 
 from genomeasm import __version__, provenance
 from genomeasm.datacard import write_cards
+from genomeasm.instance import AssemblyInstance
 from genomeasm.io import (
     GenomeError,
     GenomeNotCachedError,
@@ -22,7 +23,8 @@ from genomeasm.io import (
     fetch_from_ncbi,
     load_genome,
 )
-from genomeasm.plots import make_phase2_figures
+from genomeasm.overlap_validation import run_overlap_validation
+from genomeasm.plots import make_phase2_figures, make_phase3_figures
 from genomeasm.sim_validation import run_validation
 from genomeasm.simulate import ReadLengthModel, SimulationConfig, simulate_reads
 
@@ -30,6 +32,7 @@ DEFAULT_CONFIG = Path("configs/genomes.yaml")
 DEFAULT_RAW_DIR = Path("data/raw")
 DEFAULT_PROCESSED_DIR = Path("data/processed")
 DEFAULT_READS_DIR = Path("data/processed/reads")
+DEFAULT_ASSEMBLY_DIR = Path("data/processed/assemblies")
 
 
 def load_accessions(config_path: Path) -> list[str]:
@@ -177,10 +180,124 @@ def _cmd_sim_figures(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_overlap_validate(args: argparse.Namespace) -> int:
+    cfg = yaml.safe_load(Path(args.config).read_text(encoding="utf-8"))
+    wanted = list(
+        dict.fromkeys(
+            [*cfg["genomes"], cfg["equivalence"]["genome"], cfg["noise"]["genome"]],
+        )
+    )
+    try:
+        genomes = {acc: load_genome(acc, args.raw_dir).genome for acc in wanted}
+    except GenomeError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    results = run_overlap_validation(cfg, genomes, repo_dir=Path.cwd(), progress=print)
+    results_path = Path(args.results_dir) / "overlap_validation.json"
+    _write_json(results_path, results)
+    figures = make_phase3_figures(results, Path(args.figures_dir), results_path.as_posix())
+    print(f"{results['n_checks']} checks, {results['n_failed']} failed; wrote {results_path}")
+    print(f"wrote {len(figures)} figure files to {args.figures_dir}")
+    return 0 if results["all_passed"] else 1
+
+
+def _cmd_overlap_figures(args: argparse.Namespace) -> int:
+    results_path = Path(args.results_dir) / "overlap_validation.json"
+    results = json.loads(results_path.read_text(encoding="utf-8"))
+    figures = make_phase3_figures(results, Path(args.figures_dir), results_path.as_posix())
+    print(f"wrote {len(figures)} figure files to {args.figures_dir}")
+    return 0
+
+
+def _cmd_assemble(args: argparse.Namespace) -> int:
+    """Walking skeleton: simulate reads, build the overlap graph, order, layout, consensus."""
+    try:
+        genome = load_genome(args.accession, args.raw_dir).genome
+        config = SimulationConfig(
+            coverage=args.coverage,
+            read_length=ReadLengthModel.fixed(int(args.read_length)),
+            substitution_rate=args.sub_rate,
+            seed=args.seed,
+        )
+        reads = simulate_reads(genome, config)
+        tau: int | str = "auto" if args.min_overlap == "auto" else int(args.min_overlap)
+        inst = AssemblyInstance.from_readset(reads, min_overlap=tau, tolerance=args.tolerance)
+    except (GenomeError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    if args.order == "true":
+        order = inst.true_order()
+    elif args.order == "random":
+        order = np.random.default_rng(args.seed).permutation(inst.n).astype(np.int64)
+    else:  # trivial: the reads in the order the sequencer produced them (random positions)
+        order = np.arange(inst.n, dtype=np.int64)
+    assembly = inst.assemble(order)
+    out_dir = args.out_dir or (
+        DEFAULT_ASSEMBLY_DIR / f"{args.accession}_c{args.coverage:g}_s{args.seed}_{args.order}"
+    )
+    out_dir.mkdir(parents=True, exist_ok=True)
+    fasta = "".join(
+        f">contig_{i + 1:03d} length={len(c.sequence)} reads={len(c.reads)}\n{c.sequence}\n"
+        for i, c in enumerate(assembly.contigs)
+    )
+    (out_dir / "contigs.fasta").write_text(fasta, encoding="utf-8", newline="\n")
+    summary = {
+        "accession": args.accession,
+        "genome_length": genome.length,
+        "simulation": config.to_dict(),
+        "instance": inst.summary(),
+        "order": args.order,
+        "fitness_F": inst.fitness(order),
+        "merged_length_L": inst.merged_length(order),
+        "n_contigs": assembly.n_contigs,
+        "contig_lengths": [len(c.sequence) for c in assembly.contigs],
+        "contigs_exact_in_genome": [c.sequence in genome.sequence for c in assembly.contigs],
+        "provenance": provenance.collect(
+            {"simulation": config.to_dict(), "min_overlap": str(args.min_overlap),
+             "tolerance": args.tolerance, "order": args.order},
+            seed=args.seed,
+            repo_dir=Path.cwd(),
+        ),
+    }  # fmt: skip
+    _write_json(out_dir / "summary.json", summary)
+    print(
+        f"{inst.n} reads (from {inst.n_input}), tau={inst.min_overlap}, order={args.order}: "
+        f"F={summary['fitness_F']}, L={summary['merged_length_L']}, "
+        f"{assembly.n_contigs} contig(s), written to {out_dir}"
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="genomeasm", description=__doc__)
     parser.add_argument("--version", action="version", version=f"genomeasm {__version__}")
     top = parser.add_subparsers(dest="group", required=True)
+
+    overlap = top.add_parser("overlap", help="validate the overlap graph against the ground truth")
+    overlap_sub = overlap.add_subparsers(dest="command", required=True)
+    ov_validate = overlap_sub.add_parser("validate", help="Phase 3 validation")
+    ov_validate.add_argument("--config", type=Path, default=Path("configs/phase3_overlap.yaml"))
+    ov_validate.add_argument("--raw-dir", type=Path, default=DEFAULT_RAW_DIR)
+    ov_validate.add_argument("--results-dir", type=Path, default=Path("results/phase3"))
+    ov_validate.add_argument("--figures-dir", type=Path, default=Path("reports/figures"))
+    ov_validate.set_defaults(func=_cmd_overlap_validate)
+    ov_figures = overlap_sub.add_parser("figures", help="redraw the Phase 3 figures")
+    ov_figures.add_argument("--results-dir", type=Path, default=Path("results/phase3"))
+    ov_figures.add_argument("--figures-dir", type=Path, default=Path("reports/figures"))
+    ov_figures.set_defaults(func=_cmd_overlap_figures)
+
+    asm = top.add_parser("assemble", help="walking skeleton: simulate, order, glue, vote")
+    asm.add_argument("accession", help="versioned accession of a cached genome")
+    asm.add_argument("--coverage", type=float, required=True)
+    asm.add_argument("--read-length", type=int, default=100)
+    asm.add_argument("--sub-rate", type=float, default=0.0)
+    asm.add_argument("--min-overlap", default="auto", help="'auto' or a whole number")
+    asm.add_argument("--tolerance", type=float, default=0.0, help="0 = exact overlaps")
+    asm.add_argument("--order", choices=["trivial", "true", "random"], default="trivial")
+    asm.add_argument("--seed", type=int, default=0)
+    asm.add_argument("--raw-dir", type=Path, default=DEFAULT_RAW_DIR)
+    asm.add_argument("--out-dir", type=Path, default=None)
+    asm.set_defaults(func=_cmd_assemble)
 
     sim = top.add_parser("simulate", help="simulate sequencing reads and validate the simulator")
     sim_sub = sim.add_subparsers(dest="command", required=True)

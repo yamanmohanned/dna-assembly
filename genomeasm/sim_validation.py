@@ -15,7 +15,7 @@ the square root of the number of replicates.
 
 from __future__ import annotations
 
-from collections.abc import Callable, Sequence
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -24,6 +24,8 @@ from scipy import stats
 
 from genomeasm import coverage as cov
 from genomeasm import provenance
+from genomeasm.checks import Checks, mean_and_se
+from genomeasm.checks import add_check as _add
 from genomeasm.io import Genome
 from genomeasm.simulate import (
     ReadLengthModel,
@@ -31,8 +33,6 @@ from genomeasm.simulate import (
     sample_geometry,
     simulate_reads,
 )
-
-Checks = list[dict[str, Any]]
 
 
 def edit_distance(a: str, b: str) -> int:
@@ -44,35 +44,6 @@ def edit_distance(a: str, b: str) -> int:
             current.append(min(previous[j] + 1, current[j - 1] + 1, previous[j - 1] + (ca != cb)))
         previous = current
     return previous[-1]
-
-
-def mean_and_se(values: Sequence[float] | np.ndarray) -> tuple[float, float]:
-    arr = np.asarray(values, dtype=np.float64)
-    if arr.size < 2:
-        return float(arr.mean()), 0.0
-    return float(arr.mean()), float(arr.std(ddof=1) / np.sqrt(arr.size))
-
-
-def _plain(value: Any) -> Any:
-    """Turn numpy scalars into plain Python numbers so the result can be written as JSON."""
-    if isinstance(value, np.floating):
-        return float(value)
-    if isinstance(value, np.integer):
-        return int(value)
-    if isinstance(value, np.bool_):
-        return bool(value)
-    return value
-
-
-def _add(checks: Checks, check_id: str, description: str, passed: bool, **numbers: Any) -> None:
-    checks.append(
-        {
-            "id": check_id,
-            "description": description,
-            "passed": bool(passed),
-            **{k: _plain(v) for k, v in numbers.items()},
-        }
-    )
 
 
 def _within(observed: float, expected: float, se: float, z_max: float, floor: float = 0.0) -> bool:
