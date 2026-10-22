@@ -1,3 +1,9 @@
 * text=auto
 Makefile text eol=lf
 *.sh text eol=lf
+
+# Downloaded NCBI files are checksummed: git must never rewrite their line endings,
+# otherwise a fresh checkout on Windows would fail the SHA-256 check.
+data/raw/** -text
+# Generated cards are written with LF on every system.
+data/processed/** text eol=lf

@@ -97,7 +97,9 @@ def write_cards(raw_dir: Path, processed_dir: Path, accessions: Iterable[str]) -
         card = build_card(load_genome(accession, raw_dir))
         json_path = out / f"{accession}.card.json"
         md_path = out / f"{accession}.card.md"
-        json_path.write_text(json.dumps(card, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-        md_path.write_text(render_card_markdown(card), encoding="utf-8")
+        # newline="\n": identical bytes on every operating system (Windows would add \r).
+        json_text = json.dumps(card, indent=2, sort_keys=True) + "\n"
+        json_path.write_text(json_text, encoding="utf-8", newline="\n")
+        md_path.write_text(render_card_markdown(card), encoding="utf-8", newline="\n")
         written += [json_path, md_path]
     return written

@@ -64,6 +64,19 @@ def test_data_cards_on_disk_were_generated_from_the_cached_files(accession: str)
     )
 
 
+@pytest.mark.parametrize("accession", ACCESSIONS)
+def test_saved_files_use_unix_line_endings(accession: str) -> None:
+    """A checkout that rewrote line endings would break the SHA-256 check (see .gitattributes)."""
+    for path in (
+        RAW / f"{accession}.fasta",
+        RAW / f"{accession}.meta.json",
+        PROCESSED / f"{accession}.card.json",
+        PROCESSED / f"{accession}.card.md",
+    ):
+        assert b"\r" not in path.read_bytes(), f"{path.name} contains carriage returns"
+    assert b"\r" not in (RAW / "SHA256SUMS").read_bytes()
+
+
 def test_every_data_card_belongs_to_a_configured_genome() -> None:
     on_disk = {p.name.removesuffix(".card.json") for p in PROCESSED.glob("*.card.json")}
     assert on_disk == set(ACCESSIONS)
