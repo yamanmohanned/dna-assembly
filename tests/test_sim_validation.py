@@ -167,6 +167,11 @@ def test_figures_exist_in_all_formats_with_a_caption(stem: str, committed: dict[
 
 
 @pytest.mark.parametrize("stem", ["fig01a_coverage_histogram", "figS1_validation_curves"])
+def test_svg_figures_use_unix_line_endings(stem: str) -> None:
+    assert b"\r" not in (FIGURES / f"{stem}.svg").read_bytes()
+
+
+@pytest.mark.parametrize("stem", ["fig01a_coverage_histogram", "figS1_validation_curves"])
 def test_png_figures_are_300_dpi(stem: str) -> None:
     from PIL import Image
 

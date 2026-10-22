@@ -90,7 +90,7 @@ New test files and what they prove:
 2. **Floating-point noise in a zero-spread test** (found by my own unit test): a standard error of 1e-17 was treated as real. Spreads below 1e-12 are now treated as zero.
 3. **A smoke test with too few runs** failed because the variance-range check needs about 100 runs. The test now keeps the full 100 runs for the error checks and says why.
 4. **The textbook value `exp(-c)` disagrees with the simulator on short genomes.** This was investigated, not hidden: it is the edge effect, explained by the exact model and confirmed on a 1,000,000-position genome (gap 0.5 % or less).
-5. **Line endings and provenance**: generated files are written with LF; the dirty flag ignores generated outputs, and the committed results were regenerated at the clean commit `975eaa7` (so `dirty: false`).
+5. **Line endings and provenance**: generated files are written with LF; the dirty flag ignores generated outputs, and the committed results were regenerated at the clean commit `975eaa7` (so `dirty: false`). After the results commit, `git ls-files --eol` showed that matplotlib had written the SVG files with Windows line endings. `save_figure` now normalises SVG output to LF, a test fails if a carriage return appears, and the figures were redrawn from the saved results (the results file is unchanged).
 
 ## Not verified (honest gaps)
 - **Lander and Waterman (1988)** is cited as the origin of the model but the reference itself was not checked: `TODO-VERIFY` before the report. The formulas used in the code were derived or tested here and do not depend on that citation.

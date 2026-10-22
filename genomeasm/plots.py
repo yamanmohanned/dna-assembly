@@ -8,6 +8,7 @@ results file) written next to every figure and as a small footer inside it.
 
 from __future__ import annotations
 
+import io
 import json
 from pathlib import Path
 from typing import Any
@@ -72,7 +73,11 @@ def save_figure(
         va="bottom",
     )
     paths = [out / f"{stem}.svg", out / f"{stem}.pdf", out / f"{stem}.png"]
-    fig.savefig(paths[0], format="svg", metadata={"Date": None})
+    # Matplotlib writes SVG as text, which on Windows turns "\n" into "\r\n". Normalise so the
+    # file has identical bytes on every operating system.
+    svg = io.BytesIO()
+    fig.savefig(svg, format="svg", metadata={"Date": None})
+    paths[0].write_bytes(svg.getvalue().replace(b"\r\n", b"\n"))
     fig.savefig(paths[1], format="pdf", metadata={"CreationDate": None, "Creator": "genomeasm"})
     fig.savefig(paths[2], format="png", dpi=300)
     sidecar = out / f"{stem}.caption.json"
