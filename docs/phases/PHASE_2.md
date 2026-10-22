@@ -75,7 +75,7 @@ Further error checks, all passed:
 (Limit: p >= 0.001 for both the length distribution and the uniformity of start positions.)
 
 ### Tests and checks
-`make check` exit code 0 before the commit: ruff, ruff format, mypy (20 source files), **pytest 202 passed** (126 from earlier phases, 76 new), about 29 s.
+`make check` exit code 0 before the commit: ruff, ruff format, mypy (20 source files), **pytest 204 passed** (126 from earlier phases, 78 new), about 30 s. (The first Phase 2 commit had 202; two SVG line-ending tests were added afterwards.)
 
 New test files and what they prove:
 
@@ -117,6 +117,6 @@ New test files and what they prove:
 
 ## Test output
 ```
-202 passed in 28.64s     (make check: ruff, ruff format --check, mypy, pytest all exit 0)
+204 passed in 30.37s     (make check: ruff, ruff format --check, mypy, pytest all exit 0)
 93 checks, 0 failed      (genomeasm simulate validate, 31 s)
 ```

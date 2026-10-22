@@ -37,7 +37,7 @@ Requirements: `docs/MASTER_PROMPT.md` (authoritative). Plan (approved): `docs/PL
 - NCBI usage guidelines page unreadable (CAPTCHA); rate limit rule only verified via Biopython source (D-019).
 
 ## Commands (all through `.venv\Scripts\python.exe`)
-- `make check`: ruff check, ruff format --check, mypy (`genomeasm tests`), pytest. Green at end of Phase 2: 202 tests.
+- `make check`: ruff check, ruff format --check, mypy (`genomeasm tests`), pytest. Green at end of Phase 2: 204 tests.
 - `make test`, `make lint`, `make format`, `make typecheck`, `make venv`, `make help`.
 - `genomeasm data fetch` (needs internet), `genomeasm data verify`, `genomeasm data cards` (offline).
 - `genomeasm simulate run ACC --coverage C ...` (reads + ground truth to `data/processed/reads/`, not committed), `genomeasm simulate validate` (about 30 s, rewrites `results/phase2/` and the figures), `genomeasm simulate figures` (redraw only).
