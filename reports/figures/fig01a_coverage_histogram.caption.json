@@ -1,0 +1,11 @@
+{
+  "figure": "fig01a_coverage_histogram",
+  "caption": "Read depth along the genome for simulated single-strand reads of length 100. Bars: mean over 200 simulated runs (whiskers: interquartile range across runs). Black line: exact distribution for this simulator (finite genome, reads fully inside it). Dashed red: Lander-Waterman Poisson approximation, which ignores the genome ends. Largest absolute gap between simulation and the exact model in any bin: 4.7e-03.",
+  "source": "results/phase2/validation.json",
+  "config_hash": "80f8e527961136dcab49287a8910cf9080014c3db0cd9e497493b082577a87e9",
+  "files": [
+    "fig01a_coverage_histogram.svg",
+    "fig01a_coverage_histogram.pdf",
+    "fig01a_coverage_histogram.png"
+  ]
+}

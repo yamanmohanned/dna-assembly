@@ -112,3 +112,128 @@ terms:
     precise: >-
       A JSON and Markdown summary generated from the cached files: accession, version,
       organism, length, base counts, GC content and checksums.
+
+  - term: read
+    phase: 2
+    plain: >-
+      A short piece of DNA text that the sequencing machine reads in one go, like one strip torn
+      from a very long roll of paper.
+    precise: >-
+      A string over {A, C, G, T} obtained from one position of the genome, possibly with errors.
+      Here the typical length is l = 100.
+
+  - term: coverage and depth
+    phase: 2
+    plain: >-
+      How many layers of strips lie on top of each spot of the long paper, on average.
+    precise: >-
+      With N reads of length l from a genome of length G, the nominal coverage is c = N * l / G.
+      The depth at a position is the number of reads that cover it; its average over the genome
+      is exactly c when every read lies inside the genome.
+
+  - term: uncovered fraction
+    phase: 2
+    plain: The share of spots on the long paper that no strip happened to cover.
+    precise: >-
+      The fraction of genome positions with depth 0. Lander-Waterman predicts exp(-c); the exact
+      finite-genome model of this project also accounts for the genome ends.
+
+  - term: Poisson distribution
+    phase: 2
+    plain: >-
+      The pattern of counts you get when things land at random, like how many raindrops hit each
+      paving stone.
+    precise: >-
+      P(k) = exp(-c) * c^k / k! for k = 0, 1, 2, ... Lander-Waterman approximates the depth at a
+      position by a Poisson distribution with mean c.
+
+  - term: Lander-Waterman model
+    phase: 2
+    plain: >-
+      A classic piece of mathematics that predicts how many spots stay bare, and how many
+      separate pieces appear, when random strips are thrown onto a long paper.
+    precise: >-
+      Reads start at uniformly random positions. It predicts depth ~ Poisson(c), uncovered
+      fraction ~ exp(-c) and about N * exp(-c * (1 - theta / l)) contigs, ignoring the genome
+      ends. Original source: Lander and Waterman (1988); the citation is TODO-VERIFY until it is
+      checked.
+
+  - term: edge effect
+    phase: 2
+    plain: >-
+      Near the two ends of the genome fewer strips can cover a spot, because every strip has to
+      fit inside the genome.
+    precise: >-
+      For a position x closer than l - 1 to an end, the probability q(x) that a random read
+      covers it is smaller than l / (G - l + 1), so uncovered positions are more likely than
+      exp(-c) says.
+
+  - term: contig
+    phase: 2
+    plain: >-
+      A stretch of the genome that the reads cover without a gap, so it can be put together in
+      one piece.
+    precise: >-
+      A true contig is a maximal group of reads chained by true overlaps of at least theta
+      bases, counted from the known read positions. An assembler's contigs are judged against
+      these.
+
+  - term: ground truth
+    phase: 2
+    plain: >-
+      The answer key. Because we made the reads ourselves, we know exactly where each one came
+      from and which mistakes were put in.
+    precise: >-
+      For every simulated read, its true start position, the number of reference bases it
+      covers and its counts of substitutions, insertions and deletions.
+
+  - term: substitution error
+    phase: 2
+    plain: A typing mistake where one letter is swapped for a different letter.
+    precise: >-
+      A kept base replaced by one of the three other bases, each with probability 1/3. The
+      substitution rate is the probability of this for each kept base.
+
+  - term: indel (insertion and deletion)
+    phase: 2
+    plain: >-
+      A typing mistake where a letter is skipped (deletion) or an extra letter slips in
+      (insertion).
+    precise: >-
+      Deletion: a reference base is dropped with probability p_del. Insertion: after each
+      reference base, one random base is inserted with probability p_ins.
+
+  - term: random seed
+    phase: 2
+    plain: >-
+      A starting number that makes a computer's dice rolls repeat exactly, so a random
+      experiment can be run again and give identical results.
+    precise: >-
+      An integer given to numpy's SeedSequence. The same seed and configuration always give the
+      same output; independent streams are spawned from it for read positions and for errors.
+
+  - term: Monte Carlo simulation
+    phase: 2
+    plain: >-
+      Finding out how something behaves by running it many times with random dice and looking at
+      all the results.
+    precise: >-
+      Estimating an expected value by averaging over R independent random runs. The uncertainty
+      of the average is its standard error.
+
+  - term: standard error
+    phase: 2
+    plain: >-
+      How much an average would wobble if the whole experiment were repeated. Smaller means more
+      trust in the average.
+    precise: >-
+      The sample standard deviation across R independent runs divided by the square root of R.
+      Checks in this project pass when the observed value is within a stated number of standard
+      errors of the expected value.
+
+  - term: provenance
+    phase: 2
+    plain: The label on a result that says exactly how and when it was made.
+    precise: >-
+      The record stored with every result: configuration hash, git commit and whether the code
+      was modified, random seed, library versions, machine information and a timestamp.

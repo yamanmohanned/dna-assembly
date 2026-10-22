@@ -1,0 +1,11 @@
+{
+  "figure": "figS1_validation_curves",
+  "caption": "Simulator versus theory. (a, b) Mean over 200 runs with 95% confidence intervals for two real genomes; solid lines: exact formulas derived for this simulator; dashed: Lander-Waterman. On short genomes the genome ends leave more positions uncovered than exp(-c) predicts, and the exact model explains this. (c) On a long genome, where the approximation applies, exp(-c) holds (100 runs per point).",
+  "source": "results/phase2/validation.json",
+  "config_hash": "80f8e527961136dcab49287a8910cf9080014c3db0cd9e497493b082577a87e9",
+  "files": [
+    "figS1_validation_curves.svg",
+    "figS1_validation_curves.pdf",
+    "figS1_validation_curves.png"
+  ]
+}
