@@ -45,6 +45,11 @@ extend-exclude = [".venv", "tools"]
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM", "NPY"]
 
+# numba kernels draw random numbers from numba's own generator (np.random.* inside @njit) by design
+[tool.ruff.lint.per-file-ignores]
+"genomeasm/solvers/tabu.py" = ["NPY002"]
+"genomeasm/solvers/alns.py" = ["NPY002"]
+
 [tool.mypy]
 python_version = "3.11"
 disallow_untyped_defs = true

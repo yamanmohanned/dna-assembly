@@ -27,6 +27,13 @@ from genomeasm.overlap_validation import run_overlap_validation
 from genomeasm.plots import make_phase2_figures, make_phase3_figures
 from genomeasm.sim_validation import run_validation
 from genomeasm.simulate import ReadLengthModel, SimulationConfig, simulate_reads
+from genomeasm.solver_validation import run_solver_validation
+from genomeasm.solvers.alns import alns
+from genomeasm.solvers.common import Budget, Problem
+from genomeasm.solvers.greedy import greedy, nearest_neighbour
+from genomeasm.solvers.lkh import LkhError, lkh
+from genomeasm.solvers.tabu import tabu_search
+from genomeasm.solvers.warmup import warmup
 
 DEFAULT_CONFIG = Path("configs/genomes.yaml")
 DEFAULT_RAW_DIR = Path("data/raw")
@@ -268,10 +275,86 @@ def _cmd_assemble(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_solvers_validate(args: argparse.Namespace) -> int:
+    cfg = yaml.safe_load(Path(args.config).read_text(encoding="utf-8"))
+    try:
+        genomes = {cfg["genome"]: load_genome(cfg["genome"], args.raw_dir).genome}
+    except GenomeError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    results = run_solver_validation(cfg, genomes, repo_dir=Path.cwd(), progress=print)
+    path = Path(args.results_dir) / "correctness.json"
+    _write_json(path, results)
+    print(f"{results['n_checks']} checks, {results['n_failed']} failed; wrote {path}")
+    return 0 if results["all_passed"] else 1
+
+
+def _cmd_solve(args: argparse.Namespace) -> int:
+    """Simulate reads, build the instance and run one solver (a quick look, not an experiment)."""
+    try:
+        genome = load_genome(args.accession, args.raw_dir).genome
+        reads = simulate_reads(
+            genome,
+            SimulationConfig(
+                coverage=args.coverage,
+                read_length=ReadLengthModel.fixed(int(args.read_length)),
+                substitution_rate=args.sub_rate,
+                seed=args.read_seed,
+            ),
+        )
+        tau: int | str = "auto" if args.min_overlap == "auto" else int(args.min_overlap)
+        inst = AssemblyInstance.from_readset(reads, min_overlap=tau, tolerance=args.tolerance)
+        problem = Problem.from_instance(inst)
+        warmup()
+        budget = Budget(seconds=args.seconds)
+        if args.solver == "greedy":
+            result = greedy(problem)
+        elif args.solver == "nn":
+            result = nearest_neighbour(problem)
+        elif args.solver == "tabu":
+            result = tabu_search(problem, budget, seed=args.seed)
+        elif args.solver == "alns":
+            result = alns(problem, budget, seed=args.seed, policy=args.policy)
+        else:
+            result = lkh(problem, seconds=args.seconds, seed=args.seed)
+    except (GenomeError, ValueError, LkhError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
+    print(
+        f"{result.solver}: n={inst.n}, F={result.fitness}, L={result.merged_length}, "
+        f"F(true order)={inst.fitness(inst.true_order())}, evaluations={result.evaluations}, "
+        f"{result.seconds:.2f} s"
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="genomeasm", description=__doc__)
     parser.add_argument("--version", action="version", version=f"genomeasm {__version__}")
     top = parser.add_subparsers(dest="group", required=True)
+
+    solvers = top.add_parser("solvers", help="validate the solvers")
+    solvers_sub = solvers.add_subparsers(dest="command", required=True)
+    sv = solvers_sub.add_parser("validate", help="Phase 4 correctness validation")
+    sv.add_argument("--config", type=Path, default=Path("configs/phase4_correctness.yaml"))
+    sv.add_argument("--raw-dir", type=Path, default=DEFAULT_RAW_DIR)
+    sv.add_argument("--results-dir", type=Path, default=Path("results/phase4"))
+    sv.set_defaults(func=_cmd_solvers_validate)
+
+    solve = top.add_parser("solve", help="run one solver on a simulated instance")
+    solve.add_argument("accession")
+    solve.add_argument("--coverage", type=float, required=True)
+    solve.add_argument("--solver", choices=["greedy", "nn", "tabu", "alns", "lkh"], default="alns")
+    solve.add_argument("--policy", default="ucb1", help="ALNS operator-selection policy")
+    solve.add_argument("--seconds", type=float, default=5.0)
+    solve.add_argument("--read-length", type=int, default=100)
+    solve.add_argument("--sub-rate", type=float, default=0.0)
+    solve.add_argument("--min-overlap", default="auto")
+    solve.add_argument("--tolerance", type=float, default=0.0)
+    solve.add_argument("--read-seed", type=int, default=0)
+    solve.add_argument("--seed", type=int, default=0)
+    solve.add_argument("--raw-dir", type=Path, default=DEFAULT_RAW_DIR)
+    solve.set_defaults(func=_cmd_solve)
 
     overlap = top.add_parser("overlap", help="validate the overlap graph against the ground truth")
     overlap_sub = overlap.add_subparsers(dest="command", required=True)

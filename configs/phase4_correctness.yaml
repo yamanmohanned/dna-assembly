@@ -1,0 +1,42 @@
+# Phase 4: correctness of the solvers. Pass rules are written BEFORE the run.
+# Not a benchmark: the statistics-based comparison of the solvers is Phase 5.
+name: phase4_solver_correctness
+seed: 20261024
+genome: NC_001422.1        # real genome used for the real-window instances and the preview
+
+# Delta evaluation: every swap/insert delta must equal a full recomputation.
+delta: {moves_per_instance: 20000, synthetic_instances: 5, synthetic_n: 40}
+
+# Brute force and Held-Karp must give the same optimum.
+exact_agreement: {instances: 60, n_min: 4, n_max: 9}
+
+# Small instances with a known optimum (Held-Karp). Instances: random overlap matrices
+# (synthetic, only for testing algorithms) and windows of the real genome with simulated reads.
+small:
+  sizes: [6, 8, 10, 12, 14]
+  per_size: 12              # synthetic random-matrix instances per size
+  real_windows: 12          # real-genome window instances (8 to 15 reads)
+  evaluation_budget: 500000 # tabu and the five ALNS policies stop after this many evaluations
+  fixed_arm_budget: 100000  # single-operator ALNS runs (informational: no optimality required)
+  lkh_instances: 12         # LKH-3 is run on the first instances only (each call starts Ubuntu)
+  lkh_seconds: 1.0
+  window: {length_min: 200, length_max: 350, read_length: 60, coverage: 3.0,
+           substitution_rate: 0.01, tolerance: 0.05, min_overlap: 8}
+
+# One look at a realistic instance: all solvers, same wall-clock budget, one seed (no statistics).
+preview:
+  coverage: 10
+  read_length: 100
+  substitution_rate: 0.01
+  tolerance: 0.05
+  min_overlap: 20
+  seconds: 10
+  read_seed: 3
+  solver_seed: 1
+
+policies: [random, roundrobin, roulette, epsilon_greedy, ucb1]
+
+tolerances:
+  # Tabu, every ALNS policy and LKH-3 must find the exact optimum in at least this share of the
+  # small instances. Greedy and nearest neighbour are constructive; their gap is only documented.
+  min_success_rate: 0.95
