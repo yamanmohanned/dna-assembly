@@ -49,6 +49,8 @@ select = ["E", "F", "I", "UP", "B", "SIM", "NPY"]
 [tool.ruff.lint.per-file-ignores]
 "genomeasm/solvers/tabu.py" = ["NPY002"]
 "genomeasm/solvers/alns.py" = ["NPY002"]
+# figure code carries long caption strings and compact plotting calls
+"genomeasm/experiments/figures.py" = ["E501"]
 
 [tool.mypy]
 python_version = "3.11"

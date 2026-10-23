@@ -9,6 +9,7 @@ import sys
 from collections.abc import Sequence
 from functools import partial
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import yaml
@@ -328,6 +329,56 @@ def _cmd_solve(args: argparse.Namespace) -> int:
     return 0
 
 
+def _analyze(cfg: dict[str, Any], results: Path) -> int:
+    """Statistics, tables and figures 4 to 11 from the raw runs in results/phase5."""
+    import numpy as np
+
+    from genomeasm.experiments import analysis, figures, runner
+
+    summary = json.loads((results / "tuning_summary.json").read_text(encoding="utf-8"))
+    runs, inst = analysis.load_runs(runner.read_records(results / "main_runs.jsonl.gz"))
+    scaling_runs, scaling_inst = analysis.load_runs(
+        runner.read_records(results / "scaling_runs.jsonl.gz")
+    )
+    best = summary["best_alns_policy"]
+    tests = analysis.run_tests(runs, cfg, best)
+    conv = analysis.convergence(
+        runs, np.geomspace(0.02, cfg["budget_seconds"], 60), np.geomspace(1e3, 3e8, 60)
+    )
+    scaling = analysis.scaling_table(scaling_runs, scaling_inst, float(cfg["budget_seconds"]))
+    by_algorithm = analysis.summarise(runs, ["algorithm"])
+    by_instance = analysis.summarise(runs, ["instance", "algorithm"])
+    true_ref = (
+        inst.groupby("instance")[
+            [c for c in inst.columns if c.startswith("bio_")] + ["n", "F_true"]
+        ]
+        .median()
+        .reset_index()
+    )
+    out = results / "analysis"
+    analysis.write_tables(
+        {"by_algorithm": by_algorithm, "by_instance": by_instance, "tests": tests,
+         "scaling": scaling, "true_order_reference": true_ref}, out)  # fmt: skip
+    claim = analysis.claim_verdict(tests, float(cfg["statistics"]["alpha"]))
+    info = {
+        "best_alns_policy_from_tuning": best,
+        "claim_bandit_beats_random": claim,
+        "read_sets": int(runs.drop_duplicates(["instance", "seed_index"]).shape[0]),
+        "provenance": provenance.collect(cfg, seed=int(cfg["seed"]), repo_dir=Path.cwd()),
+    }
+    _write_json(out / "analysis.json", info)
+    _write_json(out / "convergence.json", conv)
+    primary = tests[(tests["scope"] == "pooled") & (tests["family"] == "primary")]
+    shown = {"by_algorithm": by_algorithm, "scaling": scaling, "tests_primary_pooled": primary}
+    text = "\n\n".join(f"## {k}\n\n{analysis.markdown(v)}" for k, v in shown.items())
+    (out / "tables.md").write_text(text, encoding="utf-8", newline="\n")
+    paths = figures.make_figures(
+        runs, tests, conv, scaling, float(cfg["budget_seconds"]), Path("reports/figures"),
+        (results / "main_runs.jsonl.gz").as_posix(), info["provenance"]["config_hash"])  # fmt: skip
+    print(f"wrote tables to {out} and {len(paths)} figure files; claim: {claim}")
+    return 0
+
+
 def _cmd_experiments(args: argparse.Namespace) -> int:
     """tune | run | scale: run a Phase 5 stage (resumable); analyze | figures are in analysis."""
     from genomeasm.experiments import plan, runner
@@ -338,6 +389,8 @@ def _cmd_experiments(args: argparse.Namespace) -> int:
     work = Path(args.work_dir)
     workers = args.workers or int(cfg["workers"])
     summary_path = results / "tuning_summary.json"
+    if args.stage == "analyze":
+        return _analyze(cfg, results)
     if args.stage == "tune":
         tasks = plan.tuning_tasks(cfg, seeds=args.seeds, trials=args.trials)
         runner.execute(tasks, work / "tuning.jsonl", workers)
@@ -370,7 +423,7 @@ def build_parser() -> argparse.ArgumentParser:
     top = parser.add_subparsers(dest="group", required=True)
 
     exp = top.add_parser("experiments", help="Phase 5 experiments (tune, run, scale)")
-    exp.add_argument("stage", choices=["tune", "run", "scale"])
+    exp.add_argument("stage", choices=["tune", "run", "scale", "analyze"])
     exp.add_argument("--config", type=Path, default=Path("configs/phase5_experiments.yaml"))
     exp.add_argument("--results-dir", type=Path, default=Path("results/phase5"))
     exp.add_argument("--work-dir", type=Path, default=Path("data/processed/phase5_work"))
