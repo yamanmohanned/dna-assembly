@@ -402,6 +402,13 @@ def _cmd_experiments(args: argparse.Namespace) -> int:
         print(f"best ALNS policy on the tuning data: {summary['best_alns_policy']}")
         return 0
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    if args.stage == "rerun-lkh":
+        name = args.target
+        records = runner.read_records(work / f"{name}.jsonl")
+        tasks = plan.missing_lkh_tasks(cfg, summary, records, stage=name)
+        runner.execute(tasks, work / f"{name}.jsonl", workers)
+        runner.compress(work / f"{name}.jsonl", results / f"{name}_runs.jsonl.gz")
+        return 0
     if args.stage == "run":
         specs = cfg["evaluation_instances"][: args.instances] if args.instances else None
         tasks = plan.main_tasks(cfg, summary, seeds=args.seeds, specs=specs)
@@ -423,7 +430,7 @@ def build_parser() -> argparse.ArgumentParser:
     top = parser.add_subparsers(dest="group", required=True)
 
     exp = top.add_parser("experiments", help="Phase 5 experiments (tune, run, scale)")
-    exp.add_argument("stage", choices=["tune", "run", "scale", "analyze"])
+    exp.add_argument("stage", choices=["tune", "run", "scale", "analyze", "rerun-lkh"])
     exp.add_argument("--config", type=Path, default=Path("configs/phase5_experiments.yaml"))
     exp.add_argument("--results-dir", type=Path, default=Path("results/phase5"))
     exp.add_argument("--work-dir", type=Path, default=Path("data/processed/phase5_work"))
@@ -432,6 +439,7 @@ def build_parser() -> argparse.ArgumentParser:
     exp.add_argument("--trials", type=int, default=None, help="tune: override the trials")
     exp.add_argument("--instances", type=int, default=None, help="run: first k instances only")
     exp.add_argument("--seconds", type=float, default=None, help="run: override the budget")
+    exp.add_argument("--target", choices=["main", "scaling"], default="main", help="rerun-lkh")
     exp.set_defaults(func=_cmd_experiments)
 
     solvers = top.add_parser("solvers", help="validate the solvers")

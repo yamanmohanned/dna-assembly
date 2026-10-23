@@ -417,6 +417,76 @@ terms:
       One delta of a move, one insertion-gain computation, or one full recomputation. Wall-clock time is
       the main budget; evaluations are reported as well.
 
+  - term: read set and paired design
+    phase: 5
+    plain: >-
+      One simulated batch of reads is one test case. Every solver gets exactly the same batch, so we
+      compare them fairly, case by case.
+    precise: >-
+      A read set is an instance setting plus a seed. Solvers are compared paired on the same read set;
+      the read set is the unit of replication (30 per instance setting).
+
+  - term: relative gap to the best known
+    phase: 5
+    plain: >-
+      How far a solver's score is below the best score anybody reached on the same test case, in
+      percent. Zero means as good as the best.
+    precise: >-
+      gap = 100 * (best - F) / best, where best is the largest fitness any solver reached on that read
+      set. The gap to LKH-3 uses the LKH-3 fitness instead.
+
+  - term: hyper-parameter tuning (random search)
+    phase: 5
+    plain: >-
+      Every method has dials. We try many random dial settings on practice cases and keep the best, then
+      use that setting on the real test cases, which the tuning never saw.
+    precise: >-
+      24 configurations per algorithm (trial 0 is the default), evaluated on 18 tuning read sets from a
+      region of phiX174 that the evaluation does not use; the configuration with the smallest mean regret
+      to the best known is kept.
+
+  - term: Wilcoxon signed-rank test
+    phase: 5
+    plain: >-
+      A test that asks, for pairs of results on the same case, whether one method wins more or by more
+      than luck would allow.
+    precise: >-
+      A non-parametric paired test on the differences, two-sided here; zero differences are discarded.
+
+  - term: Holm correction
+    phase: 5
+    plain: >-
+      When you run several tests, some will look significant by luck. This correction makes the bar
+      higher so that the whole group is judged fairly.
+    precise: >-
+      The step-down Holm-Bonferroni adjustment of p-values, applied within each family of comparisons.
+
+  - term: bootstrap confidence interval
+    phase: 5
+    plain: >-
+      Re-draw the results at random many times and see how much the answer wobbles; the middle 95% of the
+      wobble is the interval.
+    precise: >-
+      Percentile interval of the median paired difference over 10,000 resamples of the read sets.
+
+  - term: effect size (A12, Cliff's delta)
+    phase: 5
+    plain: >-
+      How big a difference is, not only whether it exists: the chance that a random result of method A
+      beats a random result of method B.
+    precise: >-
+      Vargha-Delaney A12 = P(A > B) + 0.5 P(A = B) (0.5 means no effect); Cliff's delta = 2 * A12 - 1.
+
+  - term: genome fraction, identity, N50 and misjoin
+    phase: 5
+    plain: >-
+      How much of the real genome the assembly rebuilt, how correct its letters are, how long the typical
+      piece is, and whether a piece jumps between distant places.
+    precise: >-
+      Defined in genomeasm/experiments/bio.py: windows of 100 letters are located on the reference by
+      shared 15-letter words; genome fraction counts positions covered by windows with identity >= 0.9;
+      N50 is the contig length such that longer contigs hold half of the assembled letters.
+
   - term: provenance
     phase: 2
     plain: The label on a result that says exactly how and when it was made.

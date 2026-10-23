@@ -200,6 +200,43 @@ def main_tasks(
     return tasks
 
 
+def missing_lkh_tasks(
+    cfg: dict[str, Any], summary: dict[str, Any], records: list[dict[str, Any]], stage: str = "main"
+) -> list[dict[str, Any]]:
+    """Tasks that run only LKH-3 on the read sets where it has no result (e.g. WSL crashed).
+
+    The read sets are rebuilt from the same seeds, so they are identical to the original ones.
+    """
+    have = {
+        (r["instance"], r["seed_index"])
+        for r in records
+        if r.get("kind") == "run" and r.get("requested") == "lkh3" and r["stage"] == stage
+    }
+    specs = cfg["evaluation_instances"] if stage == "main" else cfg["scaling_instances"]
+    tasks = []
+    for si, spec in enumerate(specs):
+        for s in range(int(cfg["seeds"]["evaluation" if stage == "main" else "scaling"])):
+            if (spec["id"], s) not in have:
+                run = {"algorithm": "lkh3", "params": _params_for(summary, "lkh3")}
+                extra: dict[str, Any] = {"emit_instance": False}
+                if stage == "scaling":
+                    extra["lkh_search_seconds"] = float(cfg["lkh_scaling_seconds"])
+                tasks.append(
+                    _task(
+                        cfg,
+                        stage,
+                        si,
+                        spec,
+                        s,
+                        "lkh_rerun",
+                        [run],
+                        float(cfg["budget_seconds"]),
+                        **extra,
+                    )
+                )
+    return tasks
+
+
 def scaling_tasks(
     cfg: dict[str, Any], summary: dict[str, Any], seeds: int | None = None
 ) -> list[dict[str, Any]]:

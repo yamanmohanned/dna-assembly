@@ -50,18 +50,19 @@ def run_task(task: dict[str, Any]) -> list[dict[str, Any]]:
         built = design.build(spec, task["read_seed"])
         inst = built.instance
         order = inst.true_order()
-        records.append(
-            {
-                **head,
-                "kind": "instance",
-                "n": inst.n,
-                "n_input": inst.n_input,
-                "edges": int((inst.ov > 0).sum()),
-                "build_seconds": round(built.build_seconds, 3),
-                "F_true": int(inst.fitness(order)),
-                "bio_true": design.bio_metrics(built, order),
-            }
-        )
+        if task.get("emit_instance", True):
+            records.append(
+                {
+                    **head,
+                    "kind": "instance",
+                    "n": inst.n,
+                    "n_input": inst.n_input,
+                    "edges": int((inst.ov > 0).sum()),
+                    "build_seconds": round(built.build_seconds, 3),
+                    "F_true": int(inst.fitness(order)),
+                    "bio_true": design.bio_metrics(built, order),
+                }
+            )
     except Exception:  # noqa: BLE001
         return [{**head, "kind": "error", "error": traceback.format_exc()[-600:]}]
     for run in task["runs"]:
