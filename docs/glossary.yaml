@@ -328,6 +328,95 @@ terms:
       The reads sorted by their true start position. Its fitness F is the reference line against
       which the solvers are compared.
 
+  - term: heuristic and exact solver
+    phase: 4
+    plain: >-
+      An exact solver is guaranteed to find the very best order but only for a handful of reads. A
+      heuristic is a clever shortcut that finds a very good order quickly, without a guarantee.
+    precise: >-
+      Brute force (n <= 9) and Held-Karp dynamic programming (n <= 15) are exact. Greedy, tabu search,
+      ALNS and LKH-3 are heuristics; the exact solvers are used to check them on small instances.
+
+  - term: greedy and nearest neighbour
+    phase: 4
+    plain: >-
+      Greedy: glue the best-matching pair first, then the next best, and so on. Nearest neighbour:
+      start somewhere and always step to the best-matching unused read.
+    precise: >-
+      Greedy edge merging accepts overlaps in decreasing order when the first read has no successor yet,
+      the second no predecessor, and no cycle is closed. Both are deterministic.
+
+  - term: delta evaluation
+    phase: 4
+    plain: >-
+      After a small change we do not recount everything; we only look at the few joins that changed.
+    precise: >-
+      For a swap or insert move the change of F is the sum of the new edge weights minus the old ones,
+      computed in constant time and tested against a full recomputation.
+
+  - term: tabu search
+    phase: 4
+    plain: >-
+      Keep taking the best small change, even when it makes things worse, but remember what you just
+      moved and forbid moving it again for a while, so you do not walk in circles.
+    precise: >-
+      Local search over swap and insert moves with a tabu list (tenure), an aspiration criterion (a
+      tabu move is allowed if it gives a new best) and restarts from the shaken best solution.
+
+  - term: ALNS (adaptive large neighbourhood search)
+    phase: 4
+    plain: >-
+      Repeatedly smash part of the solution (destroy) and rebuild it (repair), keep the result if it is
+      good, and learn which smashing and rebuilding tools work best.
+    precise: >-
+      Destroy operators: random, worst-connection, segment. Repair operators: greedy insertion and
+      regret-k insertion. Simulated-annealing acceptance with a calibrated start temperature.
+
+  - term: simulated annealing
+    phase: 4
+    plain: >-
+      Accept a worse solution sometimes, often at the beginning and almost never at the end, like a
+      metal cooling slowly.
+    precise: >-
+      A worse solution (change delta < 0) is accepted with probability exp(delta / T); T falls
+      geometrically from T0 to T0 * 1e-3 as the budget is used.
+
+  - term: multi-armed bandit and policy
+    phase: 4
+    plain: >-
+      Several slot machines with unknown payouts: pull one, see the reward, and decide which to pull
+      next. Here each machine is a pair of destroy and repair tools. The rule that chooses is the policy.
+    precise: >-
+      Policies: random, round robin, roulette wheel (classical ALNS weights), epsilon-greedy and UCB1
+      (both on a sliding window of the last 100 rewards, because usefulness changes over time).
+
+  - term: UCB1 (upper confidence bound)
+    phase: 4
+    plain: >-
+      Pick the tool whose average result plus a bonus for being tried rarely is highest: optimism in the
+      face of uncertainty.
+    precise: >-
+      Index = mean reward + sqrt(2 ln N / n), with n the arm's rewards in its window and N the total.
+      Citation Auer, Cesa-Bianchi and Fischer (2002) is TODO-VERIFY.
+
+  - term: LKH-3
+    phase: 4
+    plain: >-
+      A famous program written by a researcher for travelling-salesman problems. We use it as the strong
+      reference to compare our solvers with.
+    precise: >-
+      Helsgaun's Lin-Kernighan-Helsgaun heuristic, version 3.0.6 here, run through Ubuntu on a TSPLIB
+      file; every tour it returns is re-checked against the cost matrix.
+
+  - term: evaluation (budget)
+    phase: 4
+    plain: >-
+      One look at how good a candidate change would be. A fair race gives every solver the same time and
+      also reports how many looks it used.
+    precise: >-
+      One delta of a move, one insertion-gain computation, or one full recomputation. Wall-clock time is
+      the main budget; evaluations are reported as well.
+
   - term: provenance
     phase: 2
     plain: The label on a result that says exactly how and when it was made.

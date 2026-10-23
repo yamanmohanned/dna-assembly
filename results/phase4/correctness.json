@@ -1,0 +1,505 @@
+{
+  "name": "phase4_solver_correctness",
+  "config": {
+    "name": "phase4_solver_correctness",
+    "seed": 20261024,
+    "genome": "NC_001422.1",
+    "delta": {
+      "moves_per_instance": 20000,
+      "synthetic_instances": 5,
+      "synthetic_n": 40
+    },
+    "exact_agreement": {
+      "instances": 60,
+      "n_min": 4,
+      "n_max": 9
+    },
+    "small": {
+      "sizes": [
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "per_size": 12,
+      "real_windows": 12,
+      "evaluation_budget": 500000,
+      "fixed_arm_budget": 100000,
+      "lkh_instances": 12,
+      "lkh_seconds": 1.0,
+      "window": {
+        "length_min": 200,
+        "length_max": 350,
+        "read_length": 60,
+        "coverage": 3.0,
+        "substitution_rate": 0.01,
+        "tolerance": 0.05,
+        "min_overlap": 8
+      }
+    },
+    "preview": {
+      "coverage": 10,
+      "read_length": 100,
+      "substitution_rate": 0.01,
+      "tolerance": 0.05,
+      "min_overlap": 20,
+      "seconds": 10,
+      "read_seed": 3,
+      "solver_seed": 1
+    },
+    "policies": [
+      "random",
+      "roundrobin",
+      "roulette",
+      "epsilon_greedy",
+      "ucb1"
+    ],
+    "tolerances": {
+      "min_success_rate": 0.95
+    }
+  },
+  "provenance": {
+    "config_hash": "405352f5139b691b9dcc139261e36c0b483dcda80471a9740f397e220cee6f21",
+    "git": {
+      "commit": "07f63ea3dbe09a61916fdbd8338fdbd8a201b155",
+      "dirty": false
+    },
+    "seed": 20261024,
+    "library_versions": {
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "pandas": "3.1.0",
+      "numba": "0.68.0",
+      "biopython": "1.88",
+      "matplotlib": "3.11.2",
+      "plotly": "7.1.0",
+      "PyYAML": "6.0.3"
+    },
+    "machine": {
+      "platform": "Windows-10-10.0.19045-SP0",
+      "processor": "Intel64 Family 6 Model 60 Stepping 3, GenuineIntel",
+      "python": "3.12.7",
+      "cpu_count": 8
+    },
+    "timestamp_utc": "2026-10-23T14:39:23+00:00"
+  },
+  "lkh_available": true,
+  "delta": {
+    "moves_checked": 160000,
+    "mismatches": 0
+  },
+  "exact": {
+    "instances": 60,
+    "disagreements": 0
+  },
+  "small": {
+    "instances": [
+      "random_matrix_n6",
+      "random_matrix_n6",
+      "random_matrix_n6",
+      "random_matrix_n6",
+      "random_matrix_n6",
+      "random_matrix_n6",
+      "random_matrix_n6",
+      "random_matrix_n6",
+      "random_matrix_n6",
+      "random_matrix_n6",
+      "random_matrix_n6",
+      "random_matrix_n6",
+      "random_matrix_n8",
+      "random_matrix_n8",
+      "random_matrix_n8",
+      "random_matrix_n8",
+      "random_matrix_n8",
+      "random_matrix_n8",
+      "random_matrix_n8",
+      "random_matrix_n8",
+      "random_matrix_n8",
+      "random_matrix_n8",
+      "random_matrix_n8",
+      "random_matrix_n8",
+      "random_matrix_n10",
+      "random_matrix_n10",
+      "random_matrix_n10",
+      "random_matrix_n10",
+      "random_matrix_n10",
+      "random_matrix_n10",
+      "random_matrix_n10",
+      "random_matrix_n10",
+      "random_matrix_n10",
+      "random_matrix_n10",
+      "random_matrix_n10",
+      "random_matrix_n10",
+      "random_matrix_n12",
+      "random_matrix_n12",
+      "random_matrix_n12",
+      "random_matrix_n12",
+      "random_matrix_n12",
+      "random_matrix_n12",
+      "random_matrix_n12",
+      "random_matrix_n12",
+      "random_matrix_n12",
+      "random_matrix_n12",
+      "random_matrix_n12",
+      "random_matrix_n12",
+      "random_matrix_n14",
+      "random_matrix_n14",
+      "random_matrix_n14",
+      "random_matrix_n14",
+      "random_matrix_n14",
+      "random_matrix_n14",
+      "random_matrix_n14",
+      "random_matrix_n14",
+      "random_matrix_n14",
+      "random_matrix_n14",
+      "random_matrix_n14",
+      "random_matrix_n14",
+      "real_window",
+      "real_window",
+      "real_window",
+      "real_window",
+      "real_window",
+      "real_window",
+      "real_window",
+      "real_window",
+      "real_window",
+      "real_window",
+      "real_window",
+      "real_window"
+    ],
+    "solvers": {
+      "greedy": {
+        "runs": 72,
+        "optimal": 20,
+        "success_rate": 0.2777777777777778,
+        "mean_gap_percent": 5.338494953564805,
+        "max_gap_percent": 19.485294117647058
+      },
+      "nearest_neighbour": {
+        "runs": 72,
+        "optimal": 15,
+        "success_rate": 0.20833333333333334,
+        "mean_gap_percent": 12.444056832749547,
+        "max_gap_percent": 36.612021857923494
+      },
+      "tabu": {
+        "runs": 72,
+        "optimal": 71,
+        "success_rate": 0.9861111111111112,
+        "mean_gap_percent": 0.004509379509379509,
+        "max_gap_percent": 0.3246753246753247
+      },
+      "alns_random": {
+        "runs": 72,
+        "optimal": 72,
+        "success_rate": 1.0,
+        "mean_gap_percent": 0.0,
+        "max_gap_percent": 0.0
+      },
+      "alns_roundrobin": {
+        "runs": 72,
+        "optimal": 72,
+        "success_rate": 1.0,
+        "mean_gap_percent": 0.0,
+        "max_gap_percent": 0.0
+      },
+      "alns_roulette": {
+        "runs": 72,
+        "optimal": 72,
+        "success_rate": 1.0,
+        "mean_gap_percent": 0.0,
+        "max_gap_percent": 0.0
+      },
+      "alns_epsilon_greedy": {
+        "runs": 72,
+        "optimal": 71,
+        "success_rate": 0.9861111111111112,
+        "mean_gap_percent": 0.010212418300653595,
+        "max_gap_percent": 0.7352941176470589
+      },
+      "alns_ucb1": {
+        "runs": 72,
+        "optimal": 71,
+        "success_rate": 0.9861111111111112,
+        "mean_gap_percent": 0.004509379509379509,
+        "max_gap_percent": 0.3246753246753247
+      },
+      "alns_fixed_random+greedy": {
+        "runs": 72,
+        "optimal": 63,
+        "success_rate": 0.875,
+        "mean_gap_percent": 0.2211390477230086,
+        "max_gap_percent": 3.3950617283950617
+      },
+      "alns_fixed_random+regret": {
+        "runs": 72,
+        "optimal": 61,
+        "success_rate": 0.8472222222222222,
+        "mean_gap_percent": 0.20847521083543008,
+        "max_gap_percent": 3.2085561497326203
+      },
+      "alns_fixed_worst+greedy": {
+        "runs": 72,
+        "optimal": 60,
+        "success_rate": 0.8333333333333334,
+        "mean_gap_percent": 0.25043585796444284,
+        "max_gap_percent": 3.2679738562091503
+      },
+      "alns_fixed_worst+regret": {
+        "runs": 72,
+        "optimal": 57,
+        "success_rate": 0.7916666666666666,
+        "mean_gap_percent": 0.46049551300795344,
+        "max_gap_percent": 5.2631578947368425
+      },
+      "alns_fixed_segment+greedy": {
+        "runs": 72,
+        "optimal": 67,
+        "success_rate": 0.9305555555555556,
+        "mean_gap_percent": 0.07482631956346765,
+        "max_gap_percent": 1.948051948051948
+      },
+      "alns_fixed_segment+regret": {
+        "runs": 72,
+        "optimal": 67,
+        "success_rate": 0.9305555555555556,
+        "mean_gap_percent": 0.03248752442381214,
+        "max_gap_percent": 0.6289308176100629
+      },
+      "lkh3": {
+        "runs": 12,
+        "optimal": 12,
+        "success_rate": 1.0,
+        "mean_gap_percent": 0.0,
+        "max_gap_percent": 0.0
+      }
+    }
+  },
+  "reproducibility": {
+    "same_seed_identical": {
+      "tabu": true,
+      "alns_random": true,
+      "alns_roundrobin": true,
+      "alns_roulette": true,
+      "alns_epsilon_greedy": true,
+      "alns_ucb1": true
+    }
+  },
+  "preview": {
+    "instance": {
+      "n_input_reads": 539,
+      "n_duplicates_removed": 3,
+      "n_contained_removed": 0,
+      "n_reads": 536,
+      "min_overlap": 20,
+      "tolerance": 0.05,
+      "total_read_length": 53600,
+      "n_overlap_edges": 3961,
+      "true_order_fitness": 43311
+    },
+    "note": "one seed, one instance: a smoke comparison, not a result (statistics: Phase 5)",
+    "solvers": {
+      "greedy": {
+        "fitness": 44829,
+        "merged_length": 8771,
+        "evaluations": 3961,
+        "seconds": 0.005822799999805284,
+        "trace_points": 1,
+        "info": {}
+      },
+      "nearest_neighbour": {
+        "fitness": 43912,
+        "merged_length": 9688,
+        "evaluations": 287296,
+        "seconds": 0.002484500000718981,
+        "trace_points": 1,
+        "info": {}
+      },
+      "tabu": {
+        "fitness": 45154,
+        "merged_length": 8446,
+        "evaluations": 104549437,
+        "seconds": 10.02064160000009,
+        "trace_points": 16,
+        "info": {
+          "iterations": 9780,
+          "restarts": 1
+        }
+      },
+      "alns_random": {
+        "fitness": 45239,
+        "merged_length": 8361,
+        "evaluations": 210238008,
+        "seconds": 10.001279600000998,
+        "trace_points": 39,
+        "info": {
+          "iterations": 6437,
+          "t0": 62.03588675822543
+        }
+      },
+      "alns_roundrobin": {
+        "fitness": 45247,
+        "merged_length": 8353,
+        "evaluations": 213432659,
+        "seconds": 10.000789499999883,
+        "trace_points": 27,
+        "info": {
+          "iterations": 6711,
+          "t0": 62.03588675822543
+        }
+      },
+      "alns_roulette": {
+        "fitness": 45221,
+        "merged_length": 8379,
+        "evaluations": 204908478,
+        "seconds": 10.00110400000085,
+        "trace_points": 28,
+        "info": {
+          "iterations": 7060,
+          "t0": 62.03588675822543
+        }
+      },
+      "alns_epsilon_greedy": {
+        "fitness": 45242,
+        "merged_length": 8358,
+        "evaluations": 185831836,
+        "seconds": 10.003082799999902,
+        "trace_points": 37,
+        "info": {
+          "iterations": 7301,
+          "t0": 62.03588675822543
+        }
+      },
+      "alns_ucb1": {
+        "fitness": 45227,
+        "merged_length": 8373,
+        "evaluations": 177306023,
+        "seconds": 10.00145209999937,
+        "trace_points": 21,
+        "info": {
+          "iterations": 8465,
+          "t0": 62.03588675822543
+        }
+      },
+      "lkh3": {
+        "fitness": 45203,
+        "merged_length": 8397,
+        "evaluations": 0,
+        "seconds": 12.047361500000989,
+        "trace_points": 53,
+        "info": {
+          "lkh_reported_cost": 8397
+        }
+      }
+    }
+  },
+  "checks": [
+    {
+      "id": "delta.equals_full_recomputation",
+      "description": "every swap and insert delta equals the difference of two full recomputations",
+      "passed": true,
+      "moves_checked": 160000,
+      "mismatches": 0
+    },
+    {
+      "id": "exact.brute_force_equals_held_karp",
+      "description": "brute force and Held-Karp find the same optimal fitness",
+      "passed": true,
+      "instances": 60,
+      "disagreements": 0
+    },
+    {
+      "id": "solvers.valid_permutations",
+      "description": "every returned solution is a valid permutation and its reported fitness is correct",
+      "passed": true,
+      "solvers": 15,
+      "instances": 72
+    },
+    {
+      "id": "optimality.tabu",
+      "description": "finds the exact optimum on at least the required share of small instances",
+      "passed": true,
+      "success_rate": 0.9861111111111112,
+      "required": 0.95,
+      "runs": 72,
+      "max_gap_percent": 0.3246753246753247
+    },
+    {
+      "id": "optimality.alns_random",
+      "description": "finds the exact optimum on at least the required share of small instances",
+      "passed": true,
+      "success_rate": 1.0,
+      "required": 0.95,
+      "runs": 72,
+      "max_gap_percent": 0.0
+    },
+    {
+      "id": "optimality.alns_roundrobin",
+      "description": "finds the exact optimum on at least the required share of small instances",
+      "passed": true,
+      "success_rate": 1.0,
+      "required": 0.95,
+      "runs": 72,
+      "max_gap_percent": 0.0
+    },
+    {
+      "id": "optimality.alns_roulette",
+      "description": "finds the exact optimum on at least the required share of small instances",
+      "passed": true,
+      "success_rate": 1.0,
+      "required": 0.95,
+      "runs": 72,
+      "max_gap_percent": 0.0
+    },
+    {
+      "id": "optimality.alns_epsilon_greedy",
+      "description": "finds the exact optimum on at least the required share of small instances",
+      "passed": true,
+      "success_rate": 0.9861111111111112,
+      "required": 0.95,
+      "runs": 72,
+      "max_gap_percent": 0.7352941176470589
+    },
+    {
+      "id": "optimality.alns_ucb1",
+      "description": "finds the exact optimum on at least the required share of small instances",
+      "passed": true,
+      "success_rate": 0.9861111111111112,
+      "required": 0.95,
+      "runs": 72,
+      "max_gap_percent": 0.3246753246753247
+    },
+    {
+      "id": "optimality.lkh3",
+      "description": "finds the exact optimum on at least the required share of small instances",
+      "passed": true,
+      "success_rate": 1.0,
+      "required": 0.95,
+      "runs": 12,
+      "max_gap_percent": 0.0
+    },
+    {
+      "id": "reproducibility.same_seed_same_result",
+      "description": "with an evaluation budget, the same seed gives the same order and fitness",
+      "passed": true,
+      "solvers": [
+        "alns_epsilon_greedy",
+        "alns_random",
+        "alns_roulette",
+        "alns_roundrobin",
+        "alns_ucb1",
+        "tabu"
+      ]
+    },
+    {
+      "id": "preview.valid_and_verified",
+      "description": "on the realistic instance every solution is a permutation and its fitness is re-verified",
+      "passed": true,
+      "n": 536
+    }
+  ],
+  "n_checks": 12,
+  "n_failed": 0,
+  "all_passed": true
+}

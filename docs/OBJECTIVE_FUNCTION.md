@@ -155,5 +155,16 @@ letters is below `(4/3) * 4^(-tau)`, so among `n(n-1)` ordered pairs fewer than
 | file for LKH-3 | `objective.write_tsplib_atsp` (`AssemblyInstance.write_tsplib`) |
 | gluing and voting | `assembly.layout`, `assembly.consensus`, `assembly.assemble` |
 
-Delta evaluation (updating `F` in constant time after a swap or insert move) is added with the
-solvers in Phase 4 and tested there against a full recomputation.
+### Delta evaluation (constant-time update of F; `genomeasm/solvers/moves.py`)
+
+With the dummy node the tour is a cycle and F is the sum of `W[a, b]` over its edges (`W` = overlaps,
+0 in row and column 0). A move changes only a few edges, so F changes by (new edges) minus (old edges):
+
+* **swap** of the reads x (between a and b) and y (between c and d), not adjacent:
+  `W[a,y] + W[y,b] + W[c,x] + W[x,d] - W[a,x] - W[x,b] - W[c,y] - W[y,d]`;
+  for adjacent reads `a, x, y, d`: `W[a,y] + W[y,x] + W[x,d] - W[a,x] - W[x,y] - W[y,d]`.
+* **insert** read x (between p and q) after the read a (followed by b), `a` not x and not p:
+  `W[p,q] - W[p,x] - W[x,q] + W[a,x] + W[x,b] - W[a,b]`.
+
+Tested against a full recomputation on every move of small instances and on 160,000 random moves
+(results/phase4/correctness.json).
