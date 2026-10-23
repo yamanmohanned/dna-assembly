@@ -328,10 +328,58 @@ def _cmd_solve(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_experiments(args: argparse.Namespace) -> int:
+    """tune | run | scale: run a Phase 5 stage (resumable); analyze | figures are in analysis."""
+    from genomeasm.experiments import plan, runner
+    from genomeasm.experiments.design import load_config
+
+    cfg = load_config(args.config)
+    results = Path(args.results_dir)
+    work = Path(args.work_dir)
+    workers = args.workers or int(cfg["workers"])
+    summary_path = results / "tuning_summary.json"
+    if args.stage == "tune":
+        tasks = plan.tuning_tasks(cfg, seeds=args.seeds, trials=args.trials)
+        runner.execute(tasks, work / "tuning.jsonl", workers)
+        records = runner.read_records(work / "tuning.jsonl")
+        summary = plan.select_tuned(cfg, records)
+        summary["provenance"] = provenance.collect(cfg, seed=int(cfg["seed"]), repo_dir=Path.cwd())
+        _write_json(summary_path, summary)
+        runner.compress(work / "tuning.jsonl", results / "tuning_runs.jsonl.gz")
+        print(f"best ALNS policy on the tuning data: {summary['best_alns_policy']}")
+        return 0
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
+    if args.stage == "run":
+        specs = cfg["evaluation_instances"][: args.instances] if args.instances else None
+        tasks = plan.main_tasks(cfg, summary, seeds=args.seeds, specs=specs)
+        if args.seconds:
+            for t in tasks:
+                t["seconds"] = args.seconds
+        name = "main"
+    else:
+        tasks = plan.scaling_tasks(cfg, summary, seeds=args.seeds)
+        name = "scaling"
+    runner.execute(tasks, work / f"{name}.jsonl", workers)
+    runner.compress(work / f"{name}.jsonl", results / f"{name}_runs.jsonl.gz")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="genomeasm", description=__doc__)
     parser.add_argument("--version", action="version", version=f"genomeasm {__version__}")
     top = parser.add_subparsers(dest="group", required=True)
+
+    exp = top.add_parser("experiments", help="Phase 5 experiments (tune, run, scale)")
+    exp.add_argument("stage", choices=["tune", "run", "scale"])
+    exp.add_argument("--config", type=Path, default=Path("configs/phase5_experiments.yaml"))
+    exp.add_argument("--results-dir", type=Path, default=Path("results/phase5"))
+    exp.add_argument("--work-dir", type=Path, default=Path("data/processed/phase5_work"))
+    exp.add_argument("--workers", type=int, default=0)
+    exp.add_argument("--seeds", type=int, default=None, help="override the number of seeds")
+    exp.add_argument("--trials", type=int, default=None, help="tune: override the trials")
+    exp.add_argument("--instances", type=int, default=None, help="run: first k instances only")
+    exp.add_argument("--seconds", type=float, default=None, help="run: override the budget")
+    exp.set_defaults(func=_cmd_experiments)
 
     solvers = top.add_parser("solvers", help="validate the solvers")
     solvers_sub = solvers.add_subparsers(dest="command", required=True)

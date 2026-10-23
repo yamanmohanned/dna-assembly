@@ -12,6 +12,7 @@ htmlcov/
 # Simulated read sets are reproducible from their config and seed; they are not committed
 data/processed/reads/
 data/processed/assemblies/
+data/processed/phase5_work/
 
 # LKH-3: academic-licence source and build output are not redistributed (see tools/README.md)
 tools/*

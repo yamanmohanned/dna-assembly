@@ -1,0 +1,108 @@
+# Phase 5: experiments and statistics. Everything that decides what is run, how it is tuned and
+# how it is tested is written here BEFORE the runs (rules R6 and R7).
+name: phase5_experiments
+seed: 20261025
+
+# Instances. Read sets are simulated from windows of real genomes; every read set has its own seed.
+# Tuning uses phiX174 positions 0..2500 and seeds 1000+; the evaluation uses lambda windows (a held-out
+# genome) and the rest of phiX174 (positions 2500..5386, no overlap with the tuning window), with
+# seeds 0..29. All instances: substitution errors, error-tolerant overlaps (decision D-036).
+overlap: {tolerance: 0.05, min_overlap: 20}
+tuning_instances:
+  - {id: T-c5-e0.5, genome: NC_001422.1, start: 0, length: 2500, coverage: 5, error: 0.005, read_length: 100}
+  - {id: T-c5-e2.0, genome: NC_001422.1, start: 0, length: 2500, coverage: 5, error: 0.020, read_length: 100}
+  - {id: T-c10-e0.5, genome: NC_001422.1, start: 0, length: 2500, coverage: 10, error: 0.005, read_length: 100}
+  - {id: T-c10-e2.0, genome: NC_001422.1, start: 0, length: 2500, coverage: 10, error: 0.020, read_length: 100}
+  - {id: T-c20-e0.5, genome: NC_001422.1, start: 0, length: 2500, coverage: 20, error: 0.005, read_length: 100}
+  - {id: T-c20-e2.0, genome: NC_001422.1, start: 0, length: 2500, coverage: 20, error: 0.020, read_length: 100}
+evaluation_instances:
+  - {id: L5-c5-e1.0, genome: NC_001416.1, start: 10000, length: 5000, coverage: 5, error: 0.010, read_length: 100}
+  - {id: L5-c10-e1.0, genome: NC_001416.1, start: 10000, length: 5000, coverage: 10, error: 0.010, read_length: 100}
+  - {id: L5-c20-e1.0, genome: NC_001416.1, start: 10000, length: 5000, coverage: 20, error: 0.010, read_length: 100}
+  - {id: L5-c10-e0.5, genome: NC_001416.1, start: 10000, length: 5000, coverage: 10, error: 0.005, read_length: 100}
+  - {id: L5-c10-e2.0, genome: NC_001416.1, start: 10000, length: 5000, coverage: 10, error: 0.020, read_length: 100}
+  - {id: L5-c10-e1.0-l60, genome: NC_001416.1, start: 10000, length: 5000, coverage: 10, error: 0.010, read_length: 60, min_overlap: 15}
+  - {id: L10-c5-e1.0, genome: NC_001416.1, start: 10000, length: 10000, coverage: 5, error: 0.010, read_length: 100}
+  - {id: L10-c10-e1.0, genome: NC_001416.1, start: 10000, length: 10000, coverage: 10, error: 0.010, read_length: 100}
+  - {id: L10-c10-e2.0, genome: NC_001416.1, start: 10000, length: 10000, coverage: 10, error: 0.020, read_length: 100}
+  - {id: P-c10-e1.0, genome: NC_001422.1, start: 2500, length: 2886, coverage: 10, error: 0.010, read_length: 100}
+# Scaling study: windows of lambda of increasing length (the number of reads grows with it)
+scaling_instances:
+  - {id: S2500, genome: NC_001416.1, start: 10000, length: 2500, coverage: 10, error: 0.010, read_length: 100}
+  - {id: S5000, genome: NC_001416.1, start: 10000, length: 5000, coverage: 10, error: 0.010, read_length: 100}
+  - {id: S10000, genome: NC_001416.1, start: 10000, length: 10000, coverage: 10, error: 0.010, read_length: 100}
+  - {id: S20000, genome: NC_001416.1, start: 10000, length: 20000, coverage: 10, error: 0.010, read_length: 100}
+
+seeds: {evaluation: 30, tuning: 3, scaling: 10}
+workers: 5
+budget_seconds: 8         # same wall-clock for every timed solver, LKH-3 preprocessing included
+tuning_budget_seconds: 5
+scaling_solvers: [greedy, tabu, alns_random, alns_ucb1, lkh3]
+lkh_scaling_seconds: 1    # scaling: LKH-3 search time (the point is its total wall-clock)
+
+policies: [random, roundrobin, roulette, epsilon_greedy, ucb1]
+
+# Hyper-parameter tuning: random search, the same number of trials for every algorithm, trial 0 is
+# always the default configuration. Chosen by the smallest mean regret to the best-known fitness
+# over the tuning tasks (6 instances x 3 seeds). The six single-operator ALNS variants reuse the
+# tuned shared parameters of alns_random.
+tuning:
+  trials: 24
+  defaults:
+    tabu: {tenure_factor: 1.0, moves_factor: 20, restart_factor: 10, kick_fraction: 0.05}
+    alns: {destroy_lo: 0.10, destroy_hi: 0.40, q_cap: 30, noise: 0.3, final_ratio: 0.001,
+           accept_probability0: 0.5, regret_k: 2, p_worst: 3.0, reward_preset: classical}
+    policy:
+      random: {}
+      roundrobin: {}
+      roulette: {segment: 100, reaction: 0.5}
+      epsilon_greedy: {window: 100, epsilon: 0.1}
+      ucb1: {window: 100, c: 1.0}
+  space:
+    tabu:
+      tenure_factor: [0.25, 0.5, 1.0, 2.0]
+      moves_factor: [5, 10, 20, 40]
+      restart_factor: [2, 5, 10, 30]
+      kick_fraction: [0.02, 0.05, 0.10, 0.20]
+    alns:
+      destroy_lo: [0.02, 0.05, 0.10]
+      destroy_hi: [0.15, 0.25, 0.40, 0.60]
+      q_cap: [15, 30, 60]
+      noise: [0.0, 0.1, 0.3, 0.6]
+      final_ratio: [0.01, 0.001, 0.0001]
+      accept_probability0: [0.2, 0.5, 0.8]
+      regret_k: [2, 3]
+      p_worst: [2.0, 3.0, 5.0]
+      reward_preset: [classical, progress, balanced]
+    policy:
+      roulette: {segment: [25, 50, 100, 200], reaction: [0.2, 0.5, 0.8]}
+      epsilon_greedy: {window: [25, 50, 100, 200], epsilon: [0.02, 0.05, 0.1, 0.2]}
+      ucb1: {window: [25, 50, 100, 200], c: [0.3, 1.0, 2.0]}
+  lkh_variants:
+    default: {}
+    nearest6: {CANDIDATE_SET_TYPE: NEAREST-NEIGHBOR, MAX_CANDIDATES: "6"}
+    popmusic: {CANDIDATE_SET_TYPE: POPMUSIC}
+    period50: {INITIAL_PERIOD: "50"}
+reward_presets:        # rewards for: new best, better than current, accepted although worse, other
+  classical: [1.0, 0.2727, 0.3939, 0.0]
+  progress: [1.0, 0.3, 0.0, 0.0]
+  balanced: [1.0, 0.5, 0.2, 0.0]
+
+# Statistics (rule R7). Fitness is compared as the relative gap to the best-known fitness of the
+# same read set (the best value any solver reached on it): gap = 100 * (best - F) / best.
+statistics:
+  bootstrap_resamples: 10000
+  alpha: 0.05
+  primary:        # the claim: bandit selection beats random selection (Holm over these two)
+    - [alns_ucb1, alns_random]
+    - [alns_epsilon_greedy, alns_random]
+  secondary_vs_random: [alns_roundrobin, alns_roulette]
+  vs_roulette: [alns_ucb1, alns_epsilon_greedy]   # bandits against the classical adaptive baseline
+  single_operator_vs_random: true
+  main_pairs:     # filled with the best ALNS policy chosen on the tuning data (see tuning summary)
+    - [alns_best, tabu]
+    - [alns_best, lkh3]
+    - [alns_best, greedy]
+    - [tabu, lkh3]
+    - [tabu, greedy]
+    - [lkh3, greedy]
