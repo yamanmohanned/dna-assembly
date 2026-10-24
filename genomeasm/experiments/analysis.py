@@ -103,14 +103,18 @@ def paired_test(a: np.ndarray, b: np.ndarray, resamples: int, seed: int) -> dict
     else:
         statistic, p = 0.0, 1.0
     rng = np.random.default_rng(seed)
-    boots = np.median(d[rng.integers(0, d.size, size=(resamples, d.size))], axis=1)
-    lo, hi = np.percentile(boots, [2.5, 97.5])
+    resampled = d[rng.integers(0, d.size, size=(resamples, d.size))]
+    lo, hi = np.percentile(np.median(resampled, axis=1), [2.5, 97.5])
+    mean_lo, mean_hi = np.percentile(np.mean(resampled, axis=1), [2.5, 97.5])
     ratio = a12(a, b)
     return {
         "n": int(d.size),
         "median_diff_pp": float(100 * np.median(d)),
         "ci_low_pp": float(100 * lo),
         "ci_high_pp": float(100 * hi),
+        "mean_diff_pp": float(100 * np.mean(d)),
+        "mean_ci_low_pp": float(100 * mean_lo),
+        "mean_ci_high_pp": float(100 * mean_hi),
         "wilcoxon_W": statistic,
         "p": p,
         "a12": ratio,

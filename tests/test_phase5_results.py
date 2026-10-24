@@ -139,7 +139,9 @@ def test_tuning_summary_is_consistent(summary: dict[str, Any]) -> None:
             assert entry["best_mean_regret"] <= entry["default_mean_regret"] + 1e-12
     alns = summary["alns_regret_by_policy"]
     assert summary["best_alns_policy"] == min(alns, key=lambda a: alns[a])
-    assert summary["provenance_added"]["later"]["git"]["dirty"] is False  # tabu_cl, D-045
+    for name in ("tabu_cl", "alns_ucb1_rt"):  # the post-hoc additions (D-045, D-046)
+        stamp = summary["provenance_added"][name]
+        assert stamp["git"]["dirty"] is False or "docs/glossary.yaml" in stamp["note"]
     assert summary["provenance"]["git"]["dirty"] is False
 
 
@@ -169,6 +171,10 @@ def test_the_stored_claim_follows_from_the_stored_tests(tests_table: pd.DataFram
     assert info["claim_bandit_beats_random"] == json.loads(
         json.dumps(analysis.claim_verdict(tests_table, float(CFG["statistics"]["alpha"])))
     )
+    alpha = float(CFG["statistics"]["alpha"])
+    assert info["post_hoc_ucb1_tie_breaking"] == json.loads(
+        json.dumps(analysis.claim_verdict(tests_table, alpha, "post_hoc"))
+    )
     assert info["read_sets"] == 300
     assert info["best_alns_policy_from_tuning"] == "alns_random"
 
@@ -186,6 +192,38 @@ def test_finding_ucb1_does_not_beat_random_and_epsilon_greedy_is_slightly_worse(
         eps["p_holm"] < 0.05 and eps["a12"] < 0.5
     )  # random is better (a small effect: A12 above 0.4)
     assert eps["a12"] > 0.4
+
+
+def test_finding_ucb1_with_random_ties_is_slightly_better_than_random_and_the_original_ucb1(
+    tests_table: pd.DataFrame,
+) -> None:
+    """Post hoc (D-046): exploratory, reported next to the pre-registered result, never merged."""
+    rt = "alns_ucb1_rt"
+    vs_random = _pooled(tests_table, rt, "alns_random")
+    vs_ucb = _pooled(tests_table, rt, "alns_ucb1")
+    vs_roulette = _pooled(tests_table, rt, "alns_roulette")
+    assert vs_random["family"] == vs_ucb["family"] == vs_roulette["family"] == "post_hoc"
+    assert vs_random["p_holm"] < 0.05 and 0.5 < vs_random["a12"] < 0.65
+    assert vs_ucb["p_holm"] < 0.05 and vs_ucb["a12"] > 0.5
+    assert vs_roulette["p_holm"] > 0.05  # no difference to the classical adaptive baseline
+    per_instance = tests_table[
+        (tests_table["family"] == "post_hoc") & (tests_table["b"] == "alns_random")
+    ]
+    per_instance = per_instance[per_instance["scope"] != "pooled"]
+    assert len(per_instance) == len(CFG["evaluation_instances"])
+    assert (per_instance["a12"] > 0.5).sum() >= 7  # better than random in most settings
+
+
+def test_finding_ucb1_without_random_ties_collapses_onto_its_first_arm(
+    records: list[dict[str, Any]],
+) -> None:
+    uses = {"alns_ucb1": np.zeros(6), "alns_ucb1_rt": np.zeros(6), "alns_random": np.zeros(6)}
+    for r in records:
+        if r["kind"] == "run" and r["requested"] in uses:
+            uses[r["requested"]] += np.array(r["info"]["outcomes"], dtype=float).sum(axis=1)
+    share = {name: u / u.sum() for name, u in uses.items()}
+    assert share["alns_ucb1"][0] > 0.4  # the defect of D-046 (the first arm is random+greedy)
+    assert share["alns_ucb1_rt"].max() < 0.4 and share["alns_random"].max() < 0.2
 
 
 def test_finding_roundrobin_and_roulette_are_slightly_better_than_random(

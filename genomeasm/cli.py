@@ -405,7 +405,9 @@ def _cmd_experiments(args: argparse.Namespace) -> int:
         stamp = provenance.collect(cfg, seed=int(cfg["seed"]), repo_dir=Path.cwd())
         if frozen:  # algorithms tuned earlier keep their entries; only the new ones are stamped
             summary["provenance"] = frozen["provenance"]
-            summary["provenance_added"] = {**frozen.get("provenance_added", {}), "later": stamp}
+            added = dict(frozen.get("provenance_added", {}))
+            added.update({a: stamp for a in summary["algorithms"] if a not in frozen["algorithms"]})
+            summary["provenance_added"] = added
         else:
             summary["provenance"] = stamp
         _write_json(summary_path, summary)

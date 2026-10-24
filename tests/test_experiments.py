@@ -87,6 +87,12 @@ def test_paired_test_detects_a_shift_and_not_a_tie() -> None:
     base = 0.9 + 0.05 * rng.random(40)
     shifted = analysis.paired_test(base + 0.01, base, 2000, 0)
     assert shifted["p"] < 1e-6 and shifted["median_diff_pp"] == pytest.approx(1.0)
+    assert shifted["mean_diff_pp"] == pytest.approx(1.0)
+    assert shifted["mean_ci_low_pp"] == pytest.approx(
+        1.0
+    )  # a constant shift: a degenerate interval
+    noisy = analysis.paired_test(base + 0.01 + 0.004 * rng.standard_normal(40), base, 2000, 0)
+    assert 0 < noisy["mean_ci_low_pp"] < noisy["mean_diff_pp"] < noisy["mean_ci_high_pp"]
     assert shifted["ci_low_pp"] == pytest.approx(1.0) == pytest.approx(shifted["ci_high_pp"])
     assert shifted["wins"] == 40
     tie = analysis.paired_test(base, base, 2000, 0)

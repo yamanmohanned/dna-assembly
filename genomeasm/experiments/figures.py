@@ -144,9 +144,13 @@ def fig_ablation(tests: pd.DataFrame) -> tuple[Figure, str]:
     rows = []
     for r in pooled.itertuples():
         if r.family in ("primary", "secondary_vs_random", "post_hoc") and r.b == "alns_random":
-            rows.append((r.a, r.median_diff_pp, r.ci_low_pp, r.ci_high_pp, r.p_holm, r.family))
+            rows.append(
+                (r.a, r.mean_diff_pp, r.mean_ci_low_pp, r.mean_ci_high_pp, r.p_holm, r.family)
+            )
         elif r.family == "random_vs_single_operator":  # shown as: single operator minus random
-            rows.append((r.b, -r.median_diff_pp, -r.ci_high_pp, -r.ci_low_pp, r.p_holm, r.family))
+            rows.append(
+                (r.b, -r.mean_diff_pp, -r.mean_ci_high_pp, -r.mean_ci_low_pp, r.p_holm, r.family)
+            )
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5.2), gridspec_kw={"width_ratios": [1.3, 1]})
     for y, (_, m, lo, hi, p, fam) in enumerate(rows):
         colour = C["blue"] if fam != "random_vs_single_operator" else C["vermillion"]
@@ -156,7 +160,7 @@ def fig_ablation(tests: pd.DataFrame) -> tuple[Figure, str]:
     ax1.axvline(0, color="#444444", lw=0.8)
     ax1.set_yticks(range(len(rows)), [_label(r[0]) for r in rows])
     ax1.invert_yaxis()
-    ax1.set_xlabel("Median fitness difference to ALNS random (percentage points; > 0 = better)")
+    ax1.set_xlabel("Mean fitness difference to ALNS random (percentage points; > 0 = better)")
     ax1.set_title("(a) pooled over all read sets, with 95% bootstrap CI")
     for pol, colour in (
         ("alns_ucb1", COLORS["alns_ucb1"]),
@@ -167,7 +171,7 @@ def fig_ablation(tests: pd.DataFrame) -> tuple[Figure, str]:
             (tests["a"] == pol) & (tests["b"] == "alns_random") & (tests["scope"] != "pooled")
         ]
         ax2.plot(
-            part["median_diff_pp"].to_numpy(),
+            part["mean_diff_pp"].to_numpy(),
             range(len(part)),
             "o",
             color=colour,
@@ -177,12 +181,13 @@ def fig_ablation(tests: pd.DataFrame) -> tuple[Figure, str]:
     ax2.set_yticks(range(len(ids)), ids, fontsize=8.5)
     ax2.invert_yaxis()
     ax2.axvline(0, color="#444444", lw=0.8)
-    ax2.set_xlabel("Median difference to ALNS random (pp)")
+    ax2.set_xlabel("Mean difference to ALNS random (pp)")
     ax2.set_title("(b) per instance setting (30 read sets each)")
     ax2.legend(fontsize=9)
     fig.tight_layout(rect=(0, 0.03, 1, 1))
     return fig, (
-        "Ablation: operator-selection policies against random selection, paired by read set. Significance "
+        "Ablation: operator-selection policies against random selection, paired by read set; points are mean "
+        "paired differences with 95% bootstrap CI (the median differences are in tests.csv and are mostly 0). Significance "
         "marks come from two-sided Wilcoxon signed-rank tests with Holm correction within each family "
         "(*** p<0.001, ** p<0.01, * p<0.05, ns not significant). Red rows: a single operator pair "
         "used alone minus the random mixture. UCB1 with random ties is a post-hoc variant (D-046)."
