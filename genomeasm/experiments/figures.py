@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib.figure import Figure
+from matplotlib.ticker import NullFormatter
 
 from genomeasm.experiments.plan import MAIN_ALGORITHMS
 from genomeasm.plots import OKABE_ITO as C
@@ -124,6 +125,7 @@ def fig_gap_lkh(runs: pd.DataFrame) -> tuple[Figure, str]:
         ax.set_xlabel(xlabel)
         ax.set_xscale("log")
         ax.set_xticks(xs, [str(x) for x in xs])
+        ax.xaxis.set_minor_formatter(NullFormatter())
     axes[0].set_ylabel("Gap to LKH-3 (%; positive = below LKH-3)")
     axes[0].set_title("(a) against coverage (error 1%)")
     axes[1].set_title("(b) against error rate (coverage 10x)")
@@ -266,6 +268,8 @@ def fig_runtime(table: pd.DataFrame, budget: float) -> tuple[Figure, str]:
     )
     ax.set_xscale("log")
     ax.set_yscale("log")
+    ax.set_xticks(n, [f"{int(v)}" for v in n])
+    ax.xaxis.set_minor_formatter(NullFormatter())
     ax.set_xlabel("Number of reads n (log scale)")
     ax.set_ylabel("Seconds (log scale)")
     ax.legend(fontsize=8)
