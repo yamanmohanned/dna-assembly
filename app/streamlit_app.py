@@ -32,6 +32,7 @@ pages = [
     st.Page("views/assembly_viewer.py", title="Assembly Viewer", icon=":material/scatter_plot:"),
     st.Page("views/reproducibility.py", title="Reproducibility", icon=":material/verified:"),
 ]
+ui.force_left_to_right()
 ui.logo()
 navigation = st.navigation(pages)
 st.sidebar.caption(

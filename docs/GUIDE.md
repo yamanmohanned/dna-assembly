@@ -162,6 +162,8 @@ choose "LKH-3": a green box says it is ready; a red box says WSL does not answer
 Every other solver runs without WSL. The progress bar above a run has three steps: 1 simulate the reads and build the overlap
 graph, 2 search (for LKH-3 it counts the seconds), 3 grade the result against the real genome.
 
+Browser language: the application forces left-to-right sliders and asks the browser not to translate the page, so it also works in an Arabic browser; if a page was translated anyway, switch the translation off and press F5.
+
 Tips: every chart has SVG and PNG buttons; sliders in the left bar are shared between pages; a green badge
 means "computed now", an orange badge means "precomputed". If a page seems stuck, wait for the busy
 indicator, then press F5. Restart the server after changing code.

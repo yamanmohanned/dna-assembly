@@ -72,6 +72,38 @@ def banner() -> None:
     )  # fmt: skip
 
 
+FORCE_LTR = """
+<script>
+(function () {
+  // The sliders of Streamlit follow the language of the browser: with an Arabic browser the thumb runs
+  // from right to left while the coloured bar runs from left to right. The text of this application is
+  // English, so left-to-right is forced and the page is marked as not to be machine-translated.
+  var root = document.documentElement;
+  root.setAttribute("lang", "en");
+  root.setAttribute("dir", "ltr");
+  root.setAttribute("translate", "no");
+  if (!document.querySelector('meta[name="google"]')) {
+    var meta = document.createElement("meta");
+    meta.name = "google";
+    meta.content = "notranslate";
+    document.head.appendChild(meta);
+  }
+  if (!String(navigator.language).toLowerCase().startsWith("en")) {
+    Object.defineProperty(navigator, "language", { get: function () { return "en-US"; }, configurable: true });
+    Object.defineProperty(navigator, "languages", { get: function () { return ["en-US"]; }, configurable: true });
+    window.dispatchEvent(new Event("languagechange"));
+  }
+  window.__ltrForced = true;
+})();
+</script>
+"""
+
+
+def force_left_to_right() -> None:
+    """Keep the sliders consistent on browsers set to a right-to-left language (D-054)."""
+    st.html(FORCE_LTR, unsafe_allow_javascript=True)
+
+
 def logo() -> None:
     st.logo(_helix_png(12, False), size="large")
 
