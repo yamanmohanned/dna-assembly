@@ -18,6 +18,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
+from cycler import cycler  # noqa: E402
 from matplotlib.figure import Figure  # noqa: E402
 
 OKABE_ITO = {
@@ -31,11 +32,14 @@ OKABE_ITO = {
     "black": "#000000",
 }
 
+CYCLE = ["blue", "vermillion", "green", "orange", "purple", "sky", "black"]  # default colours
+
 
 def apply_style() -> None:
     """Global matplotlib style: readable at projector size, deterministic file output."""
     plt.rcParams.update(
         {
+            "axes.prop_cycle": cycler(color=[OKABE_ITO[k] for k in CYCLE]),
             "font.family": "DejaVu Sans",
             "font.size": 12,
             "axes.titlesize": 12,

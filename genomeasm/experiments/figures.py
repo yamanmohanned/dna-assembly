@@ -80,8 +80,9 @@ def fig_final(runs: pd.DataFrame) -> tuple[Figure, str]:
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5), gridspec_kw={"width_ratios": [1, 1.25]})
     names = [a for a in MAIN if a in set(runs["algorithm"])]
     data = [runs[runs["algorithm"] == a]["gap"].to_numpy() for a in names]
-    box = ax1.boxplot(data, vert=False, patch_artist=True, showfliers=True, widths=0.6,
-                      flierprops={"markersize": 2.5, "alpha": 0.4})  # fmt: skip
+    box = ax1.boxplot(data, orientation="horizontal", patch_artist=True, showfliers=True, widths=0.6,
+                      flierprops={"markersize": 2.5, "alpha": 0.4},
+                      medianprops={"color": "black", "linewidth": 1.6})  # fmt: skip
     for patch, a in zip(box["boxes"], names, strict=True):
         patch.set_facecolor(COLORS[a])
         patch.set_alpha(0.6)

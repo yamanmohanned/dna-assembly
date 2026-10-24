@@ -319,6 +319,20 @@ def _cmd_app(args: argparse.Namespace) -> int:
 
 def _cmd_docs(args: argparse.Namespace) -> int:
     """docs build: the PDF report, the slides (pptx and PDF) and docs/ORAL_EXAM.md from results/."""
+    if args.command == "verify":
+        from genomeasm.docgen import verify
+        from genomeasm.docgen.facts import Facts
+
+        report = verify.verify_all(Facts.load())
+        _write_json(args.out, report)
+        for name, doc in report["documents"].items():
+            print(
+                f"{name}: {doc['numbers_checked']} numbers, unexplained: {doc['unexplained']}"
+            )
+        print("recomputation problems:", report["recomputation_problems"])
+        print("figure problems:", report["figure_problems"])
+        print("OK" if report["ok"] else "NOT OK")
+        return 0 if report["ok"] else 1
     from genomeasm.docgen.build import build_all
 
     for target, files in build_all(args.only, author=args.author).items():
@@ -525,6 +539,11 @@ def build_parser() -> argparse.ArgumentParser:
     docs_build.add_argument("--only", choices=["report", "slides", "oral"], default=None)
     docs_build.add_argument("--author", default="", help="name on the cover and the title slide")
     docs_build.set_defaults(func=_cmd_docs)
+    docs_verify = docs_sub.add_parser(
+        "verify", help="check the numbers in the documents and the charts"
+    )
+    docs_verify.add_argument("--out", type=Path, default=Path("results/phase8/verification.json"))
+    docs_verify.set_defaults(func=_cmd_docs)
 
     app = top.add_parser("app", help="the interactive application (Phase 6)")
     app_sub = app.add_subparsers(dest="command", required=True)
