@@ -162,6 +162,24 @@ def test_convergence_steps_and_time_to_target() -> None:
     assert analysis.time_to_target(trace, 15, offset=1.5) == 3.5
 
 
+def test_convergence_curves_report_mean_median_and_the_share_of_valid_read_sets() -> None:
+    rows = []
+    for name in plan.MAIN_ALGORITHMS:
+        for k, (first, final) in enumerate([(0.1, 100), (0.5, 98)]):  # (time of first point, F)
+            rows.append({"algorithm": name, "best_known": 100.0, "seconds": 2.0,
+                         "info": {"search_seconds": 1.0},
+                         "trace": [[first, 1, 90 + k], [1.0, 5, final]]})  # fmt: skip
+    grid = np.array([0.05, 0.2, 2.0])
+    out = analysis.convergence(pd.DataFrame(rows), grid, np.array([1.0, 10.0]))
+    curve = out["curves"]["alns_random"]["time"]
+    assert curve["valid"] == [0.0, 0.5, 1.0]  # the second read set starts at 0.5 s
+    assert np.isnan(curve["mean"][0]) and curve["mean"][1] == pytest.approx(0.90)
+    assert curve["mean"][2] == pytest.approx(0.99) and curve["median"][2] == pytest.approx(0.99)
+    assert out["curves"]["alns_random"]["evaluations"]["valid"] == [1.0, 1.0]
+    # LKH-3's clock starts after its preprocessing (seconds - search_seconds = 1 s)
+    assert out["curves"]["lkh3"]["time"]["valid"] == [0.0, 0.0, 1.0]
+
+
 # ---- planning -----------------------------------------------------------------------------------
 
 

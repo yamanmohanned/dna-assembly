@@ -16,12 +16,13 @@ from genomeasm.plots import apply_style, save_figure
 from genomeasm.solvers.alns import ARM_NAMES, OUTCOMES
 
 COLORS = {
-    "greedy": "#777777", "nearest_neighbour": "#BBBBBB", "tabu": C["blue"],
+    "greedy": "#777777", "nearest_neighbour": "#BBBBBB", "tabu": C["blue"], "tabu_cl": "#0B3C5D",
     "alns_random": C["vermillion"], "alns_roundrobin": C["sky"], "alns_roulette": C["orange"],
     "alns_epsilon_greedy": C["green"], "alns_ucb1": C["purple"], "lkh3": C["black"],
 }  # fmt: skip
 LABELS = {
     "greedy": "Greedy", "nearest_neighbour": "Nearest neighbour", "tabu": "Tabu search",
+    "tabu_cl": "Tabu search + candidate lists",
     "alns_random": "ALNS random", "alns_roundrobin": "ALNS round robin",
     "alns_roulette": "ALNS roulette wheel", "alns_epsilon_greedy": "ALNS epsilon-greedy",
     "alns_ucb1": "ALNS UCB1", "lkh3": "LKH-3",
@@ -37,35 +38,39 @@ def _stars(p: float) -> str:
     return "***" if p < 0.001 else "**" if p < 0.01 else "*" if p < 0.05 else "ns"
 
 
+def _gap_curve(curve: dict[str, Any], floor: float = 1e-3) -> np.ndarray:
+    """Mean gap (%) of a convergence curve; NaN where fewer than 90% of the read sets have data."""
+    gap = 100 * (1 - np.array(curve["mean"]))
+    gap = np.where(np.array(curve["valid"]) >= 0.9, gap, np.nan)
+    return np.maximum(gap, floor)
+
+
 def fig_convergence(conv: dict[str, Any], n_sets: int) -> tuple[Figure, str]:
     apply_style()
-    fig, axes = plt.subplots(1, 2, figsize=(13, 5))
+    fig, axes = plt.subplots(1, 2, figsize=(13, 5.2))
     for ax, key, grid, xlabel in (
         (axes[0], "time", np.array(conv["time"]), "Wall-clock time (s, log scale)"),
         (axes[1], "evaluations", np.array(conv["evaluations"]), "Evaluations (log scale)"),
     ):
         for name in MAIN:
-            if name == "lkh3" and key == "evaluations":
+            if name == "nearest_neighbour" or (name == "lkh3" and key == "evaluations"):
                 continue
-            curve = conv["curves"][name][key]
-            med = 100 * np.array(curve["median"])
-            ax.plot(grid, med, color=COLORS[name], lw=2.0 if name != "nearest_neighbour" else 1,
+            ax.plot(grid, _gap_curve(conv["curves"][name][key]), color=COLORS[name], lw=2.0,
                     ls="--" if name == "lkh3" else "-", label=_label(name))  # fmt: skip
-            ax.fill_between(grid, 100 * np.array(curve["q1"]), 100 * np.array(curve["q3"]),
-                            color=COLORS[name], alpha=0.12, lw=0)  # fmt: skip
         ax.set_xscale("log")
+        ax.set_yscale("log")
         ax.set_xlabel(xlabel)
-        ax.set_ylabel("Fitness as % of the best known (median, band = IQR)")
-        ax.set_ylim(97.0, 100.1)
-    axes[0].legend(fontsize=8.5, loc="lower right", ncol=2)
+        ax.set_ylabel("Mean gap to the best known (%, log scale)")
+    axes[0].legend(fontsize=8.5, loc="lower left")
     axes[0].set_title("(a) against time")
     axes[1].set_title("(b) against evaluations")
     fig.tight_layout(rect=(0, 0.03, 1, 1))
     return fig, (
-        f"Convergence of every solver over {n_sets} read sets (10 instance settings x 30 seeds): best "
-        "fitness so far as a percentage of the best fitness any solver reached on the same read set. "
-        "Lines: median; bands: interquartile range. LKH-3's curve starts after its preprocessing and "
-        "has no evaluation count. Axis starts at 97%."
+        f"Convergence over {n_sets} read sets (10 instance settings x 30 seeds): mean gap of the best "
+        "solution so far to the best fitness any solver reached on the same read set. A curve is drawn "
+        "where at least 90% of the read sets already have a solution. LKH-3's curve starts after its "
+        "preprocessing, has no evaluation count and sits on the 0.001% floor (its gap is 0 by "
+        "construction of the best-known value). Nearest neighbour is left out (gap about 5%)."
     )
 
 
@@ -83,7 +88,7 @@ def fig_final(runs: pd.DataFrame) -> tuple[Figure, str]:
     ax1.invert_yaxis()
     ax1.set_xlabel("Gap to the best known fitness (%, lower is better)")
     ax1.set_title(f"(a) all read sets pooled (N = {len(data[0])} per solver)")
-    shown = ["greedy", "tabu", "alns_random", "alns_ucb1", "lkh3"]
+    shown = ["greedy", "tabu", "tabu_cl", "alns_random", "alns_ucb1", "lkh3"]
     med = runs.groupby(["instance", "algorithm"])["gap"].median().unstack()
     order = list(runs.drop_duplicates("instance")["instance"])
     for a in shown:
@@ -108,7 +113,7 @@ def fig_gap_lkh(runs: pd.DataFrame) -> tuple[Figure, str]:
         (axes[1], ["L5-c10-e0.5", "L5-c10-e1.0", "L5-c10-e2.0"], [0.5, 1.0, 2.0], "Substitution error rate (%)"),
     )  # fmt: skip
     for ax, ids, xs, xlabel in sets:
-        for k, a in enumerate(["greedy", "tabu", "alns_random", "alns_ucb1"]):
+        for k, a in enumerate(["greedy", "tabu", "tabu_cl", "alns_random", "alns_ucb1"]):
             q = [runs[(runs["instance"] == i) & (runs["algorithm"] == a)]["gap_lkh"] for i in ids]
             med = np.array([x.median() for x in q])
             lo = med - np.array([x.quantile(0.25) for x in q])
@@ -250,6 +255,7 @@ def fig_runtime(table: pd.DataFrame, budget: float) -> tuple[Figure, str]:
         ("greedy_seconds", "Greedy", COLORS["greedy"], "s"),
         ("lkh3_seconds", "LKH-3 total wall-clock (1 s search)", COLORS["lkh3"], "^"),
         ("tabu_time_to_0.1pct", "Tabu: time to within 0.1% of best known", COLORS["tabu"], "D"),
+        ("tabu_cl_time_to_0.1pct", "Tabu + candidate lists: same", COLORS["tabu_cl"], "P"),
         ("alns_ucb1_time_to_0.1pct", "ALNS UCB1: same", COLORS["alns_ucb1"], "v"),
     ]
     for col, label, colour, marker in series:
@@ -277,7 +283,7 @@ def fig_pareto(conv: dict[str, Any]) -> tuple[Figure, str]:
     grid = np.array(conv["time"])
     points = []
     for name in MAIN:
-        gap = 100 * (1 - np.array(conv["curves"][name]["time"]["median"]))
+        gap = _gap_curve(conv["curves"][name]["time"])
         ok = ~np.isnan(gap)
         ax.plot(
             grid[ok], np.maximum(gap[ok], 1e-3), "o-", ms=3, color=COLORS[name], label=_label(name)
@@ -299,11 +305,11 @@ def fig_pareto(conv: dict[str, Any]) -> tuple[Figure, str]:
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_xlabel("Wall-clock time (s, log scale)")
-    ax.set_ylabel("Median gap to the best known (%, log scale)")
+    ax.set_ylabel("Mean gap to the best known (%, log scale)")
     ax.legend(fontsize=8, ncol=2)
     fig.tight_layout(rect=(0, 0.03, 1, 1))
     return fig, (
-        "Quality against time: the median gap of every solver at every time of the budget. The black "
+        "Quality against time: the mean gap of every solver at every time of the budget. The black "
         "step line is the Pareto front: no solver reaches a smaller gap in less time. Gaps below 0.001% "
         "are drawn at 0.001%."
     )

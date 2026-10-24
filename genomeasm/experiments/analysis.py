@@ -19,6 +19,7 @@ many percentage points of fitness.
 
 from __future__ import annotations
 
+import warnings
 from pathlib import Path
 from typing import Any
 
@@ -224,7 +225,7 @@ def _step(trace: list[list[float]], axis: int, grid: np.ndarray, offset: float =
 
 
 def convergence(runs: pd.DataFrame, time_grid: np.ndarray, eval_grid: np.ndarray) -> dict[str, Any]:
-    """Median and quartiles over read sets of the relative fitness along time and evaluations."""
+    """Mean, median, quartiles over read sets of the relative fitness along time and evaluations."""
     out: dict[str, Any] = {
         "time": time_grid.tolist(),
         "evaluations": eval_grid.tolist(),
@@ -242,11 +243,18 @@ def convergence(runs: pd.DataFrame, time_grid: np.ndarray, eval_grid: np.ndarray
         entry: dict[str, Any] = {}
         for key, rows in (("time", by_time), ("evaluations", by_eval)):
             arr = np.array(rows)
-            with np.errstate(all="ignore"):
+            with np.errstate(all="ignore"), warnings.catch_warnings():
+                warnings.simplefilter(
+                    "ignore", RuntimeWarning
+                )  # grid points before every first point
                 entry[key] = {
+                    "mean": np.nanmean(arr, axis=0).tolist(),
                     "median": np.nanmedian(arr, axis=0).tolist(),
                     "q1": np.nanpercentile(arr, 25, axis=0).tolist(),
                     "q3": np.nanpercentile(arr, 75, axis=0).tolist(),
+                    "valid": np.mean(
+                        ~np.isnan(arr), axis=0
+                    ).tolist(),  # share of read sets with data
                 }
         out["curves"][name] = entry
     return out
@@ -268,7 +276,7 @@ def scaling_table(runs: pd.DataFrame, inst: pd.DataFrame, budget: float) -> pd.D
         row["build_seconds"] = float(inst[inst["instance"] == instance]["build_seconds"].median())
         for name in ("greedy", "lkh3"):
             row[f"{name}_seconds"] = float(part[part["algorithm"] == name]["seconds"].median())
-        for name in ("tabu", "alns_random", "alns_ucb1"):
+        for name in ("tabu", "tabu_cl", "alns_random", "alns_ucb1"):
             times, censored = [], 0
             for r in part[part["algorithm"] == name].itertuples():
                 t = time_to_target(r.trace, (1 - 0.001) * r.best_known)
