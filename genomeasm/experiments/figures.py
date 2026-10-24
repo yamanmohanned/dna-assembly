@@ -190,7 +190,8 @@ def fig_ablation(tests: pd.DataFrame) -> tuple[Figure, str]:
         "paired differences with 95% bootstrap CI (the median differences are in tests.csv and are mostly 0). Significance "
         "marks come from two-sided Wilcoxon signed-rank tests with Holm correction within each family "
         "(*** p<0.001, ** p<0.01, * p<0.05, ns not significant). Red rows: a single operator pair "
-        "used alone minus the random mixture. UCB1 with random ties is a post-hoc variant (D-046)."
+        "used alone minus the random mixture. Stars come from the Wilcoxon test, which looks at the whole paired distribution, "
+        "so they can disagree with a mean-difference interval that touches zero. UCB1 with random ties is a post-hoc variant (D-046)."
     )
 
 
