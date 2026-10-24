@@ -145,6 +145,10 @@ def test_tests_are_holm_corrected_within_families_and_the_verdict_follows_the_ru
     flipped = tests.copy()
     flipped["median_diff_pp"] = -1.0
     assert "rejected" in analysis.claim_verdict(flipped, 0.05)[0]["verdict"]
+    zero = flipped.assign(median_diff_pp=0.0, a12=0.55)  # significant, median 0: A12 decides
+    assert analysis.claim_verdict(zero, 0.05)[0]["verdict"].startswith("supported;")
+    assert analysis.claim_verdict(zero.assign(a12=0.46), 0.05)[0]["verdict"].startswith("rejected")
+    assert "without a direction" in analysis.claim_verdict(zero.assign(a12=0.5), 0.05)[0]["verdict"]
     flipped["significant"] = False
     assert "not supported" in analysis.claim_verdict(flipped, 0.05)[0]["verdict"]
 

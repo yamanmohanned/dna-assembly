@@ -193,12 +193,17 @@ def claim_verdict(tests: pd.DataFrame, alpha: float) -> list[dict[str, Any]]:
     """The pre-registered claim: bandit selection beats random selection (pooled, Holm)."""
     rows = []
     for r in tests[(tests["scope"] == "pooled") & (tests["family"] == "primary")].itertuples():
+        zero = "; the median paired difference is 0, the effect is small"
         if r.significant and r.median_diff_pp > 0:
             verdict = "supported"
         elif r.significant and r.median_diff_pp < 0:
             verdict = "rejected (random is significantly better)"
+        elif r.significant and r.a12 > 0.5:  # median difference 0: the effect size decides
+            verdict = "supported" + zero
+        elif r.significant and r.a12 < 0.5:
+            verdict = "rejected (random is significantly better)" + zero
         elif r.significant:
-            verdict = "significant but the median difference is zero (see effect size)"
+            verdict = "significant but without a direction (A12 = 0.5)"
         else:
             verdict = "not supported (no significant difference)"
         rows.append({"policy": r.a, "baseline": r.b, "median_diff_pp": r.median_diff_pp,
