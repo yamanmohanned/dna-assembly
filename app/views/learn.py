@@ -63,8 +63,9 @@ gluing the pieces, and the more likely they really were neighbours.
             }
         )
     ui.table(rows)
+    years = math.factorial(20) / 1e9 / (365.25 * 24 * 3600)
     st.caption(
-        "A computer that checks a billion orders per second would need more than 77 years for 20 reads."
+        f"A computer that checks a billion orders per second would need about {years:.0f} years for 20 reads."
     )
 
 with toy_tab:

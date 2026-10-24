@@ -61,10 +61,10 @@ class InstanceParams:
 
     genome: str = "NC_001422.1"
     start: int = 0
-    length: int = 2000
-    coverage: float = 8.0
+    length: int = 3000
+    coverage: float = 10.0
     read_length: int = 100
-    error: float = 0.01
+    error: float = 0.02
     seed: int = 1
     tolerance: float = 0.05
     min_overlap: int = 20

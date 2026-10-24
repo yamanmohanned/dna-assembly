@@ -451,3 +451,23 @@ def test_step_log_describes_every_iteration_consistently() -> None:
         elif k + 1 < len(steps):
             assert steps[k + 1]["before_order"] == s["before_order"]
     assert steps[-1]["best_f"] == result.fitness
+
+
+def test_a_slow_progress_callback_cannot_starve_the_search() -> None:
+    """The throttle waits one interval after the callback has finished, not after it started."""
+    problem = random_matrix_problem(np.random.default_rng(23), 6)
+    clock = {"now": 0.0}
+    calls: list[float] = []
+
+    def slow_callback(event: dict[str, Any]) -> None:
+        calls.append(event["seconds"])
+        clock["now"] += 2.0  # drawing a chart takes two (fake) seconds
+
+    recorder = Recorder(problem, clock=lambda: clock["now"], progress=slow_callback)
+    recorder.progress_interval = 1.0
+    recorder.heartbeat(1)  # fires at 0 s, the callback takes until 2 s
+    recorder.heartbeat(2)  # 0 s after the callback: must not fire again
+    assert len(calls) == 1
+    clock["now"] += 1.5
+    recorder.heartbeat(3)
+    assert len(calls) == 2

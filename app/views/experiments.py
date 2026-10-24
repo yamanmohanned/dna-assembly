@@ -29,6 +29,13 @@ LABELS = {
 }  # fmt: skip
 
 
+VERDICT_COLUMNS = {
+    "verdict": st.column_config.TextColumn(width="large"),
+    "p_holm": st.column_config.NumberColumn("p (Holm)", format="%.4f"),
+    "a12": st.column_config.NumberColumn("A12", format="%.3f"),
+}
+
+
 def label(name: str) -> str:
     return LABELS.get(name, name.replace("alns_fixed_", "single operator: "))
 
@@ -47,7 +54,9 @@ with verdict_tab:
     primary = pd.DataFrame(p5.info["claim_bandit_beats_random"])
     primary["policy"] = primary["policy"].map(label)
     primary["baseline"] = primary["baseline"].map(label)
-    ui.table(primary[["policy", "baseline", "p_holm", "a12", "verdict"]])
+    ui.table(
+        primary[["policy", "baseline", "p_holm", "a12", "verdict"]], column_config=VERDICT_COLUMNS
+    )
     st.error(
         "Not supported: UCB1 is not different from random, epsilon-greedy is slightly worse.",
         icon=":material/close:",
@@ -61,7 +70,9 @@ with verdict_tab:
     post = pd.DataFrame(p5.info["post_hoc_ucb1_tie_breaking"])
     post["policy"] = post["policy"].map(label)
     post["baseline"] = post["baseline"].map(label)
-    ui.table(post[["policy", "baseline", "p_holm", "a12", "verdict"]])
+    ui.table(
+        post[["policy", "baseline", "p_holm", "a12", "verdict"]], column_config=VERDICT_COLUMNS
+    )
     st.markdown(
         "**Final quality of every solver** (gap to the best solution found, in %; lower is better)"
     )

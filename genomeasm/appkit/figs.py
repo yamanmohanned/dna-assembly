@@ -55,6 +55,13 @@ def figure_bytes(fig: Figure, fmt: str, footer: str | None = None) -> bytes:
     return data.replace(b"\r\n", b"\n") if fmt == "svg" else data
 
 
+def live_frame(fig: Figure, dpi: int = 100) -> bytes:
+    """A PNG of a live chart (cheap: the application shows it with st.image while a solver runs)."""
+    buffer = io.BytesIO()
+    fig.savefig(buffer, format="png", dpi=dpi, bbox_inches="tight")
+    return buffer.getvalue()
+
+
 # ---- Learn: the toy example ---------------------------------------------------------------------
 
 
@@ -497,6 +504,39 @@ def operator_probabilities(
     ax.set_xlabel("Wall-clock time (s)")
     ax.set_ylabel("Probability of choosing the pair")
     ax.set_title("Operator selection over time")
+    return fig
+
+
+def live_dashboard(
+    points: Sequence[tuple[float, float]],
+    references: dict[str, float],
+    history: Sequence[tuple[float, Sequence[float]]],
+    seconds: float,
+) -> Figure:
+    """Convergence and (for ALNS) operator probabilities in one figure: cheap to redraw live."""
+    apply_style()
+    fig = Figure(figsize=(10.0, 3.6), layout="constrained")
+    left, right = fig.subplots(1, 2)
+    if points:
+        xs, ys = zip(*points, strict=True)
+        left.step(xs, ys, where="post", color=C["blue"], lw=2.2, label="best F so far")
+    for k, (name, value) in enumerate(references.items()):
+        left.axhline(value, color=[C["vermillion"], C["green"]][k % 2], ls="--", lw=1.4, label=name)
+    left.set_xlim(0, max(seconds, 0.5))
+    left.set_xlabel("Wall-clock time (s)")
+    left.set_ylabel("Fitness F (axis does not start at 0)")
+    left.set_title("Convergence")
+    left.legend(loc="lower right", fontsize=9)
+    if len(history) >= 2:
+        t = np.array([h[0] for h in history])
+        p = np.array([list(h[1]) for h in history]).T
+        right.stackplot(t, p, colors=PALETTE, labels=list(ARM_NAMES), alpha=0.9)
+        right.legend(fontsize=8, loc="center left", bbox_to_anchor=(1.0, 0.5))
+    right.set_xlim(0, max(seconds, 0.5))
+    right.set_ylim(0, 1)
+    right.set_xlabel("Wall-clock time (s)")
+    right.set_ylabel("Probability of choosing the pair")
+    right.set_title("Operator selection")
     return fig
 
 

@@ -212,6 +212,12 @@ def test_every_chart_renders_and_exports_as_svg_and_png(built: Any) -> None:
         figs.degree_distribution(built.instance),
         figs.live_convergence([(0.0, 10.0), (1.0, 12.0)], {"greedy": 9.0}, 2.0),
         figs.operator_probabilities([(0.0, [1 / 6] * 6), (1.0, [0.5] + [0.1] * 5)], 2.0),
+        figs.live_dashboard(
+            [(0.0, 10.0), (1.0, 12.0)],
+            {"greedy": 9.0},
+            [(0.0, [1 / 6] * 6), (1.0, [0.5] + [0.1] * 5)],
+            2.0,
+        ),
         figs.outcome_bars(result.info["outcomes"]),
         figs.dot_plot(lab.dot_plot(built, assembly)),
         figs.tour_blocks(result.order.tolist(), built.instance.true_starts),
@@ -224,6 +230,7 @@ def test_every_chart_renders_and_exports_as_svg_and_png(built: Any) -> None:
             svg.startswith(b"<?xml") and b"\r\n" not in svg and b"live run" in svg or b"<g" in svg
         )
         assert png[:8] == b"\x89PNG\r\n\x1a\n"
+    assert figs.live_frame(charts[0])[:4] == b"\x89PNG"
     with pytest.raises(ValueError, match="fmt"):
         figs.figure_bytes(charts[0], "pdf")
 

@@ -92,11 +92,10 @@ with run_tab:
             true_f = int(built.instance.fitness(built.instance.true_order()))
             refs = {"greedy": float(greedy_f), "true read order": float(true_f)}
             bar = st.progress(0.0, text="Starting...")
-            left, right = st.columns(2)
-            ph_conv, ph_prob = left.empty(), right.empty()
+            ph_live = st.empty()
             points: list[tuple[float, float]] = []
             history: list[tuple[float, list[float]]] = []
-            last_draw = [-1.0]
+            next_draw = [0.0]  # the search clock at which the chart is redrawn next
 
             def on_progress(event: dict[str, Any]) -> None:
                 t = float(event["seconds"])
@@ -104,19 +103,18 @@ with run_tab:
                     points.append((t, float(event["best"])))
                 if "probabilities" in event:
                     history.append((t, event["probabilities"]))
-                if t - last_draw[0] >= 0.5 or event.get("final"):
-                    last_draw[0] = t
-                    ph_conv.pyplot(
-                        figs.live_convergence(points, refs, float(seconds)), width="stretch"
+                if t >= next_draw[0] or event.get("final"):
+                    drawn = time.perf_counter()
+                    frame = figs.live_frame(
+                        figs.live_dashboard(points, refs, history, float(seconds))
                     )
-                    if history:
-                        ph_prob.pyplot(
-                            figs.operator_probabilities(history, float(seconds)), width="stretch"
-                        )
-                    bar.progress(
-                        min(t / seconds, 1.0),
-                        text=f"{t:.1f} s of {seconds} s, best F = {int(event['best']):,}",
-                    )
+                    ph_live.image(frame, width="stretch")
+                    # a redraw takes time from the search: keep it near 10% of the run
+                    next_draw[0] = t + max(1.0, 8 * (time.perf_counter() - drawn))
+                bar.progress(
+                    min(t / seconds, 1.0),
+                    text=f"{t:.1f} s of {seconds} s, best F = {int(event['best']):,}",
+                )
 
             started = time.perf_counter()
             try:
@@ -135,8 +133,7 @@ with run_tab:
                     {"solver": solver, "policy": policy, "history": history, "refs": refs,
                      "wall": time.perf_counter() - started, "n": built.problem.n},
                 )  # fmt: skip
-                ph_conv.empty()
-                ph_prob.empty()
+                ph_live.empty()
     run = st.session_state.get("lab_run")
     if run is not None:
         st.divider()

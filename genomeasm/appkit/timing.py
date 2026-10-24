@@ -12,6 +12,7 @@ import time
 from typing import Any
 
 from genomeasm.appkit import figs, lab
+from genomeasm.solvers.lkh import LkhError
 from genomeasm.solvers.warmup import warmup
 
 LIMIT = lab.MAX_TOTAL_SECONDS
@@ -41,13 +42,22 @@ def scenario_solver_lab(solver: str, policy: str = "ucb1_rt") -> dict[str, Any]:
     lab.simulate.cache_clear()
     state: dict[str, Any] = {}
     redraws: list[float] = []
+    next_draw = [0.0]
+    history: list[tuple[float, list[float]]] = []
+    points: list[tuple[float, float]] = []
 
     def on_progress(event: dict[str, Any]) -> None:
-        started = time.perf_counter()
-        history = [(event["seconds"], event.get("probabilities", [1 / 6] * 6))]
-        figs.live_convergence([(event["seconds"], event["best"])], {"greedy": 0.0}, 20.0)
-        figs.operator_probabilities(history * 2, 20.0)
-        redraws.append(time.perf_counter() - started)
+        # what the page does: one combined figure, about 10% of the run, encoded as Streamlit does
+        points.append((event["seconds"], float(event["best"])))
+        if "probabilities" in event:
+            history.append((event["seconds"], event["probabilities"]))
+        if event["seconds"] >= next_draw[0]:
+            started = time.perf_counter()
+            fig = figs.live_dashboard(points, {"greedy": 0.0}, history, 20.0)
+            figs.live_frame(fig)
+            cost = time.perf_counter() - started
+            next_draw[0] = event["seconds"] + max(1.0, 8 * cost)
+            redraws.append(cost)
 
     def build() -> None:
         state["built"] = lab.build(params)
@@ -70,6 +80,8 @@ def scenario_solver_lab(solver: str, policy: str = "ucb1_rt") -> dict[str, Any]:
     timings["reads"] = float(state["built"].problem.n)
     timings["live_redraws"] = float(len(redraws))
     timings["redraw_seconds_each"] = round(sum(redraws) / max(len(redraws), 1), 3)
+    timings["iterations"] = float(state["result"].info.get("iterations", 0))
+    timings["evaluations"] = float(state["result"].evaluations)
     return timings
 
 
@@ -144,6 +156,10 @@ def measure() -> dict[str, Any]:
         "overlap_graph_loosest": scenario_overlap_graph(),
         "simulator_largest": scenario_simulator(),
     }
+    try:  # LKH-3 runs in WSL; if it cannot run it is reported as unavailable, never replaced
+        scenarios["solver_lab_lkh3_15s"] = scenario_solver_lab("lkh3")
+    except LkhError as error:
+        scenarios["solver_lab_lkh3_15s"] = {"total": 0.0, "unavailable": str(error)[:200]}
     worst = max(s["total"] for s in scenarios.values())
     return {
         "limit_seconds": LIMIT,

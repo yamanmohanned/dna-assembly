@@ -153,11 +153,13 @@ class Recorder:
         now = self.elapsed()
         if now - self._last_progress < self.progress_interval:
             return
-        self._last_progress = now
         event: dict[str, Any] = {"seconds": now, "evaluations": evaluations, "best": self.best}
         if extra is not None:
             event.update(extra())
         self.progress(event)
+        # measured after the callback: a slow callback (a chart redraw) must not make the next
+        # one fire at once, or the search would spend its whole budget in the callback
+        self._last_progress = self.elapsed()
 
     def elapsed(self) -> float:
         return self.clock() - self.start
