@@ -395,17 +395,26 @@ def _cmd_experiments(args: argparse.Namespace) -> int:
         tasks = plan.tuning_tasks(cfg, seeds=args.seeds, trials=args.trials)
         runner.execute(tasks, work / "tuning.jsonl", workers)
         records = runner.read_records(work / "tuning.jsonl")
-        summary = plan.select_tuned(cfg, records)
-        summary["provenance"] = provenance.collect(cfg, seed=int(cfg["seed"]), repo_dir=Path.cwd())
+        frozen = (
+            json.loads(summary_path.read_text(encoding="utf-8")) if summary_path.exists() else None
+        )
+        summary = plan.select_tuned(cfg, records, frozen)
+        stamp = provenance.collect(cfg, seed=int(cfg["seed"]), repo_dir=Path.cwd())
+        if frozen:  # algorithms tuned earlier keep their entries; only the new ones are stamped
+            summary["provenance"] = frozen["provenance"]
+            summary["provenance_added"] = {**frozen.get("provenance_added", {}), "later": stamp}
+        else:
+            summary["provenance"] = stamp
         _write_json(summary_path, summary)
         runner.compress(work / "tuning.jsonl", results / "tuning_runs.jsonl.gz")
         print(f"best ALNS policy on the tuning data: {summary['best_alns_policy']}")
         return 0
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
-    if args.stage == "rerun-lkh":
+    if args.stage in ("rerun-lkh", "add-runs"):
         name = args.target
         records = runner.read_records(work / f"{name}.jsonl")
-        tasks = plan.missing_lkh_tasks(cfg, summary, records, stage=name)
+        algorithm = "lkh3" if args.stage == "rerun-lkh" else args.algorithm
+        tasks = plan.missing_tasks(cfg, summary, records, algorithm, stage=name)
         runner.execute(tasks, work / f"{name}.jsonl", workers)
         runner.compress(work / f"{name}.jsonl", results / f"{name}_runs.jsonl.gz")
         return 0
@@ -430,7 +439,7 @@ def build_parser() -> argparse.ArgumentParser:
     top = parser.add_subparsers(dest="group", required=True)
 
     exp = top.add_parser("experiments", help="Phase 5 experiments (tune, run, scale)")
-    exp.add_argument("stage", choices=["tune", "run", "scale", "analyze", "rerun-lkh"])
+    exp.add_argument("stage", choices=["tune", "run", "scale", "analyze", "rerun-lkh", "add-runs"])
     exp.add_argument("--config", type=Path, default=Path("configs/phase5_experiments.yaml"))
     exp.add_argument("--results-dir", type=Path, default=Path("results/phase5"))
     exp.add_argument("--work-dir", type=Path, default=Path("data/processed/phase5_work"))
@@ -439,7 +448,10 @@ def build_parser() -> argparse.ArgumentParser:
     exp.add_argument("--trials", type=int, default=None, help="tune: override the trials")
     exp.add_argument("--instances", type=int, default=None, help="run: first k instances only")
     exp.add_argument("--seconds", type=float, default=None, help="run: override the budget")
-    exp.add_argument("--target", choices=["main", "scaling"], default="main", help="rerun-lkh")
+    exp.add_argument(
+        "--target", choices=["main", "scaling"], default="main", help="rerun-lkh, add-runs"
+    )
+    exp.add_argument("--algorithm", default="tabu_cl", help="add-runs: algorithm to add")
     exp.set_defaults(func=_cmd_experiments)
 
     solvers = top.add_parser("solvers", help="validate the solvers")

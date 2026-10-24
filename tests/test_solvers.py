@@ -12,7 +12,7 @@ from hypothesis import strategies as st
 
 from genomeasm import objective
 from genomeasm.instance import AssemblyInstance
-from genomeasm.io import load_genome
+from genomeasm.io import Genome, load_genome
 from genomeasm.objective import is_permutation
 from genomeasm.simulate import ReadLengthModel, SimulationConfig, simulate_reads
 from genomeasm.solver_validation import random_matrix_problem
@@ -35,7 +35,7 @@ from genomeasm.solvers.moves import (
     swap_delta,
     tour_fitness,
 )
-from genomeasm.solvers.tabu import tabu_search
+from genomeasm.solvers.tabu import _candidate_lists, tabu_search
 
 ROOT = Path(__file__).resolve().parent.parent
 TOY = ["ATGCG", "GCGTA", "GTACC"]
@@ -241,6 +241,74 @@ def test_tabu_options_and_restarts() -> None:
         ).order,
         2,
     )
+
+
+def test_tabu_candidate_lists_hold_the_best_partners_by_overlap() -> None:
+    problem = random_matrix_problem(np.random.default_rng(11), 25)
+    w = np.ascontiguousarray(problem.weights)
+    pred, succ = _candidate_lists(w, 4)
+    for x in range(1, 26):
+        for lists, column in ((pred, w[:, x]), (succ, w[x, :])):
+            col = column.astype(np.int64)
+            col[0] = col[x] = 0
+            chosen = [int(a) for a in lists[x] if a >= 0]
+            assert x not in chosen and 0 not in chosen and len(set(chosen)) == len(chosen)
+            # the values of the chosen partners are the largest ones, in decreasing order
+            expected = sorted(col[col > 0], reverse=True)[:4]
+            assert [int(col[a]) for a in chosen] == [int(v) for v in expected]
+
+
+def test_tabu_without_candidate_moves_keeps_its_random_stream() -> None:
+    problem = random_matrix_problem(np.random.default_rng(4), 40)
+    plain = tabu_search(problem, Budget(evaluations=30000), seed=2, moves_per_iteration=200)
+    zero = tabu_search(
+        problem, Budget(evaluations=30000), seed=2, moves_per_iteration=200, candidate_fraction=0.0
+    )
+    assert np.array_equal(plain.order, zero.order) and plain.evaluations == zero.evaluations
+
+
+@pytest.mark.parametrize("fraction", [0.25, 0.9, 1.0])
+def test_tabu_candidate_moves_are_valid_consistent_and_reproducible(fraction: float) -> None:
+    # the position table that the candidate moves rely on is checked through the final fitness:
+    # a stale position would make the incremental fitness differ from the recomputed one
+    rng = np.random.default_rng(8)
+    for n in (20, 60):
+        problem = random_matrix_problem(rng, n)
+        a, b = (
+            tabu_search(
+                problem,
+                Budget(evaluations=60000),
+                seed=1,
+                moves_per_iteration=5 * n,
+                restart_after=30,
+                kick=3,
+                candidate_fraction=fraction,
+            )
+            for _ in range(2)
+        )
+        assert valid(a.order, n)
+        assert a.fitness == problem.fitness(a.order) >= greedy(problem).fitness
+        assert np.array_equal(a.order, b.order) and a.evaluations == b.evaluations
+        assert a.info["restarts"] > 0
+
+
+def test_tabu_candidate_moves_work_on_real_reads() -> None:
+    full = load_genome("NC_001422.1", ROOT / "data" / "raw").genome
+    window = Genome.from_sequence("window", full.sequence[:1500])
+    reads = simulate_reads(
+        window, SimulationConfig(coverage=8, read_length=ReadLengthModel.fixed(100), seed=2)
+    )
+    inst = AssemblyInstance.from_readset(reads)
+    problem = Problem.from_instance(inst)
+    result = tabu_search(
+        problem,
+        Budget(evaluations=150000),
+        seed=1,
+        moves_per_iteration=3 * problem.n,
+        candidate_fraction=0.9,
+    )
+    assert valid(result.order, problem.n)
+    assert result.fitness == inst.fitness(result.order) >= greedy(problem).fitness
 
 
 # ---- ALNS ---------------------------------------------------------------------------------------

@@ -16,6 +16,11 @@ Parameters (all exposed; tuned in Phase 5 on separate tuning instances):
 * ``kick``: number of random swaps applied to the best tour at a restart. Default
   ``max(3, round(0.05 * n))``.
 * ``init``: ``"greedy"`` (default) or ``"random"``.
+* ``candidate_fraction`` and ``candidates``: with probability ``candidate_fraction`` a sampled
+  move is a *candidate-list insert* (a read is put right after one of its ``candidates`` best
+  predecessors or right before one of its best successors, by overlap) instead of a uniformly
+  random move. Default 0 (the plain random-sampling tabu search, "tabu" in the experiments);
+  "tabu_cl" uses them.
 
 Evaluations: one per delta computed (full recomputations at start and restart count 1 each).
 """
@@ -60,6 +65,11 @@ def _tabu_chunk(
     stall: int,
     restart_after: int,
     kick: int,
+    pos: IntArray,
+    cand_pred: IntArray,
+    cand_succ: IntArray,
+    cand_prob: float,
+    ncand: int,
 ) -> tuple[int, int, int, int, int, int]:
     """Run ``n_iter`` iterations. Returns (cur, best, evaluations, stall, restarts, last_it)."""
     n = t.shape[0] - 1
@@ -89,6 +99,24 @@ def _tabu_chunk(
                     j = k % (n - 1)  # j runs over 0..n without i - 1 and i
                     if j >= i - 1:
                         j += 2
+            elif cand_prob > 0.0 and np.random.random() < cand_prob:
+                # candidate-list insert: put a random read next to one of its best partners
+                x0 = np.random.randint(1, n + 1)
+                r = np.random.randint(0, ncand)
+                kind = 1
+                i = pos[x0]
+                if np.random.random() < 0.5:
+                    a0 = cand_pred[x0, r]  # right after a read that overlaps into x0
+                    if a0 < 0:
+                        continue
+                    j = pos[a0]
+                else:
+                    b0 = cand_succ[x0, r]  # right before a read that x0 overlaps into
+                    if b0 < 0:
+                        continue
+                    j = pos[b0] - 1
+                if j == i or j == i - 1:
+                    continue
             else:
                 kind = np.random.randint(0, 2)
                 i = np.random.randint(1, n + 1)
@@ -124,10 +152,14 @@ def _tabu_chunk(
         if chosen_kind == 0:
             x, y = t[ci], t[cj]
             apply_swap(t, ci, cj)
+            pos[t[ci]] = ci
+            pos[t[cj]] = cj
             tabu_until[y] = it + np.random.randint(tenure_lo, tenure_hi + 1)
         else:
             x = t[ci]
             apply_insert(t, ci, cj)
+            for p in range(min(ci, cj), min(max(ci, cj) + 2, n + 1)):
+                pos[t[p]] = p
         tabu_until[x] = it + np.random.randint(tenure_lo, tenure_hi + 1)
         cur += cdelta
         if cur > best:
@@ -143,12 +175,28 @@ def _tabu_chunk(
                 b = np.random.randint(1, n + 1)
                 if a != b:
                     apply_swap(t, a, b)
+            for p in range(n + 1):
+                pos[t[p]] = p
             cur = tour_fitness(t, w)
             evals += 1
             tabu_until[:] = 0
             stall = 0
             restarts += 1
     return cur, best, evals, stall, restarts, it0 + n_iter
+
+
+def _candidate_lists(w: NDArray[np.int32], k: int) -> tuple[IntArray, IntArray]:
+    """For every read its ``k`` best predecessors and successors by overlap (-1 = none)."""
+    n1 = w.shape[0]
+    pred = np.full((n1, k), -1, dtype=np.int64)
+    succ = np.full((n1, k), -1, dtype=np.int64)
+    for x in range(1, n1):
+        for lists, column in ((pred, w[:, x]), (succ, w[x, :])):
+            col = column.astype(np.int64)
+            col[0] = col[x] = 0
+            best = np.argsort(-col, kind="stable")[:k]
+            lists[x, : best.size] = np.where(col[best] > 0, best, -1)
+    return pred, succ
 
 
 def tabu_search(
@@ -162,6 +210,8 @@ def tabu_search(
     kick: int | None = None,
     init: str = "greedy",
     chunk: int = 20,
+    candidate_fraction: float = 0.0,
+    candidates: int = 6,
 ) -> SolveResult:
     """Tabu search; see the module docstring for the parameters."""
     recorder = Recorder(problem)
@@ -187,6 +237,10 @@ def tabu_search(
     cur = int(tour_fitness(t, w))
     best, best_t = cur, t.copy()
     tabu_until = np.zeros(n + 1, dtype=np.int64)
+    pos = np.empty(n + 1, dtype=np.int64)
+    pos[t] = np.arange(n + 1)
+    k = max(1, candidates)
+    cand_pred, cand_succ = _candidate_lists(w, k)
     evals, it, stall, restarts = 1, 0, 0, 0
     recorder.note(best, evals)
     while not budget.used_up(recorder.elapsed(), evals):
@@ -205,6 +259,11 @@ def tabu_search(
             stall,
             restart_after,
             kick,
+            pos,
+            cand_pred,
+            cand_succ,
+            float(candidate_fraction),
+            k,
         )
         evals += int(e)
         restarts += int(r)

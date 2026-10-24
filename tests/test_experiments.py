@@ -256,6 +256,11 @@ def test_parameter_conversion() -> None:
         {"tenure_factor": 2.0, "moves_factor": 10, "restart_factor": 5, "kick_fraction": 0.1}, 400
     )
     assert kw == {"tenure": 40, "moves_per_iteration": 4000, "restart_after": 2000, "kick": 40}
+    cl = design.tabu_kwargs(plan.default_params(CFG, "tabu_cl")["tabu"], 400)
+    assert cl["candidate_fraction"] == 0.5 and cl["candidates"] == 6
+    assert "candidate_fraction" not in design.tabu_kwargs(
+        plan.default_params(CFG, "tabu")["tabu"], 9
+    )
     params = plan.default_params(CFG, "alns_ucb1")
     akw = design.alns_kwargs(CFG, params)
     assert akw["destroy_fraction"] == (0.10, 0.40) and akw["rewards"] == (1.0, 0.2727, 0.3939, 0.0)
@@ -264,16 +269,17 @@ def test_parameter_conversion() -> None:
 def test_one_tiny_real_task_runs_end_to_end() -> None:
     summary = plan.select_tuned(CFG, _tuning_records())
     spec = CFG["evaluation_instances"][0]
-    names = ["greedy", "tabu", "alns_ucb1", "alns_fixed_random+greedy"]
+    names = ["greedy", "tabu", "tabu_cl", "alns_ucb1", "alns_fixed_random+greedy"]
     task = plan.main_tasks(CFG, summary, seeds=1, specs=[spec], algorithms=names)[0]
     task["seconds"] = 0.4
     records = runner.run_task(task)
     kinds = [r["kind"] for r in records]
-    assert kinds.count("instance") == 1 and kinds.count("run") == 4 and "error" not in kinds
+    assert kinds.count("instance") == 1 and kinds.count("run") == 5 and "error" not in kinds
     instance = records[0]
     assert instance["n"] > 100 and instance["bio_true"]["misjoins"] == 0
     runs = {r["requested"]: r for r in records if r["kind"] == "run"}
     assert runs["greedy"]["seconds"] < 0.4 and runs["tabu"]["fitness"] >= runs["greedy"]["fitness"]
+    assert runs["tabu_cl"]["fitness"] >= runs["greedy"]["fitness"]
     assert (
         runs["alns_ucb1"]["info"]["outcomes"] and runs["alns_ucb1"]["bio"]["genome_fraction"] > 0.9
     )
@@ -297,3 +303,64 @@ def test_finished_tasks_are_not_run_again(tmp_path: Path) -> None:
 def test_markdown_table_helper() -> None:
     text = analysis.markdown(pd.DataFrame({"a": [1, 2], "b": [0.5, 1.25]}))
     assert text.splitlines()[0] == "| a | b |" and "| 2 | 1.250 |" in text
+
+
+# ---- algorithms added after the first run (tabu_cl, decision D-045) ----------------------------
+
+
+def test_adding_tabu_cl_does_not_change_the_other_tuning_trials() -> None:
+    assert (
+        plan.ALGORITHMS_TUNED[-1] == "tabu_cl"
+    )  # appended: earlier random-search seeds are intact
+    for algorithm in plan.ALGORITHMS_TUNED[:-1]:
+        assert plan.ALGORITHMS_TUNED.index(algorithm) < plan.ALGORITHMS_TUNED.index("tabu_cl")
+    space = CFG["tuning"]["space"]["tabu_cl"]
+    trials = plan.trial_list(CFG, "tabu_cl")
+    assert trials[0] == plan.default_params(CFG, "tabu_cl")
+    for trial in trials[1:]:
+        assert all(trial["tabu"][k] in space[k] for k in space)
+    assert plan.trial_list(CFG, "tabu") != trials
+
+
+def test_select_tuned_keeps_the_entries_that_were_frozen_before() -> None:
+    cfg = {**CFG, "tuning": {**CFG["tuning"], "trials": 3}}
+
+    def records(best: int) -> list[dict[str, Any]]:
+        return [
+            {"kind": "run", "instance": "T", "seed_index": 0, "requested": a, "trial": t,
+             "fitness": 100 - 10 * (t != best)}
+            for a in plan.ALGORITHMS_TUNED
+            for t in range(3)
+        ]  # fmt: skip
+
+    first = plan.select_tuned(cfg, records(best=1))
+    assert (
+        plan.select_tuned(cfg, records(best=2), frozen=first)["algorithms"] == first["algorithms"]
+    )
+    only_old = {"algorithms": {k: v for k, v in first["algorithms"].items() if k != "tabu_cl"}}
+    mixed = plan.select_tuned(cfg, records(best=2), frozen=only_old)
+    assert mixed["algorithms"]["tabu_cl"]["best_trial"] == 2
+    assert mixed["algorithms"]["alns_ucb1"] == first["algorithms"]["alns_ucb1"]
+    assert mixed["algorithms"]["tabu"]["best_trial"] == 1
+
+
+def test_missing_tasks_cover_only_the_read_sets_without_a_result() -> None:
+    summary = plan.select_tuned(CFG, _tuning_records())
+    n_sets = len(CFG["evaluation_instances"]) * CFG["seeds"]["evaluation"]
+    none = plan.missing_tasks(CFG, summary, [], "tabu_cl")
+    assert len(none) == n_sets and {t["group"] for t in none} == {"add_tabu_cl"}
+    assert all(len(t["runs"]) == 1 and t["runs"][0]["algorithm"] == "tabu_cl" for t in none)
+    assert all(t["emit_instance"] is False and "lkh_search_seconds" not in t for t in none)
+    spec = CFG["evaluation_instances"][0]["id"]
+    have = [{"kind": "run", "requested": "tabu_cl", "stage": "main", "instance": spec,
+             "seed_index": s} for s in range(CFG["seeds"]["evaluation"])]  # fmt: skip
+    rest = plan.missing_tasks(CFG, summary, have, "tabu_cl")
+    assert len(rest) == n_sets - CFG["seeds"]["evaluation"]
+    assert not {t["spec"]["id"] for t in rest} & {spec}
+    other_stage = [{**r, "stage": "scaling"} for r in have]
+    assert len(plan.missing_tasks(CFG, summary, other_stage, "tabu_cl")) == n_sets
+    scaling = plan.missing_tasks(CFG, summary, [], "lkh3", stage="scaling")
+    assert {t["lkh_search_seconds"] for t in scaling} == {CFG["lkh_scaling_seconds"]}
+    assert {t["group"] for t in scaling} == {"lkh_rerun"}
+    assert len(plan.missing_lkh_tasks(CFG, summary, [])) == n_sets
+    assert "tabu_cl" in CFG["scaling_solvers"]

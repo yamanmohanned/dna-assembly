@@ -114,12 +114,16 @@ def build(spec: InstanceSpec, read_seed: int) -> Built:
 
 
 def tabu_kwargs(params: dict[str, Any], n: int) -> dict[str, Any]:
-    return {
+    kwargs = {
         "tenure": max(3, round(params["tenure_factor"] * n**0.5)),
         "moves_per_iteration": round(params["moves_factor"] * n),
         "restart_after": max(50, round(params["restart_factor"] * n)),
         "kick": max(2, round(params["kick_fraction"] * n)),
     }
+    if "candidate_fraction" in params:
+        kwargs["candidate_fraction"] = float(params["candidate_fraction"])
+        kwargs["candidates"] = int(params["candidates"])
+    return kwargs
 
 
 def alns_kwargs(cfg: dict[str, Any], params: dict[str, Any]) -> dict[str, Any]:
@@ -152,7 +156,7 @@ def run_algorithm(
         return greedy(p)
     if name == "nearest_neighbour":
         return nearest_neighbour(p)
-    if name == "tabu":
+    if name in ("tabu", "tabu_cl"):
         return tabu_search(p, budget, seed=seed, **tabu_kwargs(params["tabu"], n))
     if name.startswith("alns_fixed_"):
         arm = ARM_NAMES.index(name.removeprefix("alns_fixed_"))

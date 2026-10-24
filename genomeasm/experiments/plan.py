@@ -15,13 +15,14 @@ TUNED = [
     "tabu",
     *(f"alns_{p}" for p in ("random", "roundrobin", "roulette", "epsilon_greedy", "ucb1")),
 ]
-ALGORITHMS_TUNED = [*TUNED, "lkh3"]
+# tabu_cl comes last so that the random-search seeds of the other algorithms do not change
+ALGORITHMS_TUNED = [*TUNED, "lkh3", "tabu_cl"]
 
 
 def default_params(cfg: dict[str, Any], algorithm: str) -> dict[str, Any]:
     d = cfg["tuning"]["defaults"]
-    if algorithm == "tabu":
-        return {"tabu": dict(d["tabu"])}
+    if algorithm in ("tabu", "tabu_cl"):
+        return {"tabu": dict(d[algorithm])}
     if algorithm == "lkh3":
         return {"lkh": {}}
     policy = algorithm.removeprefix("alns_")
@@ -38,8 +39,8 @@ def sample_params(cfg: dict[str, Any], algorithm: str, index: int, trial: int) -
     def pick(options: list[Any]) -> Any:
         return options[int(rng.integers(len(options)))]
 
-    if algorithm == "tabu":
-        return {"tabu": {k: pick(v) for k, v in space["tabu"].items()}}
+    if algorithm in ("tabu", "tabu_cl"):
+        return {"tabu": {k: pick(v) for k, v in space[algorithm].items()}}
     policy = algorithm.removeprefix("alns_")
     return {
         "alns": {k: pick(v) for k, v in space["alns"].items()},
@@ -120,11 +121,16 @@ def regret_table(records: list[dict[str, Any]]) -> pd.DataFrame:
     return table.rename(columns={"requested": "algorithm"})
 
 
-def select_tuned(cfg: dict[str, Any], records: list[dict[str, Any]]) -> dict[str, Any]:
+def select_tuned(
+    cfg: dict[str, Any], records: list[dict[str, Any]], frozen: dict[str, Any] | None = None
+) -> dict[str, Any]:
     """The best configuration of every algorithm and the best ALNS policy (tuning data only)."""
     table = regret_table(records)
     summary: dict[str, Any] = {"algorithms": {}}
     for algorithm in ALGORITHMS_TUNED:
+        if frozen and algorithm in frozen["algorithms"]:  # already tuned and used: keep as it was
+            summary["algorithms"][algorithm] = frozen["algorithms"][algorithm]
+            continue
         rows = table[table["algorithm"] == algorithm].sort_values(["mean", "trial"])
         trials = trial_list(cfg, algorithm)
         best_trial = int(rows.iloc[0]["trial"])
@@ -143,7 +149,9 @@ def select_tuned(cfg: dict[str, Any], records: list[dict[str, Any]]) -> dict[str
                 for r in table[table["algorithm"] == algorithm].itertuples()
             ],
         }
-    alns_rows = {a: summary["algorithms"][a]["best_mean_regret"] for a in TUNED if a != "tabu"}
+    alns_rows = {
+        a: summary["algorithms"][a]["best_mean_regret"] for a in TUNED if a.startswith("alns_")
+    }
     summary["best_alns_policy"] = min(alns_rows, key=lambda a: alns_rows[a])
     summary["alns_regret_by_policy"] = alns_rows
     return summary
@@ -160,6 +168,7 @@ MAIN_ALGORITHMS = [
     "greedy",
     "nearest_neighbour",
     "tabu",
+    "tabu_cl",
     *(f"alns_{p}" for p in ("random", "roundrobin", "roulette", "epsilon_greedy", "ucb1")),
     *FIXED_ALGORITHMS,
     "lkh3",
@@ -200,26 +209,33 @@ def main_tasks(
     return tasks
 
 
-def missing_lkh_tasks(
-    cfg: dict[str, Any], summary: dict[str, Any], records: list[dict[str, Any]], stage: str = "main"
+def missing_tasks(
+    cfg: dict[str, Any],
+    summary: dict[str, Any],
+    records: list[dict[str, Any]],
+    algorithm: str,
+    stage: str = "main",
 ) -> list[dict[str, Any]]:
-    """Tasks that run only LKH-3 on the read sets where it has no result (e.g. WSL crashed).
+    """Tasks that run only ``algorithm`` on the read sets where it has no result yet.
 
-    The read sets are rebuilt from the same seeds, so they are identical to the original ones.
+    Used when LKH-3 has to be repeated after a WSL crash and when an algorithm is added after the
+    first run (tabu_cl, decision D-045). The read sets are rebuilt from the same seeds, so they are
+    identical to the original ones.
     """
     have = {
         (r["instance"], r["seed_index"])
         for r in records
-        if r.get("kind") == "run" and r.get("requested") == "lkh3" and r["stage"] == stage
+        if r.get("kind") == "run" and r.get("requested") == algorithm and r["stage"] == stage
     }
+    group = "lkh_rerun" if algorithm == "lkh3" else f"add_{algorithm}"
     specs = cfg["evaluation_instances"] if stage == "main" else cfg["scaling_instances"]
     tasks = []
     for si, spec in enumerate(specs):
         for s in range(int(cfg["seeds"]["evaluation" if stage == "main" else "scaling"])):
             if (spec["id"], s) not in have:
-                run = {"algorithm": "lkh3", "params": _params_for(summary, "lkh3")}
+                run = {"algorithm": algorithm, "params": _params_for(summary, algorithm)}
                 extra: dict[str, Any] = {"emit_instance": False}
-                if stage == "scaling":
+                if stage == "scaling" and algorithm == "lkh3":
                     extra["lkh_search_seconds"] = float(cfg["lkh_scaling_seconds"])
                 tasks.append(
                     _task(
@@ -228,13 +244,19 @@ def missing_lkh_tasks(
                         si,
                         spec,
                         s,
-                        "lkh_rerun",
+                        group,
                         [run],
                         float(cfg["budget_seconds"]),
                         **extra,
                     )
                 )
     return tasks
+
+
+def missing_lkh_tasks(
+    cfg: dict[str, Any], summary: dict[str, Any], records: list[dict[str, Any]], stage: str = "main"
+) -> list[dict[str, Any]]:
+    return missing_tasks(cfg, summary, records, "lkh3", stage)
 
 
 def scaling_tasks(

@@ -37,7 +37,7 @@ seeds: {evaluation: 30, tuning: 3, scaling: 10}
 workers: 5
 budget_seconds: 8         # same wall-clock for every timed solver, LKH-3 preprocessing included
 tuning_budget_seconds: 5
-scaling_solvers: [greedy, tabu, alns_random, alns_ucb1, lkh3]
+scaling_solvers: [greedy, tabu, tabu_cl, alns_random, alns_ucb1, lkh3]
 lkh_scaling_seconds: 1    # scaling: LKH-3 search time (the point is its total wall-clock)
 
 policies: [random, roundrobin, roulette, epsilon_greedy, ucb1]
@@ -50,6 +50,9 @@ tuning:
   trials: 24
   defaults:
     tabu: {tenure_factor: 1.0, moves_factor: 20, restart_factor: 10, kick_fraction: 0.05}
+    # tabu_cl (added after the first main run, decision D-045): tabu with candidate-list inserts
+    tabu_cl: {tenure_factor: 1.0, moves_factor: 20, restart_factor: 10, kick_fraction: 0.05,
+              candidate_fraction: 0.5, candidates: 6}
     alns: {destroy_lo: 0.10, destroy_hi: 0.40, q_cap: 30, noise: 0.3, final_ratio: 0.001,
            accept_probability0: 0.5, regret_k: 2, p_worst: 3.0, reward_preset: classical}
     policy:
@@ -64,6 +67,13 @@ tuning:
       moves_factor: [5, 10, 20, 40]
       restart_factor: [2, 5, 10, 30]
       kick_fraction: [0.02, 0.05, 0.10, 0.20]
+    tabu_cl:
+      tenure_factor: [0.25, 0.5, 1.0, 2.0]
+      moves_factor: [5, 10, 20, 40]
+      restart_factor: [2, 5, 10, 30]
+      kick_fraction: [0.02, 0.05, 0.10, 0.20]
+      candidate_fraction: [0.25, 0.5, 0.75, 0.9]
+      candidates: [3, 6, 12]
     alns:
       destroy_lo: [0.02, 0.05, 0.10]
       destroy_hi: [0.15, 0.25, 0.40, 0.60]
@@ -100,9 +110,11 @@ statistics:
   vs_roulette: [alns_ucb1, alns_epsilon_greedy]   # bandits against the classical adaptive baseline
   single_operator_vs_random: true
   main_pairs:     # filled with the best ALNS policy chosen on the tuning data (see tuning summary)
-    - [alns_best, tabu]
+    - [alns_best, tabu_cl]
     - [alns_best, lkh3]
     - [alns_best, greedy]
-    - [tabu, lkh3]
-    - [tabu, greedy]
+    - [tabu_cl, lkh3]
+    - [tabu_cl, greedy]
     - [lkh3, greedy]
+    - [tabu_cl, tabu]      # added with tabu_cl (decision D-045); the original pairs used plain tabu
+    - [alns_best, tabu]
