@@ -290,6 +290,33 @@ def _cmd_solvers_validate(args: argparse.Namespace) -> int:
     return 0 if results["all_passed"] else 1
 
 
+def _cmd_app(args: argparse.Namespace) -> int:
+    """app run: start the Streamlit application; app benchmark: time its worst interactive runs."""
+    import subprocess
+
+    from genomeasm.appkit.paths import ROOT
+
+    if args.command == "run":
+        command = [
+            sys.executable, "-m", "streamlit", "run", str(ROOT / "app" / "streamlit_app.py"),
+            "--server.port", str(args.port), "--server.headless", str(not args.browser).lower(),
+            "--browser.gatherUsageStats", "false",
+        ]  # fmt: skip
+        return subprocess.call(command, cwd=ROOT)
+    from genomeasm.appkit import timing
+
+    result = timing.measure()
+    result["provenance"] = provenance.collect(
+        {"limits": result["interface_limits"], "scenarios": sorted(result["scenarios"])},
+        seed=None, repo_dir=Path.cwd(),
+    )  # fmt: skip
+    _write_json(args.out, result)
+    for name, scenario in result["scenarios"].items():
+        print(f"{name}: {scenario['total']:.1f} s  {scenario}")
+    print(f"worst case {result['worst_total_seconds']:.1f} s of {result['limit_seconds']:.0f} s")
+    return 0 if result["ok"] else 1
+
+
 def _cmd_solve(args: argparse.Namespace) -> int:
     """Simulate reads, build the instance and run one solver (a quick look, not an experiment)."""
     try:
@@ -481,6 +508,18 @@ def build_parser() -> argparse.ArgumentParser:
     solve.add_argument("--seed", type=int, default=0)
     solve.add_argument("--raw-dir", type=Path, default=DEFAULT_RAW_DIR)
     solve.set_defaults(func=_cmd_solve)
+
+    app = top.add_parser("app", help="the interactive application (Phase 6)")
+    app_sub = app.add_subparsers(dest="command", required=True)
+    app_run = app_sub.add_parser("run", help="start the application (offline)")
+    app_run.add_argument("--port", type=int, default=8501)
+    app_run.add_argument("--browser", action="store_true", help="open it in the default browser")
+    app_run.set_defaults(func=_cmd_app)
+    app_bench = app_sub.add_parser("benchmark", help="measure the worst interactive runs")
+    app_bench.add_argument(
+        "--out", type=Path, default=Path("results/phase6/interactive_timing.json")
+    )
+    app_bench.set_defaults(func=_cmd_app)
 
     overlap = top.add_parser("overlap", help="validate the overlap graph against the ground truth")
     overlap_sub = overlap.add_subparsers(dest="command", required=True)

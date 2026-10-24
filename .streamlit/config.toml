@@ -1,0 +1,19 @@
+# Offline application: nothing is sent anywhere (no usage statistics, no update checks).
+[browser]
+gatherUsageStats = false
+
+[server]
+headless = true
+fileWatcherType = "none"
+maxUploadSize = 5
+
+[client]
+toolbarMode = "minimal"
+
+[theme]
+base = "light"
+primaryColor = "#0072B2"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f2f5f8"
+textColor = "#1d2733"
+font = "sans serif"

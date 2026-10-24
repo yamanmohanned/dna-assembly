@@ -58,8 +58,13 @@ def figure_bytes(fig: Figure, fmt: str, footer: str | None = None) -> bytes:
 # ---- Learn: the toy example ---------------------------------------------------------------------
 
 
-def toy_graph(inst: AssemblyInstance, labels: Sequence[str], order: Sequence[int] | None) -> Figure:
-    """Reads as nodes, overlaps as arrows; the chosen order is drawn in red."""
+def toy_graph(
+    inst: AssemblyInstance,
+    labels: Sequence[str],
+    order: Sequence[int] | None,
+    highlight: Sequence[tuple[int, int]] | None = None,
+) -> Figure:
+    """Reads as nodes, overlaps as arrows; the chosen order (or the given arrows) in red."""
     fig, ax = _fig(5.8, 5.2)
     ax.axis("off")
     ax.set_aspect("equal")
@@ -71,6 +76,7 @@ def toy_graph(inst: AssemblyInstance, labels: Sequence[str], order: Sequence[int
         for k in range(n)
     ]
     chosen = set(zip(order[:-1], order[1:], strict=True)) if order is not None else set()
+    chosen |= set(highlight or ())
     rad = 0.22
     for i in range(n):
         for j in range(n):
@@ -110,7 +116,7 @@ def toy_graph(inst: AssemblyInstance, labels: Sequence[str], order: Sequence[int
         ax.text(
             x * 1.33,
             y * 1.33,
-            inst.reads[k],
+            (inst.reads[k] if len(inst.reads[k]) <= 12 else inst.reads[k][:11] + "..."),
             ha="center",
             va="center",
             fontsize=9.5,
@@ -145,7 +151,9 @@ def tour_strip(
     order_before: Sequence[int], order_after: Sequence[int], labels: Sequence[str], title: str
 ) -> Figure:
     """Two rows of boxes: the order before and after one ALNS step (changed places outlined)."""
-    fig, ax = _fig(max(5.0, 0.9 * len(order_before) + 2.0), 2.4)
+    apply_style()
+    fig = Figure(figsize=(max(5.5, 0.9 * len(order_before) + 2.0), 3.0))
+    ax = fig.add_axes((0.02, 0.03, 0.96, 0.8))
     ax.axis("off")
     n = len(order_before)
     ax.set_xlim(-1.6, n + 0.2)
@@ -481,12 +489,14 @@ def operator_probabilities(
         t = np.array([h[0] for h in history])
         p = np.array([list(h[1]) for h in history]).T
         ax.stackplot(t, p, colors=PALETTE, labels=list(ARM_NAMES), alpha=0.9)
+        ax.legend(
+            fontsize=8.5, loc="center left", bbox_to_anchor=(1.0, 0.5), title="destroy + repair"
+        )
     ax.set_xlim(0, max(seconds, 0.5))
     ax.set_ylim(0, 1)
     ax.set_xlabel("Wall-clock time (s)")
     ax.set_ylabel("Probability of choosing the pair")
     ax.set_title("Operator selection over time")
-    ax.legend(fontsize=8.5, loc="center left", bbox_to_anchor=(1.0, 0.5), title="destroy + repair")
     return fig
 
 

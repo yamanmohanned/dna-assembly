@@ -10,7 +10,7 @@ PYTHON ?= python3
 PY := .venv/bin/python
 endif
 
-.PHONY: help venv test lint format typecheck check
+.PHONY: help venv test lint format typecheck check app
 
 help:
 	@echo Targets: venv test lint format typecheck check
@@ -20,6 +20,7 @@ help:
 	@echo format    apply ruff formatting
 	@echo typecheck mypy
 	@echo check     lint, typecheck and test
+	@echo app       start the interactive application (offline)
 
 venv:
 	$(PYTHON) -m venv .venv
@@ -43,3 +44,6 @@ typecheck:
 check: lint typecheck test
 
 # TODO (Phase 8): all, which must reproduce every figure, table, report and deck from raw data.
+
+app:
+	$(PY) -m genomeasm app run

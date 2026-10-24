@@ -51,6 +51,9 @@ select = ["E", "F", "I", "UP", "B", "SIM", "NPY"]
 "genomeasm/solvers/alns.py" = ["NPY002"]
 # figure code carries long caption strings and compact plotting calls
 "genomeasm/experiments/figures.py" = ["E501"]
+# application pages carry long sentences of explanation text
+"app/**/*.py" = ["E501"]
+"genomeasm/appkit/figs.py" = ["E501"]
 
 [tool.mypy]
 python_version = "3.11"

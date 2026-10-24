@@ -149,6 +149,23 @@ def build(params: InstanceParams) -> design.Built:
     )  # fmt: skip
 
 
+def tiny_instance(seed: int) -> design.Built:
+    """A tiny exact-overlap instance with 5 to 8 reads (for the step-through mode).
+
+    Windows of phiX174 are tried from ``seed`` upwards until the substring-free read set has 5 to 8
+    reads, so the same seed always gives the same instance.
+    """
+    for k in range(400):
+        params = InstanceParams(
+            genome="NC_001422.1", start=(37 * (seed + k)) % 4800, length=240, coverage=2.6,
+            read_length=80, error=0.0, seed=seed + k, tolerance=0.0, min_overlap=10,
+        )  # fmt: skip
+        built = build(params)
+        if 5 <= built.instance.n <= 8:
+            return built
+    raise RuntimeError("no tiny instance found")  # pragma: no cover
+
+
 # ---- solvers -------------------------------------------------------------------------------------
 
 
