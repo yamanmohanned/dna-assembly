@@ -156,6 +156,12 @@ http://localhost:8501. The first start compiles code for a second or two. Stop w
 | Assembly Viewer | order from "The true order", press Assemble | straight dot-plot line, 0 misjoins |
 | Reproducibility | read | commit, seeds, checksums |
 
+**LKH-3 and WSL.** LKH-3 is a Linux program, so it runs inside Ubuntu on WSL (Windows Subsystem for Linux). In the Solver Lab,
+choose "LKH-3": a green box says it is ready; a red box says WSL does not answer and tells you what to do (open PowerShell, run
+`wsl -d Ubuntu-24.04 -- echo ok`; if it prints an error such as E_UNEXPECTED, restart the computer; then press "Check again").
+Every other solver runs without WSL. The progress bar above a run has three steps: 1 simulate the reads and build the overlap
+graph, 2 search (for LKH-3 it counts the seconds), 3 grade the result against the real genome.
+
 Tips: every chart has SVG and PNG buttons; sliders in the left bar are shared between pages; a green badge
 means "computed now", an orange badge means "precomputed". If a page seems stuck, wait for the busy
 indicator, then press F5. Restart the server after changing code.

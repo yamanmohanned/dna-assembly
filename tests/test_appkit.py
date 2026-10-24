@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import re
+import subprocess
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -302,3 +304,38 @@ def test_helix_letters_are_the_requested_sequence() -> None:
     assert letters.count("A") + letters.count("T") == 24 and len(letters) == 48
     rna = figs.dna_helix("ACGT", rna=True)
     assert [t.get_text() for t in rna.axes[0].texts if len(t.get_text()) == 1] == list("ACGU")
+
+
+def test_lkh_status_checks_that_wsl_answers_and_explains_how_to_fix_it(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    class Done:
+        def __init__(self, code: int, out: bytes) -> None:
+            self.returncode, self.stdout = code, out
+
+    program = tmp_path / "LKH"
+    program.write_text("x")
+    monkeypatch.setenv("GENOMEASM_LKH", str(program))
+    monkeypatch.setattr(lab.subprocess, "run", lambda *a, **k: Done(0, b"ok" + bytes(2)))
+    assert lab.lkh_status(force=True) == (True, lab.LKH_READY)
+    monkeypatch.setattr(lab.subprocess, "run", lambda *a, **k: Done(255, b""))
+    ready, message = lab.lkh_status(force=True)
+    assert not ready and "E_UNEXPECTED" in message and "wsl -d" in message
+
+    def hang(*args: object, **kwargs: object) -> None:
+        raise subprocess.TimeoutExpired("wsl", 25)
+
+    monkeypatch.setattr(lab.subprocess, "run", hang)
+    ready, message = lab.lkh_status(force=True)
+    assert not ready and "25 seconds" in message
+    monkeypatch.setattr(lab.subprocess, "run", lambda *a, **k: Done(0, b"ok"))
+    assert lab.lkh_status()[0] is False  # the answer of the last minute is reused (cached)
+    monkeypatch.setenv("GENOMEASM_LKH", str(tmp_path / "missing"))
+    assert lab.lkh_status(force=True)[0] is False and "not found" in lab.lkh_status()[1]
+    lab.lkh_status(force=True)
+
+
+def test_evaluations_are_never_shown_as_zero_for_lkh3() -> None:
+    assert lab.evaluations_text("lkh3", 0) == "not reported"
+    assert lab.evaluations_text("alns", 1234567) == "1,234,567"
+    assert lab.evaluations_text("greedy", 0) == "0"

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
@@ -73,25 +74,27 @@ with run_tab:
         help="Off: the default parameters of the configuration file (trial 0 of the tuning)",
     )  # fmt: skip
     if solver == "lkh3":
-        if lab.lkh_available():
-            st.info(
-                "LKH-3 runs in Ubuntu (WSL); its total time includes file writing and preprocessing."
-            )
-        else:
-            st.warning(
-                "LKH-3 is not available on this computer; it will be reported as unavailable, never replaced."
-            )
+        box, button = st.columns([6, 1], vertical_alignment="center")
+        recheck = button.button("Check again", key="lkh-recheck", icon=":material/refresh:")
+        ready, message = lab.lkh_status(force=recheck)
+        (box.success if ready else box.error)(message)
     st.caption(
         f"Every live run is limited to {int(lab.MAX_SECONDS)} s of search and {lab.MAX_READS} reads, so "
         "that it finishes in under 30 s. Larger runs: page Experiments (precomputed)."
     )
     if st.button("Run", type="primary", icon=":material/play_arrow:", key="lab-run"):
+        bar = st.progress(
+            0.0, text="Step 1 of 3: simulating the reads and computing the overlap graph..."
+        )
         built = ui.build_instance(params)
-        if built is not None:
+        if built is None:
+            bar.empty()
+        else:
             greedy_f = int(greedy(built.problem).fitness)
             true_f = int(built.instance.fitness(built.instance.true_order()))
             refs = {"greedy": float(greedy_f), "true read order": float(true_f)}
-            bar = st.progress(0.0, text="Starting...")
+            label = lab.SOLVERS[solver]
+            bar.progress(0.1, text=f"Step 2 of 3: {label} is searching (budget {seconds} s)...")
             ph_live = st.empty()
             points: list[tuple[float, float]] = []
             history: list[tuple[float, list[float]]] = []
@@ -112,27 +115,51 @@ with run_tab:
                     # a redraw takes time from the search: keep it near 10% of the run
                     next_draw[0] = t + max(1.0, 8 * (time.perf_counter() - drawn))
                 bar.progress(
-                    min(t / seconds, 1.0),
-                    text=f"{t:.1f} s of {seconds} s, best F = {int(event['best']):,}",
+                    0.1 + 0.8 * min(t / seconds, 1.0),
+                    text=f"Step 2 of 3: {label} is searching: {t:.1f} s of {seconds} s, "
+                    f"best F = {int(event['best']):,}",
                 )
 
+            live_solver = solver in ("tabu", "tabu_cl", "alns")
             started = time.perf_counter()
             try:
-                result = lab.run_solver(
-                    built, solver, seconds=seconds, seed=solver_seed, policy=policy, tuned=tuned,
-                    progress=on_progress,
-                )  # fmt: skip
+                if live_solver:
+                    result = lab.run_solver(
+                        built, solver, seconds=seconds, seed=solver_seed, policy=policy,
+                        tuned=tuned, progress=on_progress,
+                    )  # fmt: skip
+                else:  # no progress events (greedy, nearest neighbour, LKH-3): show the elapsed time
+                    expected = float(seconds) if solver == "lkh3" else 0.5
+                    with ThreadPoolExecutor(max_workers=1) as pool:
+                        future = pool.submit(
+                            lab.run_solver, built, solver, seconds=seconds, seed=solver_seed,
+                            policy=policy, tuned=tuned,
+                        )  # fmt: skip
+                        while not future.done():
+                            waited = time.perf_counter() - started
+                            bar.progress(
+                                0.1 + 0.8 * min(waited / expected, 0.97),
+                                text=f"Step 2 of 3: {label} is working: {waited:.0f} s "
+                                f"(at most about {expected:.0f} s)...",
+                            )
+                            time.sleep(0.2)
+                        result = future.result()
             except LkhError as error:
                 bar.empty()
                 st.error(f"LKH-3 could not run: {error}. It is reported as unavailable (rule R9).")
                 st.session_state.pop("lab_run", None)
             else:
-                bar.empty()
+                bar.progress(
+                    0.95, text="Step 3 of 3: grading the result against the real genome..."
+                )
                 st.session_state["lab_run"] = _summary(
                     result, built, params,
                     {"solver": solver, "policy": policy, "history": history, "refs": refs,
                      "wall": time.perf_counter() - started, "n": built.problem.n},
                 )  # fmt: skip
+                bar.progress(1.0, text="Done.")
+                time.sleep(0.4)
+                bar.empty()
                 ph_live.empty()
     run = st.session_state.get("lab_run")
     if run is not None:
@@ -149,7 +176,11 @@ with run_tab:
             help="Delta: against greedy",
         )
         b.metric("Merged length L", f"{run['merged_length']:,}")
-        c.metric("Evaluations", f"{run['evaluations']:,}")
+        c.metric(
+            "Evaluations",
+            lab.evaluations_text(run["solver"], run["evaluations"]),
+            help="LKH-3 does not count evaluations; the other solvers count every move they try",
+        )
         d.metric(
             "Time",
             f"{run['seconds']:.1f} s",

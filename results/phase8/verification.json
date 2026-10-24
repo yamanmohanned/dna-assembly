@@ -17,7 +17,7 @@
       "context": {}
     },
     "guide": {
-      "numbers_checked": 94,
+      "numbers_checked": 97,
       "unexplained": [],
       "context": {}
     }
@@ -27,8 +27,8 @@
   "provenance": {
     "config_hash": "71449e83262e0159b145e52b0a267938f1f3875c5a884dcc197bd936811803f9",
     "git": {
-      "commit": "b33d06a605aae581c1e00e7b452f322ae1016575",
-      "dirty": false
+      "commit": "921e304a0d5102a9f18e51b5f4c5508baa37a66f",
+      "dirty": true
     },
     "seed": null,
     "library_versions": {
@@ -47,6 +47,6 @@
       "python": "3.12.7",
       "cpu_count": 8
     },
-    "timestamp_utc": "2026-10-24T16:32:39+00:00"
+    "timestamp_utc": "2026-10-24T20:32:46+00:00"
   }
 }

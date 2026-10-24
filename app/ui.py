@@ -109,25 +109,38 @@ def instance_controls(prefix: str, *, overlap_options: bool = False) -> lab.Inst
         max_window = min(lab.MAX_WINDOW, total)
         length = st.slider(
             "Window length (letters)", 500, max_window, min(saved.length, max_window), 100,
-            key=f"{prefix}-length", help="Reads are cut from this window of the real genome",
+            key=f"{prefix}-length", format="%d",
+            help="Reads are cut from this window of the real genome",
         )  # fmt: skip
+        last_start = (total - length) // 100 * 100  # the largest start the steps of 100 can reach
+        if st.session_state.get(f"{prefix}-start", 0) > last_start:
+            st.session_state[f"{prefix}-start"] = (
+                last_start  # the window got longer: keep it inside
+            )
         start = st.slider(
-            "Window start", 0, total - length, min(saved.start, total - length), 100,
-            key=f"{prefix}-start",
+            "Window start (letters)", 0, max(last_start, 100), min(saved.start, last_start), 100,
+            key=f"{prefix}-start", format="%d",
         )  # fmt: skip
         read_length = st.slider(
-            "Read length (letters)", 40, 200, saved.read_length, 10, key=f"{prefix}-rl"
+            "Read length (letters)", 40, 200, saved.read_length, 10, key=f"{prefix}-rl", format="%d"
         )
         coverage = st.slider(
-            "Coverage (x)", 1.0, 20.0, float(saved.coverage), 0.5, key=f"{prefix}-cov",
+            "Coverage (x)", 1.0, 20.0, float(saved.coverage), 0.5, key=f"{prefix}-cov", format="%.1f",
             help="Average number of reads covering a letter of the genome",
         )  # fmt: skip
         error = (
             st.slider(
-                "Substitution error rate (%)", 0.0, 3.0, 100 * saved.error, 0.1, key=f"{prefix}-err"
+                "Substitution error rate (%)",
+                0.0,
+                3.0,
+                round(100 * saved.error, 1),
+                0.1,
+                key=f"{prefix}-err",
+                format="%.1f",
             )
             / 100
         )
+        error = round(error, 4)
         seed = int(st.number_input("Seed", 0, 1_000_000, saved.seed, 1, key=f"{prefix}-seed"))
         tolerance, min_overlap = saved.tolerance, saved.min_overlap
         if overlap_options:
@@ -136,16 +149,17 @@ def instance_controls(prefix: str, *, overlap_options: bool = False) -> lab.Inst
                     "Mismatches allowed in an overlap (%)",
                     0.0,
                     10.0,
-                    100 * saved.tolerance,
+                    round(100 * saved.tolerance, 1),
                     0.5,
                     key=f"{prefix}-tol",
+                    format="%.1f",
                     help="0 means exact overlaps; 5 lets one letter in 20 of an overlap differ",
                 )  # fmt: skip
                 / 100
             )
             min_overlap = st.slider(
                 "Minimum overlap tau (letters)", 5, max(6, read_length - 1),
-                min(max(saved.min_overlap, 5), max(read_length - 1, 6)), 1, key=f"{prefix}-tau",
+                min(max(saved.min_overlap, 5), max(read_length - 1, 6)), 1, key=f"{prefix}-tau", format="%d",
             )  # fmt: skip
         n_est = round(coverage * length / read_length)
         st.metric(

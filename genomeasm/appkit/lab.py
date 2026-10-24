@@ -9,6 +9,7 @@ shown from the precomputed results of Phase 5 and are labelled as such.
 from __future__ import annotations
 
 import json
+import subprocess
 import time
 from collections.abc import Callable
 from dataclasses import asdict, dataclass
@@ -27,7 +28,7 @@ from genomeasm.simulate import ReadLengthModel, ReadSet, SimulationConfig, simul
 from genomeasm.solvers.alns import alns
 from genomeasm.solvers.common import Budget, IntArray, Problem, SolveResult
 from genomeasm.solvers.greedy import greedy, nearest_neighbour
-from genomeasm.solvers.lkh import lkh_binary
+from genomeasm.solvers.lkh import WSL_DISTRO, lkh_binary
 from genomeasm.solvers.tabu import tabu_search
 
 # ---- limits that keep an interactive run under 30 seconds ----------------------------------------
@@ -191,6 +192,50 @@ def solver_params(solver: str, policy: str, tuned: bool) -> dict[str, Any]:
 
 def lkh_available() -> bool:
     return lkh_binary() is not None
+
+
+_LKH_STATE: dict[str, Any] = {"time": 0.0, "value": None}
+LKH_FIX = (
+    "LKH-3 is a Linux program that runs inside Ubuntu on WSL. How to fix: (1) open PowerShell and "
+    f"run `wsl -d {WSL_DISTRO} -- echo ok`; (2) if it prints an error such as E_UNEXPECTED, "
+    "restart "
+    "the computer (or run `Restart-Service LxssManager` as administrator); (3) press the button "
+    "to check again."
+)
+LKH_READY = (
+    "LKH-3 is ready: Ubuntu (WSL) answers. Its total time includes file writing and preprocessing."
+)
+
+
+def lkh_status(force: bool = False, ttl: float = 60.0) -> tuple[bool, str]:
+    """Can LKH-3 run right now? The program must exist and WSL must answer (cached for a minute)."""
+    now = time.time()
+    cached = _LKH_STATE["value"]
+    if not force and cached is not None and now - _LKH_STATE["time"] < ttl:
+        return (bool(cached[0]), str(cached[1]))
+    if lkh_binary() is None:
+        value = (
+            False,
+            "The LKH-3 program was not found (tools/LKH3-master/LKH): see tools/README.md.",
+        )
+    else:
+        try:
+            command = ["wsl", "-d", WSL_DISTRO, "--", "echo", "ok"]
+            done = subprocess.run(command, capture_output=True, timeout=25, check=False)
+            answer = done.stdout.decode("utf-8", "ignore").replace(chr(0), "").strip()
+            if done.returncode == 0 and answer == "ok":
+                value = (True, LKH_READY)
+            else:
+                value = (False, f"WSL does not work right now. {LKH_FIX}")
+        except (OSError, subprocess.SubprocessError):
+            value = (False, f"WSL did not answer within 25 seconds. {LKH_FIX}")
+    _LKH_STATE.update(time=now, value=value)
+    return value
+
+
+def evaluations_text(solver: str, count: int) -> str:
+    """LKH-3 does not count evaluations: say so instead of showing a misleading 0."""
+    return "not reported" if solver == "lkh3" else f"{count:,}"
 
 
 def run_solver(

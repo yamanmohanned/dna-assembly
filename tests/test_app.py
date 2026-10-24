@@ -189,3 +189,35 @@ def test_learn_page_draws_dna_and_rna_from_the_real_genome() -> None:
     code = " ".join(c.value for c in at.code)
     sequence = lab.genome_sequence("NC_001422.1")[100:124]
     assert sequence in code
+
+
+def test_window_start_slider_stays_inside_the_window_when_the_window_grows() -> None:
+    at = AppTest.from_file(str(VIEWS / "simulator.py"), default_timeout=60).run()
+    next(s for s in at.sidebar.slider if s.label.startswith("Window length")).set_value(1000).run()
+    start = next(s for s in at.sidebar.slider if s.label.startswith("Window start"))
+    start.set_value(4300).run()
+    assert not at.exception
+    next(s for s in at.sidebar.slider if s.label.startswith("Window length")).set_value(5000).run()
+    assert not at.exception, [e.value for e in at.exception]
+    start = next(s for s in at.sidebar.slider if s.label.startswith("Window start"))
+    assert (
+        isinstance(start.value, int) and start.value <= 300 and start.max == 300
+    )  # 5386 - 5000, rounded down to the step of 100
+    error = next(s for s in at.sidebar.slider if s.label.startswith("Substitution"))
+    assert isinstance(error.value, float) and error.format == "%.1f"
+    assert error.value == pytest.approx(round(error.value, 1))
+
+
+def test_solver_lab_runs_greedy_and_shows_the_lkh3_status_panel() -> None:
+    at = run_page("solver_lab")
+    algorithm = next(s for s in at.selectbox if s.label == "Algorithm")
+    algorithm.set_value("greedy").run()
+    at.button(key="lab-run").click().run()
+    assert not at.exception, [e.value for e in at.exception]
+    assert at.session_state["lab_run"]["solver"] == "greedy"
+    assert any(m.label == "Evaluations" and m.value != "not reported" for m in at.metric)
+    algorithm = next(s for s in at.selectbox if s.label == "Algorithm")
+    algorithm.set_value("lkh3").run()
+    assert not at.exception
+    notes = [*at.success, *at.error]
+    assert any("LKH-3" in n.value for n in notes), "the status of LKH-3 must be shown"
