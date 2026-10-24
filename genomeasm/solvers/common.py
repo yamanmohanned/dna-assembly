@@ -121,14 +121,43 @@ class SolveResult:
 
 
 class Recorder:
-    """Keeps the best-so-far trace of a run (for convergence curves)."""
+    """Keeps the best-so-far trace of a run (for convergence curves).
 
-    def __init__(self, problem: Problem, clock: Callable[[], float] = time.perf_counter) -> None:
+    ``progress`` is an optional callback that receives a dict (seconds, evaluations, best, and what
+    the solver adds) at most every ``progress_interval`` seconds and once more at the end. The
+    application uses it for live charts; it never changes the search (no random numbers, no state).
+    """
+
+    def __init__(
+        self,
+        problem: Problem,
+        clock: Callable[[], float] = time.perf_counter,
+        progress: Callable[[dict[str, Any]], None] | None = None,
+        progress_interval: float = 0.4,
+    ) -> None:
         self.problem = problem
         self.clock = clock
         self.start = clock()
         self.trace: list[tuple[float, int, int]] = []
         self.best = -1
+        self.progress = progress
+        self.progress_interval = progress_interval
+        self._last_progress = -1e9
+
+    def heartbeat(
+        self, evaluations: int, extra: Callable[[], dict[str, Any]] | None = None
+    ) -> None:
+        """Report the state of the run to the progress callback (throttled by time)."""
+        if self.progress is None:
+            return
+        now = self.elapsed()
+        if now - self._last_progress < self.progress_interval:
+            return
+        self._last_progress = now
+        event: dict[str, Any] = {"seconds": now, "evaluations": evaluations, "best": self.best}
+        if extra is not None:
+            event.update(extra())
+        self.progress(event)
 
     def elapsed(self) -> float:
         return self.clock() - self.start
@@ -144,6 +173,10 @@ class Recorder:
         order = order_of(tour)
         fit = self.problem.fitness(order)
         self.note(fit, evaluations)
+        if self.progress is not None:
+            self.progress(
+                {"seconds": self.elapsed(), "evaluations": evaluations, "best": fit, "final": True}
+            )
         return SolveResult(
             solver=solver,
             order=order,

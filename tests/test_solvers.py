@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import itertools
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pytest
@@ -404,3 +405,49 @@ def test_lkh_finds_the_optimum_of_small_instances_and_its_tour_verifies() -> Non
         tour = objective.tour_from_order(result.order)
         assert objective.cycle_cost(problem.cost_matrix(), tour) == result.merged_length
     assert order_of(tour_of(np.arange(3))).tolist() == [0, 1, 2]
+
+
+# ---- observation hooks of the application (progress callback, step log) ---------------------
+
+
+def test_progress_callbacks_and_step_log_do_not_change_the_search() -> None:
+    problem = random_matrix_problem(np.random.default_rng(21), 25)
+    events: list[dict[str, object]] = []
+    for solver in (tabu_search, alns):
+        plain = solver(problem, Budget(evaluations=60000), seed=3)
+        watched = solver(
+            problem,
+            Budget(evaluations=60000),
+            seed=3,
+            progress=events.append,
+        )
+        assert np.array_equal(plain.order, watched.order)
+        assert plain.fitness == watched.fitness and plain.evaluations == watched.evaluations
+    assert events[-1].get("final") is True and any("probabilities" in e for e in events)
+    steps: list[dict[str, object]] = []
+    plain = alns(problem, Budget(evaluations=60000), seed=3, policy="roulette")
+    logged = alns(problem, Budget(evaluations=60000), seed=3, policy="roulette", step_log=steps)
+    assert np.array_equal(plain.order, logged.order) and plain.evaluations == logged.evaluations
+    assert len(steps) == logged.info["iterations"] > 10
+
+
+def test_step_log_describes_every_iteration_consistently() -> None:
+    problem = random_matrix_problem(np.random.default_rng(22), 8)
+    steps: list[dict[str, Any]] = []
+    result = alns(problem, Budget(evaluations=20000), seed=4, policy="ucb1", step_log=steps)
+    best = -1
+    for k, s in enumerate(steps):
+        assert valid(np.array(s["before_order"]), 8) and valid(np.array(s["after_order"]), 8)
+        assert s["before_f"] == problem.fitness(np.array(s["before_order"]))
+        assert s["after_f"] == problem.fitness(np.array(s["after_order"]))
+        assert s["arm_name"] == ARM_NAMES[s["arm"]] and abs(sum(s["probabilities"]) - 1) < 1e-9
+        assert s["outcome"] in ("best", "improved", "accepted", "lateral", "unchanged", "rejected")
+        # the best so far never decreases and is at least the fitness of both tours of this step
+        # (it can start above the first tour: the calibration moves may have found better ones)
+        assert s["best_f"] >= max(best, s["before_f"], s["after_f"])
+        best = s["best_f"]
+        if s["accepted"] and k + 1 < len(steps):  # the next move starts from the accepted tour
+            assert steps[k + 1]["before_order"] == s["after_order"]
+        elif k + 1 < len(steps):
+            assert steps[k + 1]["before_order"] == s["before_order"]
+    assert steps[-1]["best_f"] == result.fitness

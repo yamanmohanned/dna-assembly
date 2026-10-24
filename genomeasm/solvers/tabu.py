@@ -28,6 +28,8 @@ Evaluations: one per delta computed (full recomputations at start and restart co
 from __future__ import annotations
 
 import math
+from collections.abc import Callable
+from typing import Any
 
 import numba
 import numpy as np
@@ -212,9 +214,10 @@ def tabu_search(
     chunk: int = 20,
     candidate_fraction: float = 0.0,
     candidates: int = 6,
+    progress: Callable[[dict[str, Any]], None] | None = None,
 ) -> SolveResult:
     """Tabu search; see the module docstring for the parameters."""
-    recorder = Recorder(problem)
+    recorder = Recorder(problem, progress=progress)
     n = problem.n
     w = np.ascontiguousarray(problem.weights)
     if n < 3:
@@ -243,6 +246,10 @@ def tabu_search(
     cand_pred, cand_succ = _candidate_lists(w, k)
     evals, it, stall, restarts = 1, 0, 0, 0
     recorder.note(best, evals)
+
+    def snapshot() -> dict[str, Any]:  # read by the progress callback only
+        return {"iterations": int(it), "restarts": restarts}
+
     while not budget.used_up(recorder.elapsed(), evals):
         cur, best, e, stall, r, it = _tabu_chunk(
             t,
@@ -268,5 +275,6 @@ def tabu_search(
         evals += int(e)
         restarts += int(r)
         recorder.note(int(best), evals)
+        recorder.heartbeat(evals, snapshot)
     info = {"iterations": int(it), "restarts": restarts, "tenure": tenure, "moves": moves}
     return recorder.result("tabu", best_t, evals, info)

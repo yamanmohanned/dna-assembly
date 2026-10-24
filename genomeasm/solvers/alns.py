@@ -44,6 +44,7 @@ Evaluations: one per insertion-gain computed plus one full recomputation per ite
 from __future__ import annotations
 
 import math
+from collections.abc import Callable
 from typing import Any
 
 import numba
@@ -51,7 +52,15 @@ import numpy as np
 from numpy.typing import NDArray
 
 from genomeasm.bandit import make_policy
-from genomeasm.solvers.common import Budget, IntArray, Problem, Recorder, SolveResult, tour_of
+from genomeasm.solvers.common import (
+    Budget,
+    IntArray,
+    Problem,
+    Recorder,
+    SolveResult,
+    order_of,
+    tour_of,
+)
 from genomeasm.solvers.greedy import greedy
 from genomeasm.solvers.moves import tour_fitness
 from genomeasm.solvers.tabu import seed_numba
@@ -241,9 +250,15 @@ def alns(
     calibration_fraction: float = 0.1,
     init: str = "greedy",
     trace_every: int = 100,
+    progress: Callable[[dict[str, Any]], None] | None = None,
+    step_log: list[dict[str, Any]] | None = None,
 ) -> SolveResult:
-    """ALNS with the given operator-selection policy (``fixed_arm``: one operator pair alone)."""
-    recorder = Recorder(problem)
+    """ALNS with the given operator-selection policy (``fixed_arm``: one operator pair alone).
+
+    ``progress`` (live charts) and ``step_log`` (one dict per iteration, for tiny instances: the
+    step-through mode of the application) only observe the run; they use no random numbers.
+    """
+    recorder = Recorder(problem, progress=progress)
     n = problem.n
     if n < 4:
         from genomeasm.solvers.exact import brute_force
@@ -293,7 +308,18 @@ def alns(
     outcomes = np.zeros((n_arms, len(OUTCOMES)), dtype=np.int64)
     arm_history: list[int] = []
     probability_trace: list[list[float]] = []
+    temperature = t0
+
+    def snapshot() -> dict[str, Any]:  # read by the progress callback only
+        return {
+            "iterations": iterations,
+            "probabilities": [float(x) for x in pol.probabilities()],
+            "outcomes": outcomes.tolist(),
+            "temperature": temperature,
+        }
+
     while not budget.used_up(recorder.elapsed(), evals):
+        probabilities_before = pol.probabilities().tolist() if step_log is not None else None
         arm = pol.select()
         new_f, e = move(arm)
         new_f, evals, iterations = int(new_f), evals + int(e), iterations + 1
@@ -315,6 +341,25 @@ def alns(
         arm_history.append(arm)
         if iterations % trace_every == 0:
             probability_trace.append([float(x) for x in pol.probabilities()])
+        if step_log is not None:
+            step_log.append(
+                {
+                    "iteration": iterations,
+                    "arm": arm,
+                    "arm_name": ARM_NAMES[arm],
+                    "probabilities": probabilities_before,
+                    "before_order": order_of(cur).tolist(),
+                    "after_order": order_of(cand).tolist(),
+                    "before_f": cur_f,
+                    "after_f": new_f,
+                    "best_f": max(best_f, new_f),
+                    "outcome": OUTCOMES[outcome],
+                    "accepted": accept,
+                    "temperature": temperature,
+                }
+            )
+        if progress is not None:
+            recorder.heartbeat(evals, snapshot)
         if accept:
             cur, cand = cand, cur
             cur_f = new_f
