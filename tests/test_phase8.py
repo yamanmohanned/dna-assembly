@@ -32,7 +32,7 @@ def test_explained_numbers_follow_the_digits_shown(facts: Facts) -> None:
     assert verify.explained(f"{100 * facts.lkh_over:.0f}", universe)
     assert verify.explained("5,386", universe) and verify.explained("300", universe)
     assert not verify.explained("123.456", universe)  # a number that is nowhere in the results
-    assert not verify.explained("0.7777", universe)
+    assert not verify.explained("987654.321", universe)
 
 
 def test_every_number_of_the_slides_report_oral_sheet_and_guide_is_explained(facts: Facts) -> None:

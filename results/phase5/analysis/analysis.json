@@ -73,8 +73,8 @@
   "provenance": {
     "config_hash": "e3347df73ee51e30f7abde97fbb341cdc67ddb55ece52d2301550b329c698d5f",
     "git": {
-      "commit": "a575899a25d5f00931f66bd1f3120df1a2fd4826",
-      "dirty": true
+      "commit": "b33d06a605aae581c1e00e7b452f322ae1016575",
+      "dirty": false
     },
     "seed": 20261025,
     "library_versions": {
@@ -93,6 +93,6 @@
       "python": "3.12.7",
       "cpu_count": 8
     },
-    "timestamp_utc": "2026-10-24T13:28:54+00:00"
+    "timestamp_utc": "2026-10-24T16:31:55+00:00"
   }
 }
