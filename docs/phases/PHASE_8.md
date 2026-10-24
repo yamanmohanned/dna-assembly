@@ -24,7 +24,17 @@ Machine-readable result: `results/phase8/verification.json` (with the commit it 
 
 ## 3. `make all` from a clean checkout
 
-See the log summary in section 5 (filled from the last run).
+Run on a clean `git clone` of commit `dca746f` (the commit before this record), in a new virtual environment built from `requirements.lock` (the first run of the same clone installed every pinned package without error; LKH-3 was reached through `GENOMEASM_LKH`):
+
+| Step | Result |
+|---|---|
+| `data verify` | both genomes match their SHA-256 |
+| redraw Phase 2 and 3 figures, `experiments analyze`, `docs build` | all outputs rebuilt from the committed raw runs |
+| `docs verify` | OK: no unexplained number, no recomputation difference, no figure problem |
+| `ruff check`, `ruff format --check`, `mypy` | clean, 111 files and 76 source files |
+| `pytest` | 485 passed in 2 min 39 s |
+
+An earlier run of the same clean clone stopped at `docs verify` because the audit counted the page numbers of the references as numbers; that is fixed (references are exempt) and the run above is the repeat.
 
 ## 4. What is not covered (honest list)
 
