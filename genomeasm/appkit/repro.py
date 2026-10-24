@@ -7,7 +7,7 @@ from typing import Any
 import yaml
 
 from genomeasm import provenance
-from genomeasm.appkit.paths import CONFIG, RAW, RESULTS, ROOT
+from genomeasm.appkit.paths import CONFIG, DOCS, RAW, RESULTS, ROOT
 from genomeasm.io import read_sums, sha256_file
 from genomeasm.solvers.lkh import lkh_binary
 
@@ -28,6 +28,16 @@ def config_info() -> dict[str, Any]:
             "index]).generate_state(2); tuning seeds start at 1000, evaluation seeds are 0 to 29"
         ),
     }
+
+
+def decision_range() -> tuple[str, str, int]:
+    """First and last decision id in docs/DECISIONS.md and how many there are."""
+    ids = [
+        line.split("|")[1].strip()
+        for line in (DOCS / "DECISIONS.md").read_text(encoding="utf-8").splitlines()
+        if line.startswith("| D-")
+    ]
+    return ids[0], ids[-1], len(ids)
 
 
 def environment() -> dict[str, Any]:

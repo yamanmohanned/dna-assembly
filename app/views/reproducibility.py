@@ -80,6 +80,8 @@ st.code(
     "genomeasm app run             # this application",
     language="bash",
 )
+first, last, count = repro.decision_range()
 st.caption(
-    "Every design decision is in docs/DECISIONS.md (D-001 to D-046); each phase has a report in docs/phases/."
+    f"Every design decision is in docs/DECISIONS.md ({first} to {last}, {count} decisions); "
+    "each phase has a report in docs/phases/."
 )

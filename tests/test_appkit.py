@@ -277,6 +277,8 @@ def test_reproducibility_information_is_complete_and_checksums_verify() -> None:
     assert env["git"]["commit"] and env["libraries"]["numpy"] and env["machine"]["python"]
     sums = repro.verify_checksums()
     assert len(sums) == 2 and all(row["ok"] for row in sums)
+    first, last, count = repro.decision_range()
+    assert (first, last) == ("D-001", f"D-{count:03d}") and count >= 50
     files = repro.result_files()
     assert any(f["file"] == "results/phase5/tuning_summary.json" for f in files)
     assert all(re.fullmatch(r"[0-9a-f]{64}", f["sha256"]) for f in files)
