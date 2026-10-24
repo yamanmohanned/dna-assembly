@@ -1,0 +1,11 @@
+{
+  "figure": "fig08_arm_probability",
+  "caption": "How the learning policies spread their choices over the six operator pairs during a run (mean over all read sets). Roulette: its weights; epsilon-greedy: epsilon/6 plus the greedy arm; UCB1: the arm it would pick next (one-hot), so the mean shows how often each arm leads. UCB1 with lowest-index ties collapses onto the first arm once rewards are all zero (D-046); with random ties (rightmost) it does not.",
+  "source": "results/phase5/main_runs.jsonl.gz",
+  "config_hash": "e3347df73ee51e30f7abde97fbb341cdc67ddb55ece52d2301550b329c698d5f",
+  "files": [
+    "fig08_arm_probability.svg",
+    "fig08_arm_probability.pdf",
+    "fig08_arm_probability.png"
+  ]
+}

@@ -1,0 +1,4094 @@
+{
+  "algorithms": {
+    "tabu": {
+      "best_trial": 1,
+      "best_mean_regret": 0.34410629479815824,
+      "default_mean_regret": 0.5012163448171474,
+      "params": {
+        "tabu": {
+          "tenure_factor": 0.5,
+          "moves_factor": 5,
+          "restart_factor": 10,
+          "kick_fraction": 0.05
+        }
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "mean_regret": 0.5012163448171474,
+          "params": {
+            "tabu": {
+              "tenure_factor": 1.0,
+              "moves_factor": 20,
+              "restart_factor": 10,
+              "kick_fraction": 0.05
+            }
+          }
+        },
+        {
+          "trial": 1,
+          "mean_regret": 0.34410629479815824,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.5,
+              "moves_factor": 5,
+              "restart_factor": 10,
+              "kick_fraction": 0.05
+            }
+          }
+        },
+        {
+          "trial": 2,
+          "mean_regret": 0.6713623159578064,
+          "params": {
+            "tabu": {
+              "tenure_factor": 1.0,
+              "moves_factor": 5,
+              "restart_factor": 5,
+              "kick_fraction": 0.2
+            }
+          }
+        },
+        {
+          "trial": 3,
+          "mean_regret": 0.510461612770669,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.25,
+              "moves_factor": 10,
+              "restart_factor": 2,
+              "kick_fraction": 0.2
+            }
+          }
+        },
+        {
+          "trial": 4,
+          "mean_regret": 0.6426034764557418,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.25,
+              "moves_factor": 40,
+              "restart_factor": 5,
+              "kick_fraction": 0.05
+            }
+          }
+        },
+        {
+          "trial": 5,
+          "mean_regret": 0.5835056706805534,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.25,
+              "moves_factor": 20,
+              "restart_factor": 2,
+              "kick_fraction": 0.2
+            }
+          }
+        },
+        {
+          "trial": 6,
+          "mean_regret": 0.6918153405356562,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.5,
+              "moves_factor": 5,
+              "restart_factor": 2,
+              "kick_fraction": 0.2
+            }
+          }
+        },
+        {
+          "trial": 7,
+          "mean_regret": 0.5962004557637113,
+          "params": {
+            "tabu": {
+              "tenure_factor": 2.0,
+              "moves_factor": 40,
+              "restart_factor": 30,
+              "kick_fraction": 0.05
+            }
+          }
+        },
+        {
+          "trial": 8,
+          "mean_regret": 0.559283356643603,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.5,
+              "moves_factor": 10,
+              "restart_factor": 30,
+              "kick_fraction": 0.02
+            }
+          }
+        },
+        {
+          "trial": 9,
+          "mean_regret": 0.46173521046284033,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.25,
+              "moves_factor": 5,
+              "restart_factor": 30,
+              "kick_fraction": 0.1
+            }
+          }
+        },
+        {
+          "trial": 10,
+          "mean_regret": 0.6369248581535731,
+          "params": {
+            "tabu": {
+              "tenure_factor": 1.0,
+              "moves_factor": 40,
+              "restart_factor": 10,
+              "kick_fraction": 0.02
+            }
+          }
+        },
+        {
+          "trial": 11,
+          "mean_regret": 0.5543241379722441,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.5,
+              "moves_factor": 20,
+              "restart_factor": 5,
+              "kick_fraction": 0.05
+            }
+          }
+        },
+        {
+          "trial": 12,
+          "mean_regret": 0.3730929578915298,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.25,
+              "moves_factor": 5,
+              "restart_factor": 10,
+              "kick_fraction": 0.05
+            }
+          }
+        },
+        {
+          "trial": 13,
+          "mean_regret": 0.38909338482030376,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.25,
+              "moves_factor": 5,
+              "restart_factor": 30,
+              "kick_fraction": 0.05
+            }
+          }
+        },
+        {
+          "trial": 14,
+          "mean_regret": 0.5987627122563238,
+          "params": {
+            "tabu": {
+              "tenure_factor": 1.0,
+              "moves_factor": 40,
+              "restart_factor": 2,
+              "kick_fraction": 0.05
+            }
+          }
+        },
+        {
+          "trial": 15,
+          "mean_regret": 0.3935460688764464,
+          "params": {
+            "tabu": {
+              "tenure_factor": 2.0,
+              "moves_factor": 20,
+              "restart_factor": 30,
+              "kick_fraction": 0.1
+            }
+          }
+        },
+        {
+          "trial": 16,
+          "mean_regret": 0.6428050589857279,
+          "params": {
+            "tabu": {
+              "tenure_factor": 2.0,
+              "moves_factor": 40,
+              "restart_factor": 2,
+              "kick_fraction": 0.02
+            }
+          }
+        },
+        {
+          "trial": 17,
+          "mean_regret": 0.6191301600613945,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.5,
+              "moves_factor": 40,
+              "restart_factor": 10,
+              "kick_fraction": 0.1
+            }
+          }
+        },
+        {
+          "trial": 18,
+          "mean_regret": 0.4412595461706821,
+          "params": {
+            "tabu": {
+              "tenure_factor": 1.0,
+              "moves_factor": 5,
+              "restart_factor": 5,
+              "kick_fraction": 0.02
+            }
+          }
+        },
+        {
+          "trial": 19,
+          "mean_regret": 0.6625579266700994,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.25,
+              "moves_factor": 20,
+              "restart_factor": 10,
+              "kick_fraction": 0.02
+            }
+          }
+        },
+        {
+          "trial": 20,
+          "mean_regret": 0.689014526936526,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.5,
+              "moves_factor": 40,
+              "restart_factor": 5,
+              "kick_fraction": 0.1
+            }
+          }
+        },
+        {
+          "trial": 21,
+          "mean_regret": 0.42674656934031485,
+          "params": {
+            "tabu": {
+              "tenure_factor": 2.0,
+              "moves_factor": 20,
+              "restart_factor": 5,
+              "kick_fraction": 0.02
+            }
+          }
+        },
+        {
+          "trial": 22,
+          "mean_regret": 0.6106593048871822,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.25,
+              "moves_factor": 40,
+              "restart_factor": 2,
+              "kick_fraction": 0.1
+            }
+          }
+        },
+        {
+          "trial": 23,
+          "mean_regret": 0.9600265734837019,
+          "params": {
+            "tabu": {
+              "tenure_factor": 2.0,
+              "moves_factor": 5,
+              "restart_factor": 30,
+              "kick_fraction": 0.02
+            }
+          }
+        }
+      ]
+    },
+    "alns_random": {
+      "best_trial": 11,
+      "best_mean_regret": 0.0813724096751322,
+      "default_mean_regret": 0.16008476079052603,
+      "params": {
+        "alns": {
+          "destroy_lo": 0.05,
+          "destroy_hi": 0.25,
+          "q_cap": 15,
+          "noise": 0.3,
+          "final_ratio": 0.0001,
+          "accept_probability0": 0.8,
+          "regret_k": 2,
+          "p_worst": 2.0,
+          "reward_preset": "balanced"
+        },
+        "policy": {
+          "random": {}
+        }
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "mean_regret": 0.16008476079052603,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 1,
+          "mean_regret": 0.09868354451772773,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.15,
+              "q_cap": 15,
+              "noise": 0.3,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 2,
+          "mean_regret": 0.48029590904894015,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.6,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 3,
+          "mean_regret": 0.19325350487358228,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.15,
+              "q_cap": 60,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 4,
+          "mean_regret": 0.1981364157240556,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 5,
+          "mean_regret": 0.10623608102606842,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.1,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 6,
+          "mean_regret": 0.2673361129448046,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.6,
+              "q_cap": 60,
+              "noise": 0.0,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 7,
+          "mean_regret": 0.1220839312332482,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.6,
+              "q_cap": 60,
+              "noise": 0.1,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 8,
+          "mean_regret": 0.12701463406849292,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 9,
+          "mean_regret": 0.20405838971931678,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.15,
+              "q_cap": 60,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 10,
+          "mean_regret": 0.16473211794304385,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 15,
+              "noise": 0.0,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 11,
+          "mean_regret": 0.0813724096751322,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.25,
+              "q_cap": 15,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 12,
+          "mean_regret": 0.6579640573293806,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.25,
+              "q_cap": 60,
+              "noise": 0.6,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 13,
+          "mean_regret": 0.1389847219012881,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 14,
+          "mean_regret": 0.08992043538598542,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.6,
+              "q_cap": 15,
+              "noise": 0.1,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 15,
+          "mean_regret": 0.29615030967492384,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.6,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 16,
+          "mean_regret": 0.16560591249752174,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.15,
+              "q_cap": 60,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 17,
+          "mean_regret": 0.21983173052728844,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 18,
+          "mean_regret": 0.13224550900441556,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.1,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 19,
+          "mean_regret": 0.19559561280850934,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.25,
+              "q_cap": 15,
+              "noise": 0.0,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 20,
+          "mean_regret": 0.13575513456744293,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.1,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 21,
+          "mean_regret": 0.13293153264734872,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.1,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 22,
+          "mean_regret": 0.09836635070091831,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.25,
+              "q_cap": 15,
+              "noise": 0.3,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        },
+        {
+          "trial": 23,
+          "mean_regret": 0.12516025815616466,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.6,
+              "q_cap": 15,
+              "noise": 0.1,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "random": {}
+            }
+          }
+        }
+      ]
+    },
+    "alns_roundrobin": {
+      "best_trial": 10,
+      "best_mean_regret": 0.08846868586872131,
+      "default_mean_regret": 0.13280235567676424,
+      "params": {
+        "alns": {
+          "destroy_lo": 0.02,
+          "destroy_hi": 0.6,
+          "q_cap": 30,
+          "noise": 0.3,
+          "final_ratio": 0.001,
+          "accept_probability0": 0.5,
+          "regret_k": 3,
+          "p_worst": 5.0,
+          "reward_preset": "balanced"
+        },
+        "policy": {
+          "roundrobin": {}
+        }
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "mean_regret": 0.13280235567676424,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 1,
+          "mean_regret": 0.20591753264205584,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 2,
+          "mean_regret": 0.16470276084776875,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.4,
+              "q_cap": 60,
+              "noise": 0.3,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 3,
+          "mean_regret": 0.1656812664451324,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 60,
+              "noise": 0.3,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 4,
+          "mean_regret": 0.11902688134247745,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.25,
+              "q_cap": 15,
+              "noise": 0.1,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 5,
+          "mean_regret": 0.34174576152506336,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.6,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 6,
+          "mean_regret": 0.09055739174742822,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 7,
+          "mean_regret": 0.1073204715598645,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 8,
+          "mean_regret": 0.45725415258875163,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.6,
+              "q_cap": 60,
+              "noise": 0.6,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 9,
+          "mean_regret": 0.4280715557418915,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.6,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 10,
+          "mean_regret": 0.08846868586872131,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 11,
+          "mean_regret": 0.1501034406684617,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.25,
+              "q_cap": 60,
+              "noise": 0.1,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 12,
+          "mean_regret": 0.1302735438989635,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.25,
+              "q_cap": 60,
+              "noise": 0.1,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 13,
+          "mean_regret": 0.19669831180856365,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.4,
+              "q_cap": 60,
+              "noise": 0.0,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 14,
+          "mean_regret": 0.12698138800376862,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.1,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 15,
+          "mean_regret": 0.10232813019434464,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.1,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 16,
+          "mean_regret": 0.3308842586929803,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.6,
+              "q_cap": 60,
+              "noise": 0.0,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 17,
+          "mean_regret": 0.12171257408282418,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.15,
+              "q_cap": 60,
+              "noise": 0.1,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 18,
+          "mean_regret": 0.1250239604553392,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.6,
+              "q_cap": 15,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 19,
+          "mean_regret": 0.1607152481081114,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 20,
+          "mean_regret": 0.21256496688385493,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.25,
+              "q_cap": 60,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 21,
+          "mean_regret": 0.23470354432863655,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.6,
+              "q_cap": 15,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 22,
+          "mean_regret": 0.2128809616430089,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.4,
+              "q_cap": 15,
+              "noise": 0.0,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        },
+        {
+          "trial": 23,
+          "mean_regret": 0.2352831317586854,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.6,
+              "q_cap": 60,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roundrobin": {}
+            }
+          }
+        }
+      ]
+    },
+    "alns_roulette": {
+      "best_trial": 17,
+      "best_mean_regret": 0.08597815205911422,
+      "default_mean_regret": 0.10317592632672694,
+      "params": {
+        "alns": {
+          "destroy_lo": 0.1,
+          "destroy_hi": 0.15,
+          "q_cap": 15,
+          "noise": 0.3,
+          "final_ratio": 0.001,
+          "accept_probability0": 0.5,
+          "regret_k": 2,
+          "p_worst": 2.0,
+          "reward_preset": "classical"
+        },
+        "policy": {
+          "roulette": {
+            "segment": 100,
+            "reaction": 0.8
+          }
+        }
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "mean_regret": 0.10317592632672694,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 100,
+                "reaction": 0.5
+              }
+            }
+          }
+        },
+        {
+          "trial": 1,
+          "mean_regret": 0.1975526766724054,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.4,
+              "q_cap": 60,
+              "noise": 0.0,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 25,
+                "reaction": 0.8
+              }
+            }
+          }
+        },
+        {
+          "trial": 2,
+          "mean_regret": 0.5135728585675303,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.6,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 100,
+                "reaction": 0.2
+              }
+            }
+          }
+        },
+        {
+          "trial": 3,
+          "mean_regret": 0.12443400564305268,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.15,
+              "q_cap": 60,
+              "noise": 0.1,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 200,
+                "reaction": 0.5
+              }
+            }
+          }
+        },
+        {
+          "trial": 4,
+          "mean_regret": 0.12452588702714529,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.4,
+              "q_cap": 15,
+              "noise": 0.1,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 200,
+                "reaction": 0.8
+              }
+            }
+          }
+        },
+        {
+          "trial": 5,
+          "mean_regret": 0.17489308136671894,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 100,
+                "reaction": 0.2
+              }
+            }
+          }
+        },
+        {
+          "trial": 6,
+          "mean_regret": 0.13027549446109205,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 15,
+              "noise": 0.1,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 50,
+                "reaction": 0.5
+              }
+            }
+          }
+        },
+        {
+          "trial": 7,
+          "mean_regret": 0.15906789453724215,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 50,
+                "reaction": 0.8
+              }
+            }
+          }
+        },
+        {
+          "trial": 8,
+          "mean_regret": 0.5811390291398362,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.6,
+              "q_cap": 60,
+              "noise": 0.6,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 25,
+                "reaction": 0.8
+              }
+            }
+          }
+        },
+        {
+          "trial": 9,
+          "mean_regret": 0.20892637391524793,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 100,
+                "reaction": 0.2
+              }
+            }
+          }
+        },
+        {
+          "trial": 10,
+          "mean_regret": 0.22530697564351165,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 60,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 100,
+                "reaction": 0.5
+              }
+            }
+          }
+        },
+        {
+          "trial": 11,
+          "mean_regret": 0.1487841036093559,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 25,
+                "reaction": 0.5
+              }
+            }
+          }
+        },
+        {
+          "trial": 12,
+          "mean_regret": 0.10987954010170088,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.25,
+              "q_cap": 15,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 100,
+                "reaction": 0.2
+              }
+            }
+          }
+        },
+        {
+          "trial": 13,
+          "mean_regret": 0.0992785906715887,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 25,
+                "reaction": 0.8
+              }
+            }
+          }
+        },
+        {
+          "trial": 14,
+          "mean_regret": 0.17901748402274553,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.15,
+              "q_cap": 60,
+              "noise": 0.0,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 100,
+                "reaction": 0.5
+              }
+            }
+          }
+        },
+        {
+          "trial": 15,
+          "mean_regret": 0.14625964894397,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 60,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 25,
+                "reaction": 0.5
+              }
+            }
+          }
+        },
+        {
+          "trial": 16,
+          "mean_regret": 0.20396130121532222,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 25,
+                "reaction": 0.5
+              }
+            }
+          }
+        },
+        {
+          "trial": 17,
+          "mean_regret": 0.08597815205911422,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.15,
+              "q_cap": 15,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 100,
+                "reaction": 0.8
+              }
+            }
+          }
+        },
+        {
+          "trial": 18,
+          "mean_regret": 0.12164842856940493,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.1,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 200,
+                "reaction": 0.5
+              }
+            }
+          }
+        },
+        {
+          "trial": 19,
+          "mean_regret": 0.0899451011424515,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 50,
+                "reaction": 0.2
+              }
+            }
+          }
+        },
+        {
+          "trial": 20,
+          "mean_regret": 0.21921143880122326,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.15,
+              "q_cap": 60,
+              "noise": 0.0,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 100,
+                "reaction": 0.5
+              }
+            }
+          }
+        },
+        {
+          "trial": 21,
+          "mean_regret": 0.10226025408753396,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.4,
+              "q_cap": 15,
+              "noise": 0.1,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 25,
+                "reaction": 0.8
+              }
+            }
+          }
+        },
+        {
+          "trial": 22,
+          "mean_regret": 0.18962126288999143,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.25,
+              "q_cap": 60,
+              "noise": 0.1,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 25,
+                "reaction": 0.5
+              }
+            }
+          }
+        },
+        {
+          "trial": 23,
+          "mean_regret": 0.36697766778048524,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.6,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "roulette": {
+                "segment": 100,
+                "reaction": 0.8
+              }
+            }
+          }
+        }
+      ]
+    },
+    "alns_epsilon_greedy": {
+      "best_trial": 1,
+      "best_mean_regret": 0.11052983832069777,
+      "default_mean_regret": 0.12216569728023191,
+      "params": {
+        "alns": {
+          "destroy_lo": 0.02,
+          "destroy_hi": 0.25,
+          "q_cap": 30,
+          "noise": 0.3,
+          "final_ratio": 0.01,
+          "accept_probability0": 0.8,
+          "regret_k": 2,
+          "p_worst": 2.0,
+          "reward_preset": "progress"
+        },
+        "policy": {
+          "epsilon_greedy": {
+            "window": 25,
+            "epsilon": 0.05
+          }
+        }
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "mean_regret": 0.12216569728023191,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 100,
+                "epsilon": 0.1
+              }
+            }
+          }
+        },
+        {
+          "trial": 1,
+          "mean_regret": 0.11052983832069777,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 25,
+                "epsilon": 0.05
+              }
+            }
+          }
+        },
+        {
+          "trial": 2,
+          "mean_regret": 0.225683271360699,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.25,
+              "q_cap": 15,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 25,
+                "epsilon": 0.05
+              }
+            }
+          }
+        },
+        {
+          "trial": 3,
+          "mean_regret": 0.13243861094735052,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 25,
+                "epsilon": 0.1
+              }
+            }
+          }
+        },
+        {
+          "trial": 4,
+          "mean_regret": 0.404128512521249,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.15,
+              "q_cap": 60,
+              "noise": 0.6,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 25,
+                "epsilon": 0.02
+              }
+            }
+          }
+        },
+        {
+          "trial": 5,
+          "mean_regret": 0.138584410008843,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.25,
+              "q_cap": 15,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 100,
+                "epsilon": 0.05
+              }
+            }
+          }
+        },
+        {
+          "trial": 6,
+          "mean_regret": 0.23467912764282783,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.15,
+              "q_cap": 60,
+              "noise": 0.0,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 25,
+                "epsilon": 0.2
+              }
+            }
+          }
+        },
+        {
+          "trial": 7,
+          "mean_regret": 0.250851329805143,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.6,
+              "q_cap": 15,
+              "noise": 0.6,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 200,
+                "epsilon": 0.02
+              }
+            }
+          }
+        },
+        {
+          "trial": 8,
+          "mean_regret": 0.22653457185325776,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.4,
+              "q_cap": 15,
+              "noise": 0.6,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 100,
+                "epsilon": 0.1
+              }
+            }
+          }
+        },
+        {
+          "trial": 9,
+          "mean_regret": 0.5410609989969879,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.25,
+              "q_cap": 60,
+              "noise": 0.6,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 50,
+                "epsilon": 0.02
+              }
+            }
+          }
+        },
+        {
+          "trial": 10,
+          "mean_regret": 0.1504415981611015,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 100,
+                "epsilon": 0.1
+              }
+            }
+          }
+        },
+        {
+          "trial": 11,
+          "mean_regret": 0.18023707579225098,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 60,
+              "noise": 0.3,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 200,
+                "epsilon": 0.05
+              }
+            }
+          }
+        },
+        {
+          "trial": 12,
+          "mean_regret": 0.17394741696113794,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.15,
+              "q_cap": 60,
+              "noise": 0.1,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 50,
+                "epsilon": 0.1
+              }
+            }
+          }
+        },
+        {
+          "trial": 13,
+          "mean_regret": 0.46125410159430547,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.6,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 200,
+                "epsilon": 0.2
+              }
+            }
+          }
+        },
+        {
+          "trial": 14,
+          "mean_regret": 0.20684427519126472,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.15,
+              "q_cap": 60,
+              "noise": 0.1,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 200,
+                "epsilon": 0.2
+              }
+            }
+          }
+        },
+        {
+          "trial": 15,
+          "mean_regret": 0.6857816947466442,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.4,
+              "q_cap": 60,
+              "noise": 0.6,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 100,
+                "epsilon": 0.1
+              }
+            }
+          }
+        },
+        {
+          "trial": 16,
+          "mean_regret": 0.2895899909608641,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.6,
+              "q_cap": 60,
+              "noise": 0.0,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 200,
+                "epsilon": 0.1
+              }
+            }
+          }
+        },
+        {
+          "trial": 17,
+          "mean_regret": 0.2896285604594152,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 200,
+                "epsilon": 0.05
+              }
+            }
+          }
+        },
+        {
+          "trial": 18,
+          "mean_regret": 0.16682166640248364,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.4,
+              "q_cap": 15,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 100,
+                "epsilon": 0.05
+              }
+            }
+          }
+        },
+        {
+          "trial": 19,
+          "mean_regret": 0.3388948704971299,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.15,
+              "q_cap": 60,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 50,
+                "epsilon": 0.2
+              }
+            }
+          }
+        },
+        {
+          "trial": 20,
+          "mean_regret": 0.6093792167791094,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.6,
+              "q_cap": 60,
+              "noise": 0.6,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 25,
+                "epsilon": 0.1
+              }
+            }
+          }
+        },
+        {
+          "trial": 21,
+          "mean_regret": 0.21666804438267379,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 100,
+                "epsilon": 0.05
+              }
+            }
+          }
+        },
+        {
+          "trial": 22,
+          "mean_regret": 0.26557870962106467,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.25,
+              "q_cap": 15,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 200,
+                "epsilon": 0.05
+              }
+            }
+          }
+        },
+        {
+          "trial": 23,
+          "mean_regret": 0.16475520321034864,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "epsilon_greedy": {
+                "window": 50,
+                "epsilon": 0.05
+              }
+            }
+          }
+        }
+      ]
+    },
+    "alns_ucb1": {
+      "best_trial": 18,
+      "best_mean_regret": 0.1709796143567184,
+      "default_mean_regret": 0.2322926301970821,
+      "params": {
+        "alns": {
+          "destroy_lo": 0.05,
+          "destroy_hi": 0.4,
+          "q_cap": 15,
+          "noise": 0.3,
+          "final_ratio": 0.0001,
+          "accept_probability0": 0.2,
+          "regret_k": 2,
+          "p_worst": 2.0,
+          "reward_preset": "progress"
+        },
+        "policy": {
+          "ucb1": {
+            "window": 200,
+            "c": 0.3
+          }
+        }
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "mean_regret": 0.2322926301970821,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 100,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 1,
+          "mean_regret": 0.2649379144009103,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 25,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 2,
+          "mean_regret": 0.21792642857837138,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.6,
+              "q_cap": 15,
+              "noise": 0.0,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 200,
+                "c": 2.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 3,
+          "mean_regret": 0.25018777156894995,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.6,
+              "q_cap": 60,
+              "noise": 0.3,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 100,
+                "c": 2.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 4,
+          "mean_regret": 0.528253320465844,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.6,
+              "q_cap": 15,
+              "noise": 0.6,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 50,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 5,
+          "mean_regret": 0.5082352913957149,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.6,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 50,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 6,
+          "mean_regret": 0.181891490999288,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.1,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 200,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 7,
+          "mean_regret": 0.5290022726282548,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.25,
+              "q_cap": 60,
+              "noise": 0.6,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 50,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 8,
+          "mean_regret": 0.22876636621257015,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 25,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 9,
+          "mean_regret": 0.2043445924859249,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.6,
+              "q_cap": 15,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 100,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 10,
+          "mean_regret": 0.371003585889144,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.15,
+              "q_cap": 15,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 25,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 11,
+          "mean_regret": 0.24993188339566264,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.25,
+              "q_cap": 15,
+              "noise": 0.1,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 50,
+                "c": 2.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 12,
+          "mean_regret": 0.33300490539035965,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.15,
+              "q_cap": 15,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 25,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 13,
+          "mean_regret": 0.19221421923975343,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.1,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 50,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 14,
+          "mean_regret": 0.29351290476366176,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 200,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 15,
+          "mean_regret": 0.17106711280476616,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.1,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 100,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 16,
+          "mean_regret": 0.3371805719861969,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 25,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 17,
+          "mean_regret": 0.23592756594486625,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.15,
+              "q_cap": 60,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 50,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 18,
+          "mean_regret": 0.1709796143567184,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.4,
+              "q_cap": 15,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 200,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 19,
+          "mean_regret": 0.3593573496555849,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.25,
+              "q_cap": 15,
+              "noise": 0.0,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 50,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 20,
+          "mean_regret": 0.23654924234300528,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.25,
+              "q_cap": 60,
+              "noise": 0.0,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 100,
+                "c": 2.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 21,
+          "mean_regret": 0.5185823420956592,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.6,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 100,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 22,
+          "mean_regret": 0.24387424262468452,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 100,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 23,
+          "mean_regret": 0.6829932617315133,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.25,
+              "q_cap": 60,
+              "noise": 0.6,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "ucb1": {
+                "window": 25,
+                "c": 0.3
+              }
+            }
+          }
+        }
+      ]
+    },
+    "lkh3": {
+      "best_trial": 1,
+      "best_mean_regret": 0.0,
+      "default_mean_regret": 0.023236207140862917,
+      "params": {
+        "lkh": {
+          "CANDIDATE_SET_TYPE": "NEAREST-NEIGHBOR",
+          "MAX_CANDIDATES": "6"
+        }
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "mean_regret": 0.023236207140862917,
+          "params": {
+            "lkh": {}
+          }
+        },
+        {
+          "trial": 1,
+          "mean_regret": 0.0,
+          "params": {
+            "lkh": {
+              "CANDIDATE_SET_TYPE": "NEAREST-NEIGHBOR",
+              "MAX_CANDIDATES": "6"
+            }
+          }
+        },
+        {
+          "trial": 2,
+          "mean_regret": 0.0,
+          "params": {
+            "lkh": {
+              "CANDIDATE_SET_TYPE": "POPMUSIC"
+            }
+          }
+        },
+        {
+          "trial": 3,
+          "mean_regret": 0.07954699196894399,
+          "params": {
+            "lkh": {
+              "INITIAL_PERIOD": "50"
+            }
+          }
+        }
+      ]
+    },
+    "tabu_cl": {
+      "best_trial": 23,
+      "best_mean_regret": 0.4909242400915924,
+      "default_mean_regret": 0.7997726553362791,
+      "params": {
+        "tabu": {
+          "tenure_factor": 2.0,
+          "moves_factor": 5,
+          "restart_factor": 10,
+          "kick_fraction": 0.2,
+          "candidate_fraction": 0.5,
+          "candidates": 6
+        }
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "mean_regret": 0.7997726553362791,
+          "params": {
+            "tabu": {
+              "tenure_factor": 1.0,
+              "moves_factor": 20,
+              "restart_factor": 10,
+              "kick_fraction": 0.05,
+              "candidate_fraction": 0.5,
+              "candidates": 6
+            }
+          }
+        },
+        {
+          "trial": 1,
+          "mean_regret": 0.7566357516462067,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.25,
+              "moves_factor": 40,
+              "restart_factor": 30,
+              "kick_fraction": 0.02,
+              "candidate_fraction": 0.25,
+              "candidates": 6
+            }
+          }
+        },
+        {
+          "trial": 2,
+          "mean_regret": 0.6161654512568776,
+          "params": {
+            "tabu": {
+              "tenure_factor": 2.0,
+              "moves_factor": 20,
+              "restart_factor": 30,
+              "kick_fraction": 0.2,
+              "candidate_fraction": 0.25,
+              "candidates": 3
+            }
+          }
+        },
+        {
+          "trial": 3,
+          "mean_regret": 0.9764067339668789,
+          "params": {
+            "tabu": {
+              "tenure_factor": 1.0,
+              "moves_factor": 40,
+              "restart_factor": 2,
+              "kick_fraction": 0.05,
+              "candidate_fraction": 0.75,
+              "candidates": 3
+            }
+          }
+        },
+        {
+          "trial": 4,
+          "mean_regret": 0.5253321659773468,
+          "params": {
+            "tabu": {
+              "tenure_factor": 1.0,
+              "moves_factor": 10,
+              "restart_factor": 10,
+              "kick_fraction": 0.05,
+              "candidate_fraction": 0.25,
+              "candidates": 6
+            }
+          }
+        },
+        {
+          "trial": 5,
+          "mean_regret": 0.8600823528699204,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.25,
+              "moves_factor": 40,
+              "restart_factor": 2,
+              "kick_fraction": 0.1,
+              "candidate_fraction": 0.5,
+              "candidates": 3
+            }
+          }
+        },
+        {
+          "trial": 6,
+          "mean_regret": 0.7918815868709935,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.5,
+              "moves_factor": 10,
+              "restart_factor": 30,
+              "kick_fraction": 0.1,
+              "candidate_fraction": 0.75,
+              "candidates": 3
+            }
+          }
+        },
+        {
+          "trial": 7,
+          "mean_regret": 0.7890801949506955,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.5,
+              "moves_factor": 10,
+              "restart_factor": 5,
+              "kick_fraction": 0.02,
+              "candidate_fraction": 0.9,
+              "candidates": 6
+            }
+          }
+        },
+        {
+          "trial": 8,
+          "mean_regret": 0.83684407044034,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.25,
+              "moves_factor": 40,
+              "restart_factor": 5,
+              "kick_fraction": 0.2,
+              "candidate_fraction": 0.25,
+              "candidates": 3
+            }
+          }
+        },
+        {
+          "trial": 9,
+          "mean_regret": 0.9132926865654264,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.5,
+              "moves_factor": 20,
+              "restart_factor": 30,
+              "kick_fraction": 0.05,
+              "candidate_fraction": 0.75,
+              "candidates": 3
+            }
+          }
+        },
+        {
+          "trial": 10,
+          "mean_regret": 0.6842516494898194,
+          "params": {
+            "tabu": {
+              "tenure_factor": 2.0,
+              "moves_factor": 20,
+              "restart_factor": 5,
+              "kick_fraction": 0.02,
+              "candidate_fraction": 0.75,
+              "candidates": 12
+            }
+          }
+        },
+        {
+          "trial": 11,
+          "mean_regret": 1.040023812089826,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.25,
+              "moves_factor": 20,
+              "restart_factor": 2,
+              "kick_fraction": 0.2,
+              "candidate_fraction": 0.9,
+              "candidates": 3
+            }
+          }
+        },
+        {
+          "trial": 12,
+          "mean_regret": 0.5590243965677443,
+          "params": {
+            "tabu": {
+              "tenure_factor": 2.0,
+              "moves_factor": 20,
+              "restart_factor": 2,
+              "kick_fraction": 0.05,
+              "candidate_fraction": 0.5,
+              "candidates": 12
+            }
+          }
+        },
+        {
+          "trial": 13,
+          "mean_regret": 0.6316638863017503,
+          "params": {
+            "tabu": {
+              "tenure_factor": 2.0,
+              "moves_factor": 40,
+              "restart_factor": 5,
+              "kick_fraction": 0.2,
+              "candidate_fraction": 0.5,
+              "candidates": 12
+            }
+          }
+        },
+        {
+          "trial": 14,
+          "mean_regret": 0.8113483302540503,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.25,
+              "moves_factor": 20,
+              "restart_factor": 10,
+              "kick_fraction": 0.2,
+              "candidate_fraction": 0.5,
+              "candidates": 6
+            }
+          }
+        },
+        {
+          "trial": 15,
+          "mean_regret": 0.5845806120218945,
+          "params": {
+            "tabu": {
+              "tenure_factor": 1.0,
+              "moves_factor": 10,
+              "restart_factor": 5,
+              "kick_fraction": 0.1,
+              "candidate_fraction": 0.25,
+              "candidates": 3
+            }
+          }
+        },
+        {
+          "trial": 16,
+          "mean_regret": 0.5228418155589275,
+          "params": {
+            "tabu": {
+              "tenure_factor": 2.0,
+              "moves_factor": 10,
+              "restart_factor": 30,
+              "kick_fraction": 0.2,
+              "candidate_fraction": 0.5,
+              "candidates": 6
+            }
+          }
+        },
+        {
+          "trial": 17,
+          "mean_regret": 0.863134259059757,
+          "params": {
+            "tabu": {
+              "tenure_factor": 1.0,
+              "moves_factor": 20,
+              "restart_factor": 2,
+              "kick_fraction": 0.2,
+              "candidate_fraction": 0.9,
+              "candidates": 6
+            }
+          }
+        },
+        {
+          "trial": 18,
+          "mean_regret": 0.49774397743935367,
+          "params": {
+            "tabu": {
+              "tenure_factor": 2.0,
+              "moves_factor": 10,
+              "restart_factor": 5,
+              "kick_fraction": 0.02,
+              "candidate_fraction": 0.5,
+              "candidates": 6
+            }
+          }
+        },
+        {
+          "trial": 19,
+          "mean_regret": 0.7177759968927818,
+          "params": {
+            "tabu": {
+              "tenure_factor": 0.25,
+              "moves_factor": 5,
+              "restart_factor": 5,
+              "kick_fraction": 0.2,
+              "candidate_fraction": 0.9,
+              "candidates": 6
+            }
+          }
+        },
+        {
+          "trial": 20,
+          "mean_regret": 0.6641248600956087,
+          "params": {
+            "tabu": {
+              "tenure_factor": 1.0,
+              "moves_factor": 20,
+              "restart_factor": 2,
+              "kick_fraction": 0.02,
+              "candidate_fraction": 0.5,
+              "candidates": 12
+            }
+          }
+        },
+        {
+          "trial": 21,
+          "mean_regret": 0.9396980135722561,
+          "params": {
+            "tabu": {
+              "tenure_factor": 1.0,
+              "moves_factor": 40,
+              "restart_factor": 10,
+              "kick_fraction": 0.1,
+              "candidate_fraction": 0.75,
+              "candidates": 6
+            }
+          }
+        },
+        {
+          "trial": 22,
+          "mean_regret": 0.6564543582770228,
+          "params": {
+            "tabu": {
+              "tenure_factor": 1.0,
+              "moves_factor": 10,
+              "restart_factor": 30,
+              "kick_fraction": 0.1,
+              "candidate_fraction": 0.75,
+              "candidates": 6
+            }
+          }
+        },
+        {
+          "trial": 23,
+          "mean_regret": 0.4909242400915924,
+          "params": {
+            "tabu": {
+              "tenure_factor": 2.0,
+              "moves_factor": 5,
+              "restart_factor": 10,
+              "kick_fraction": 0.2,
+              "candidate_fraction": 0.5,
+              "candidates": 6
+            }
+          }
+        }
+      ]
+    },
+    "alns_ucb1_rt": {
+      "best_trial": 6,
+      "best_mean_regret": 0.09672313803847941,
+      "default_mean_regret": 0.12344313138371185,
+      "params": {
+        "alns": {
+          "destroy_lo": 0.02,
+          "destroy_hi": 0.25,
+          "q_cap": 15,
+          "noise": 0.3,
+          "final_ratio": 0.0001,
+          "accept_probability0": 0.2,
+          "regret_k": 3,
+          "p_worst": 2.0,
+          "reward_preset": "balanced"
+        },
+        "policy": {
+          "ucb1_rt": {
+            "window": 50,
+            "c": 1.0
+          }
+        }
+      },
+      "trials": [
+        {
+          "trial": 0,
+          "mean_regret": 0.12344313138371185,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 100,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 1,
+          "mean_regret": 0.17855909156468655,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.6,
+              "q_cap": 15,
+              "noise": 0.6,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 100,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 2,
+          "mean_regret": 0.13477514106157257,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 15,
+              "noise": 0.0,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 200,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 3,
+          "mean_regret": 0.8388550980619471,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.25,
+              "q_cap": 30,
+              "noise": 0.6,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 200,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 4,
+          "mean_regret": 0.2733466653393264,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.6,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 25,
+                "c": 2.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 5,
+          "mean_regret": 0.1905189124491071,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.4,
+              "q_cap": 15,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 200,
+                "c": 2.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 6,
+          "mean_regret": 0.09672313803847941,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.25,
+              "q_cap": 15,
+              "noise": 0.3,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 50,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 7,
+          "mean_regret": 0.10116461043049935,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.6,
+              "q_cap": 15,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 200,
+                "c": 2.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 8,
+          "mean_regret": 0.12119227889766855,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.1,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 200,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 9,
+          "mean_regret": 0.22797730245633976,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 200,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 10,
+          "mean_regret": 0.12796073856440096,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.6,
+              "q_cap": 60,
+              "noise": 0.1,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 50,
+                "c": 2.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 11,
+          "mean_regret": 0.20947755321416228,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 100,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 12,
+          "mean_regret": 0.13985543213086488,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 200,
+                "c": 2.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 13,
+          "mean_regret": 0.3985215951272696,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.6,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 25,
+                "c": 1.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 14,
+          "mean_regret": 0.2288943893502653,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.25,
+              "q_cap": 15,
+              "noise": 0.6,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 200,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 15,
+          "mean_regret": 0.31542937988466707,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.6,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 5.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 50,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 16,
+          "mean_regret": 0.10229808049411676,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.4,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 50,
+                "c": 2.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 17,
+          "mean_regret": 0.15939466559113932,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "classical"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 100,
+                "c": 2.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 18,
+          "mean_regret": 0.13178687532573635,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.1,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 50,
+                "c": 2.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 19,
+          "mean_regret": 0.1950496646833782,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.25,
+              "q_cap": 15,
+              "noise": 0.6,
+              "final_ratio": 0.0001,
+              "accept_probability0": 0.2,
+              "regret_k": 2,
+              "p_worst": 3.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 100,
+                "c": 2.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 20,
+          "mean_regret": 0.18859257602815752,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.02,
+              "destroy_hi": 0.6,
+              "q_cap": 60,
+              "noise": 0.0,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 50,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 21,
+          "mean_regret": 0.1386360480786677,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.6,
+              "q_cap": 30,
+              "noise": 0.3,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.5,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 100,
+                "c": 2.0
+              }
+            }
+          }
+        },
+        {
+          "trial": 22,
+          "mean_regret": 0.19053935407726644,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.05,
+              "destroy_hi": 0.15,
+              "q_cap": 30,
+              "noise": 0.0,
+              "final_ratio": 0.001,
+              "accept_probability0": 0.8,
+              "regret_k": 3,
+              "p_worst": 2.0,
+              "reward_preset": "balanced"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 50,
+                "c": 0.3
+              }
+            }
+          }
+        },
+        {
+          "trial": 23,
+          "mean_regret": 0.16879012056638118,
+          "params": {
+            "alns": {
+              "destroy_lo": 0.1,
+              "destroy_hi": 0.15,
+              "q_cap": 60,
+              "noise": 0.3,
+              "final_ratio": 0.01,
+              "accept_probability0": 0.8,
+              "regret_k": 2,
+              "p_worst": 2.0,
+              "reward_preset": "progress"
+            },
+            "policy": {
+              "ucb1_rt": {
+                "window": 100,
+                "c": 1.0
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "best_alns_policy": "alns_random",
+  "alns_regret_by_policy": {
+    "alns_random": 0.0813724096751322,
+    "alns_roundrobin": 0.08846868586872131,
+    "alns_roulette": 0.08597815205911422,
+    "alns_epsilon_greedy": 0.11052983832069777,
+    "alns_ucb1": 0.1709796143567184
+  },
+  "provenance": {
+    "config_hash": "e535e5799cdd758ce015912cae3798ff0c8655a9733482a4075af9f8ad4a1732",
+    "git": {
+      "commit": "0e89bcbf8b00b3c4d663959adff24eb876dcf66c",
+      "dirty": false
+    },
+    "seed": 20261025,
+    "library_versions": {
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "pandas": "3.1.0",
+      "numba": "0.68.0",
+      "biopython": "1.88",
+      "matplotlib": "3.11.2",
+      "plotly": "7.1.0",
+      "PyYAML": "6.0.3"
+    },
+    "machine": {
+      "platform": "Windows-10-10.0.19045-SP0",
+      "processor": "Intel64 Family 6 Model 60 Stepping 3, GenuineIntel",
+      "python": "3.12.7",
+      "cpu_count": 8
+    },
+    "timestamp_utc": "2026-10-23T21:41:49+00:00"
+  },
+  "provenance_added": {
+    "tabu_cl": {
+      "git": {
+        "commit": "941fbe191c9e5f870242ed879750bbb349f7c6ac",
+        "dirty": false
+      },
+      "note": "stamp overwritten by the next tuning stage and restored by hand from the commit that was checked out (clean tree) when tabu_cl was tuned, 2026-10-24"
+    },
+    "alns_ucb1_rt": {
+      "config_hash": "e3347df73ee51e30f7abde97fbb341cdc67ddb55ece52d2301550b329c698d5f",
+      "git": {
+        "commit": "6b06fbf854c859b86e6d852f609c2460ecfa66cc",
+        "dirty": true
+      },
+      "seed": 20261025,
+      "library_versions": {
+        "numpy": "2.5.4",
+        "scipy": "1.18.1",
+        "pandas": "3.1.0",
+        "numba": "0.68.0",
+        "biopython": "1.88",
+        "matplotlib": "3.11.2",
+        "plotly": "7.1.0",
+        "PyYAML": "6.0.3"
+      },
+      "machine": {
+        "platform": "Windows-10-10.0.19045-SP0",
+        "processor": "Intel64 Family 6 Model 60 Stepping 3, GenuineIntel",
+        "python": "3.12.7",
+        "cpu_count": 8
+      },
+      "timestamp_utc": "2026-10-24T13:13:20+00:00",
+      "note": "dirty flag set only because docs/glossary.yaml was being edited while this stage ran; the code is identical to commit 6b06fbf (git diff 6b06fbf HEAD touches only docs/glossary.yaml)"
+    }
+  }
+}

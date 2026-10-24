@@ -1,0 +1,11 @@
+{
+  "figure": "fig11_pareto",
+  "caption": "Quality against time: the mean gap of every solver at every time of the budget. The black step line is the Pareto front: no solver reaches a smaller gap in less time. Gaps below 0.001% are drawn at 0.001%.",
+  "source": "results/phase5/main_runs.jsonl.gz",
+  "config_hash": "e3347df73ee51e30f7abde97fbb341cdc67ddb55ece52d2301550b329c698d5f",
+  "files": [
+    "fig11_pareto.svg",
+    "fig11_pareto.pdf",
+    "fig11_pareto.png"
+  ]
+}

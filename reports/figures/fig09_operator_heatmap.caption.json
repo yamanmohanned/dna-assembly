@@ -1,0 +1,11 @@
+{
+  "figure": "fig09_operator_heatmap",
+  "caption": "What each destroy + repair operator pair achieved, as a share of its uses (all read sets pooled; the number of uses is in brackets). With random selection every pair is used equally, so the rows show the operators' intrinsic usefulness; with UCB1 the rows show where the bandit put its effort.",
+  "source": "results/phase5/main_runs.jsonl.gz",
+  "config_hash": "e3347df73ee51e30f7abde97fbb341cdc67ddb55ece52d2301550b329c698d5f",
+  "files": [
+    "fig09_operator_heatmap.svg",
+    "fig09_operator_heatmap.pdf",
+    "fig09_operator_heatmap.png"
+  ]
+}

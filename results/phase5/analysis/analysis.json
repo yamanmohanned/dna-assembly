@@ -1,0 +1,98 @@
+{
+  "best_alns_policy_from_tuning": "alns_random",
+  "claim_bandit_beats_random": [
+    {
+      "policy": "alns_ucb1",
+      "baseline": "alns_random",
+      "median_diff_pp": 0.0,
+      "ci": [
+        0.0,
+        0.0
+      ],
+      "p_holm": 0.9032212377095467,
+      "a12": 0.5208055555555555,
+      "alpha": 0.05,
+      "verdict": "not supported (no significant difference)"
+    },
+    {
+      "policy": "alns_epsilon_greedy",
+      "baseline": "alns_random",
+      "median_diff_pp": 0.0,
+      "ci": [
+        -0.01900084000195923,
+        0.0
+      ],
+      "p_holm": 1.2603289931969929e-10,
+      "a12": 0.4619111111111111,
+      "alpha": 0.05,
+      "verdict": "rejected (random is significantly better); the median paired difference is 0, the effect is small"
+    }
+  ],
+  "post_hoc_ucb1_tie_breaking": [
+    {
+      "policy": "alns_ucb1_rt",
+      "baseline": "alns_random",
+      "median_diff_pp": 0.0,
+      "ci": [
+        0.0,
+        0.006985354041022518
+      ],
+      "p_holm": 0.00022785228273745016,
+      "a12": 0.5665222222222221,
+      "alpha": 0.05,
+      "verdict": "supported; the median paired difference is 0, the effect is small"
+    },
+    {
+      "policy": "alns_ucb1_rt",
+      "baseline": "alns_ucb1",
+      "median_diff_pp": 0.0,
+      "ci": [
+        0.0,
+        0.0005611987204667823
+      ],
+      "p_holm": 1.67229091926588e-05,
+      "a12": 0.5443388888888889,
+      "alpha": 0.05,
+      "verdict": "supported; the median paired difference is 0, the effect is small"
+    },
+    {
+      "policy": "alns_ucb1_rt",
+      "baseline": "alns_roulette",
+      "median_diff_pp": 0.0,
+      "ci": [
+        0.0,
+        0.0
+      ],
+      "p_holm": 0.3672104247866016,
+      "a12": 0.5326388888888889,
+      "alpha": 0.05,
+      "verdict": "not supported (no significant difference)"
+    }
+  ],
+  "read_sets": 300,
+  "provenance": {
+    "config_hash": "e3347df73ee51e30f7abde97fbb341cdc67ddb55ece52d2301550b329c698d5f",
+    "git": {
+      "commit": "a575899a25d5f00931f66bd1f3120df1a2fd4826",
+      "dirty": true
+    },
+    "seed": 20261025,
+    "library_versions": {
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "pandas": "3.1.0",
+      "numba": "0.68.0",
+      "biopython": "1.88",
+      "matplotlib": "3.11.2",
+      "plotly": "7.1.0",
+      "PyYAML": "6.0.3"
+    },
+    "machine": {
+      "platform": "Windows-10-10.0.19045-SP0",
+      "processor": "Intel64 Family 6 Model 60 Stepping 3, GenuineIntel",
+      "python": "3.12.7",
+      "cpu_count": 8
+    },
+    "timestamp_utc": "2026-10-24T13:28:54+00:00"
+  }
+}

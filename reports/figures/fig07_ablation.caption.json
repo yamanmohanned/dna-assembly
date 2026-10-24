@@ -1,0 +1,11 @@
+{
+  "figure": "fig07_ablation",
+  "caption": "Ablation: operator-selection policies against random selection, paired by read set; points are mean paired differences with 95% bootstrap CI (the median differences are in tests.csv and are mostly 0). Significance marks come from two-sided Wilcoxon signed-rank tests with Holm correction within each family (*** p<0.001, ** p<0.01, * p<0.05, ns not significant). Red rows: a single operator pair used alone minus the random mixture. Stars come from the Wilcoxon test, which looks at the whole paired distribution, so they can disagree with a mean-difference interval that touches zero. UCB1 with random ties is a post-hoc variant (D-046).",
+  "source": "results/phase5/main_runs.jsonl.gz",
+  "config_hash": "e3347df73ee51e30f7abde97fbb341cdc67ddb55ece52d2301550b329c698d5f",
+  "files": [
+    "fig07_ablation.svg",
+    "fig07_ablation.pdf",
+    "fig07_ablation.png"
+  ]
+}

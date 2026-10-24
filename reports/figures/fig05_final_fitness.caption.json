@@ -1,0 +1,11 @@
+{
+  "figure": "fig05_final_fitness",
+  "caption": "Final fitness of all solvers after the same wall-clock budget. (a) Boxes: quartiles, whiskers 1.5 x IQR, points: outliers. (b) Median gap per instance setting. Gap = 100 x (best known - F) / best known on the same read set.",
+  "source": "results/phase5/main_runs.jsonl.gz",
+  "config_hash": "e3347df73ee51e30f7abde97fbb341cdc67ddb55ece52d2301550b329c698d5f",
+  "files": [
+    "fig05_final_fitness.svg",
+    "fig05_final_fitness.pdf",
+    "fig05_final_fitness.png"
+  ]
+}

@@ -4,10 +4,13 @@ Project: DNA fragment assembly as an asymmetric TSP, comparing Greedy, Tabu Sear
 Requirements: `docs/MASTER_PROMPT.md` (authoritative). Plan (approved): `docs/PLAN.md`. Decisions: `docs/DECISIONS.md`. Phase reports: `docs/phases/PHASE_N.md`. Data pipeline for the oral exam: `docs/DATA_LOADING.md`. Objective function and ATSP proof for the oral exam: `docs/OBJECTIVE_FUNCTION.md`. Definitions: `docs/glossary.yaml`.
 
 ## Status
-- **Phases 0 to 4 complete; waiting for the user's "continue" to start Phase 5** (experiments and statistics: instance design, tuning on separate instances, main comparison and ablation with 30 seeds, metrics, R7 statistics).
-- Deadline 2026-11-01 (confirmed). Language: English. Presentation: own laptop, offline, projector. About 2 days ahead of schedule after Phase 4.
+- **Phases 0 to 5 complete; waiting for the user's "continue" to start Phase 6** (Streamlit application, offline demo; figures come from `results/`). Phase 5 report: `docs/phases/PHASE_5.md` (generated from the results; tests `tests/test_phase5_results.py`).
+- Deadline 2026-11-01 (confirmed). Language: English. Presentation: own laptop, offline, projector. About 2 days ahead of schedule after Phase 5.
 - **LKH-3 is available** (D-033): version 3.0.6 supplied by the user in `tools/LKH3-master/` (research-use licence, never committed), built in WSL Ubuntu 24.04 (the user installed build-essential and prefers to run any sudo command themselves; keep token use low). Provenance caveat: identity with the official release not verifiable. LKH-3 is only used through `genomeasm/solvers/lkh.py` (verifies every tour) and is never replaced silently (R9).
 - Open questions: Q3 (program that opens the .pptx), Q5 (is this the presenting laptop).
+- **Phase 5 verdict (honest):** the pre-registered claim (UCB1 and epsilon-greedy beat random operator selection) is NOT supported (UCB1 p_holm 0.90, A12 0.52; epsilon-greedy slightly worse). LKH-3 was never beaten on 300 read sets; ALNS beats greedy and tabu. Post hoc (D-045, D-046, exploratory): `tabu_cl` (candidate-list tabu) and `alns_ucb1_rt` (UCB1 with random tie-breaking; the original UCB1 had a defect: it plays arm 0 on a plateau). `alns_ucb1_rt` is slightly better than random (A12 0.57) and equal to roulette. Keep both versions visible in any slide; never present post-hoc results as confirmation.
+- **WSL is down again** (`Wsl/Service/E_UNEXPECTED`, 2026-10-24): LKH-3 cannot run and `tests/test_solvers.py::test_lkh_finds_the_optimum...` fails until the user restarts WSL (reboot, or admin `Restart-Service LxssManager`). `wsl --shutdown` does not help. First action next session: check `wsl -d Ubuntu-24.04 -- echo ok`, ask the user if it fails.
+- Lessons: (1) never let the laptop sleep during timed runs (keep-awake); (2) a policy surprise (an arm used 60% of the time) is a bug until proven otherwise; (3) tuning results do not always transfer from the tuning set to the evaluation set; (4) in PowerShell never pass a single `@(@(a,b))` pair to a helper (it flattens): edit files with Python.
 - Key findings so far: D-031 (errors fragment the true-order chain), D-036 (error-free instances are trivial: greedy = LKH-3 = true order; solver comparison needs noisy instances with tolerant overlaps; the true order has LOWER F than the heuristics' solutions there, so biological metrics are essential).
 
 ## Working protocol (from the master prompt)
@@ -31,6 +34,7 @@ Requirements: `docs/MASTER_PROMPT.md` (authoritative). Plan (approved): `docs/PL
 - Key facts for Phase 4/5: true order = `inst.true_order()`; its F is the reference line (46,235 for phiX174 at c = 10, seed 1; trivial order F = 435). Recommended tau by `recommend_min_overlap` (9 to 14 for the real instances). With read errors the true-order chain breaks into many contigs (D-031): measure contigs, N50, genome fraction, not only F. Delta evaluation (O(1) swap/insert) is a Phase 4 task (D-032).
 
 - `genomeasm/solvers/`: `common.py` (`Problem` = cycle form, weights W (n+1)x(n+1) with dummy node 0; `Budget(seconds, evaluations)`; `SolveResult` with `order`, `fitness`, `merged_length`, `evaluations`, `seconds`, `trace`, `info`), `moves.py` (O(1) `swap_delta`, `insert_delta`), `exact.py` (`brute_force` n<=9, `held_karp` n<=15), `greedy.py` (`greedy`, `nearest_neighbour`), `tabu.py` (`tabu_search`), `alns.py` (`alns(problem, budget, seed, policy=..., fixed_arm=...)`, arms = 3 destroy x 2 repair, `ARM_NAMES`), `lkh.py` (`lkh`, `lkh_binary`, `verify_tour`), `warmup.py` (`warmup()`: ALWAYS call before timing). `genomeasm/bandit/policies.py` (random, roundrobin, roulette, epsilon_greedy, ucb1 with sliding window, fixed). `genomeasm/solver_validation.py`.
+- `genomeasm/bandit/policies.py`: random, roundrobin, roulette, epsilon_greedy, ucb1 (lowest-index ties, kept for reproducibility), ucb1_rt (random ties, D-046), fixed. `genomeasm/experiments/`: `design.py` (instances, `run_algorithm`, bio metrics), `runner.py` (resumable pool), `plan.py` (tuning, tuned params, tasks, `missing_tasks`), `analysis.py` (statistics, verdicts, convergence, scaling), `figures.py` (figs 4 to 11), `bio.py`. Config `configs/phase5_experiments.yaml` (D-039 to D-046).
 - Results (committed): `results/phase4/correctness.json` (12 checks, commit 07f63ea; includes a one-instance preview comparison, not a result).
 
 ## Environment (Windows 10, i7-4800MQ 4C/8T, 15.6 GB RAM)
@@ -42,9 +46,10 @@ Requirements: `docs/MASTER_PROMPT.md` (authoritative). Plan (approved): `docs/PL
 - NCBI usage guidelines page unreadable (CAPTCHA); rate limit rule only verified via Biopython source (D-019).
 
 ## Commands (all through `.venv\Scripts\python.exe`)
-- `make check`: ruff check, ruff format --check, mypy (`genomeasm tests`), pytest. Green at end of Phase 4: 345 tests.
+- `make check`: ruff check, ruff format --check, mypy (`genomeasm tests`), pytest. Green at end of Phase 5 except the LKH-3 unit test while WSL is down (see Status).
 - `make test`, `make lint`, `make format`, `make typecheck`, `make venv`, `make help`.
 - `genomeasm solve ACC --coverage C --solver greedy|nn|tabu|alns|lkh [--policy ucb1] [--seconds S] [--sub-rate P --tolerance T --min-overlap N]`; `genomeasm solvers validate` (about 10 min, writes `results/phase4/correctness.json`). Run LKH-3 by hand: `wsl -d Ubuntu-24.04 -- bash -c 'cd "<wsl dir>" && "<wsl>/tools/LKH3-master/LKH" file.par'`.
+- `genomeasm experiments tune|run|scale|analyze` (resumable; `rerun-lkh --target main|scaling` repeats LKH-3 only where missing; `add-runs --target main|scaling --algorithm A` adds one algorithm where it has no result). Work files in `data/processed/phase5_work/` (ignored); raw runs, tables and `stages.json` in `results/phase5/`. Never launch a timed run with a dirty code tree; request keep-awake first.
 - `genomeasm data fetch|verify|cards`; `genomeasm simulate run|validate|figures`; `genomeasm overlap validate|figures` (about 170 s); `genomeasm assemble ACC --coverage C --order true|trivial|random [--min-overlap auto|N] [--tolerance T] [--sub-rate P] [--out-dir D]`.
 
 ## Conventions

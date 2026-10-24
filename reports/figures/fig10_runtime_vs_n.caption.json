@@ -1,0 +1,11 @@
+{
+  "figure": "fig10_runtime_vs_n",
+  "caption": "Runtime against instance size (lambda windows of 2,500 to 20,000 bases, coverage 10x, 1% errors, 10 read sets per size, medians). LKH-3's preprocessing makes its total time grow much faster than the other quantities.",
+  "source": "results/phase5/main_runs.jsonl.gz",
+  "config_hash": "e3347df73ee51e30f7abde97fbb341cdc67ddb55ece52d2301550b329c698d5f",
+  "files": [
+    "fig10_runtime_vs_n.svg",
+    "fig10_runtime_vs_n.pdf",
+    "fig10_runtime_vs_n.png"
+  ]
+}

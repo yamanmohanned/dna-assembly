@@ -1,0 +1,54 @@
+{
+  "note": "The raw run files carry no commit, so each stage of Phase 5 is recorded here. 'recorded' = stamped by the program at the time; 'inferred' = written by hand from the git history and file timestamps (no commit was made between the stages named); the trees were clean (results and reports are ignored by the dirty flag) unless stated.",
+  "stages": [
+    {
+      "stage": "tuning of tabu, ALNS policies and LKH-3 variants",
+      "output": "tuning_runs.jsonl.gz, tuning_summary.json (algorithms except tabu_cl, alns_ucb1_rt)",
+      "commit": "0e89bcbf8b00b3c4d663959adff24eb876dcf66c",
+      "dirty": false,
+      "evidence": "recorded (tuning_summary.json provenance, 2026-10-23T21:41:49+00:00)"
+    },
+    {
+      "stage": "main run, 300 read sets, all solvers except tabu_cl and alns_ucb1_rt; first scaling run",
+      "output": "main_runs.jsonl.gz, scaling_runs.jsonl.gz",
+      "commit": "0e89bcbf8b00b3c4d663959adff24eb876dcf66c",
+      "dirty": false,
+      "evidence": "inferred: started after the tuning stage and before the next commit da591f4 (2026-10-24 02:41); runner, design and plan code did not change in between except the emit_instance option of da591f4"
+    },
+    {
+      "stage": "LKH-3 re-runs after the WSL crash (121 main read sets, all 40 scaling read sets)",
+      "output": "main_runs.jsonl.gz, scaling_runs.jsonl.gz",
+      "commit": "da591f4",
+      "dirty": false,
+      "evidence": "inferred: stage rerun-lkh was added by da591f4 and the runs were made right after it (error records of the crash are kept in the files)"
+    },
+    {
+      "stage": "tuning of tabu_cl",
+      "output": "tuning_runs.jsonl.gz, tuning_summary.json (algorithms.tabu_cl)",
+      "commit": "941fbe191c9e5f870242ed879750bbb349f7c6ac",
+      "dirty": false,
+      "evidence": "recorded in tuning_summary.json provenance_added.tabu_cl (restored by hand, see its note); git status was clean before launching"
+    },
+    {
+      "stage": "tabu_cl on the 300 main read sets and the 40 scaling read sets",
+      "output": "main_runs.jsonl.gz, scaling_runs.jsonl.gz",
+      "commit": "941fbe191c9e5f870242ed879750bbb349f7c6ac",
+      "dirty": false,
+      "evidence": "inferred: git status was clean when the stage was launched and no code changed while it ran"
+    },
+    {
+      "stage": "tuning of alns_ucb1_rt and its 300 main read sets",
+      "output": "tuning_runs.jsonl.gz, tuning_summary.json (algorithms.alns_ucb1_rt), main_runs.jsonl.gz",
+      "commit": "6b06fbf854c859b86e6d852f609c2460ecfa66cc",
+      "dirty": true,
+      "evidence": "recorded for the tuning (provenance_added.alns_ucb1_rt); dirty only because docs/glossary.yaml was edited while the stages ran, the code is identical to 6b06fbf"
+    },
+    {
+      "stage": "analysis, tables and figures 4 to 11",
+      "output": "analysis/*, reports/figures/fig04..fig11",
+      "commit": "see analysis/analysis.json provenance",
+      "dirty": false,
+      "evidence": "recorded (analysis.json provenance); regenerated after every code change to the analysis"
+    }
+  ]
+}

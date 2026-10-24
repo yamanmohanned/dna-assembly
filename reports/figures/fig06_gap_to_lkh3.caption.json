@@ -1,0 +1,11 @@
+{
+  "figure": "fig06_gap_to_lkh3",
+  "caption": "Gap of each solver to LKH-3 on the same read set, lambda window of 5,000 bases, 30 read sets per point (median and interquartile range). Gap = 100 x (F of LKH-3 - F) / F of LKH-3: negative values mean the solver beat LKH-3 within the same total wall-clock time.",
+  "source": "results/phase5/main_runs.jsonl.gz",
+  "config_hash": "e3347df73ee51e30f7abde97fbb341cdc67ddb55ece52d2301550b329c698d5f",
+  "files": [
+    "fig06_gap_to_lkh3.svg",
+    "fig06_gap_to_lkh3.pdf",
+    "fig06_gap_to_lkh3.png"
+  ]
+}

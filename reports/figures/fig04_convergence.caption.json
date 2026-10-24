@@ -1,0 +1,11 @@
+{
+  "figure": "fig04_convergence",
+  "caption": "Convergence over 300 read sets (10 instance settings x 30 seeds): mean gap of the best solution so far to the best fitness any solver reached on the same read set. A curve is drawn where at least 90% of the read sets already have a solution. LKH-3's curve starts after its preprocessing, has no evaluation count and sits on the 0.001% floor (its gap is 0 by construction of the best-known value). Nearest neighbour is left out (gap about 5%).",
+  "source": "results/phase5/main_runs.jsonl.gz",
+  "config_hash": "e3347df73ee51e30f7abde97fbb341cdc67ddb55ece52d2301550b329c698d5f",
+  "files": [
+    "fig04_convergence.svg",
+    "fig04_convergence.pdf",
+    "fig04_convergence.png"
+  ]
+}
