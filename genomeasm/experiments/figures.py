@@ -19,14 +19,14 @@ from genomeasm.solvers.alns import ARM_NAMES, OUTCOMES
 COLORS = {
     "greedy": "#777777", "nearest_neighbour": "#BBBBBB", "tabu": C["blue"], "tabu_cl": "#0B3C5D",
     "alns_random": C["vermillion"], "alns_roundrobin": C["sky"], "alns_roulette": C["orange"],
-    "alns_epsilon_greedy": C["green"], "alns_ucb1": C["purple"], "lkh3": C["black"],
+    "alns_epsilon_greedy": C["green"], "alns_ucb1": C["purple"], "alns_ucb1_rt": "#882255", "lkh3": C["black"],
 }  # fmt: skip
 LABELS = {
     "greedy": "Greedy", "nearest_neighbour": "Nearest neighbour", "tabu": "Tabu search",
     "tabu_cl": "Tabu search + candidate lists",
     "alns_random": "ALNS random", "alns_roundrobin": "ALNS round robin",
     "alns_roulette": "ALNS roulette wheel", "alns_epsilon_greedy": "ALNS epsilon-greedy",
-    "alns_ucb1": "ALNS UCB1", "lkh3": "LKH-3",
+    "alns_ucb1": "ALNS UCB1", "alns_ucb1_rt": "ALNS UCB1 (random ties)", "lkh3": "LKH-3",
 }  # fmt: skip
 MAIN = list(COLORS)
 
@@ -143,13 +143,14 @@ def fig_ablation(tests: pd.DataFrame) -> tuple[Figure, str]:
     pooled = tests[tests["scope"] == "pooled"]
     rows = []
     for r in pooled.itertuples():
-        if r.family in ("primary", "secondary_vs_random") and r.b == "alns_random":
+        if r.family in ("primary", "secondary_vs_random", "post_hoc") and r.b == "alns_random":
             rows.append((r.a, r.median_diff_pp, r.ci_low_pp, r.ci_high_pp, r.p_holm, r.family))
         elif r.family == "random_vs_single_operator":  # shown as: single operator minus random
             rows.append((r.b, -r.median_diff_pp, -r.ci_high_pp, -r.ci_low_pp, r.p_holm, r.family))
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(13, 5.2), gridspec_kw={"width_ratios": [1.3, 1]})
     for y, (_, m, lo, hi, p, fam) in enumerate(rows):
         colour = C["blue"] if fam != "random_vs_single_operator" else C["vermillion"]
+        colour = COLORS["alns_ucb1_rt"] if fam == "post_hoc" else colour
         ax1.errorbar(m, y, xerr=[[m - lo], [hi - m]], fmt="o", color=colour, capsize=3)
         ax1.text(hi + 0.0005, y, _stars(p), va="center", fontsize=10)
     ax1.axvline(0, color="#444444", lw=0.8)
@@ -160,6 +161,7 @@ def fig_ablation(tests: pd.DataFrame) -> tuple[Figure, str]:
     for pol, colour in (
         ("alns_ucb1", COLORS["alns_ucb1"]),
         ("alns_epsilon_greedy", COLORS["alns_epsilon_greedy"]),
+        ("alns_ucb1_rt", COLORS["alns_ucb1_rt"]),
     ):
         part = tests[
             (tests["a"] == pol) & (tests["b"] == "alns_random") & (tests["scope"] != "pooled")
@@ -183,16 +185,17 @@ def fig_ablation(tests: pd.DataFrame) -> tuple[Figure, str]:
         "Ablation: operator-selection policies against random selection, paired by read set. Significance "
         "marks come from two-sided Wilcoxon signed-rank tests with Holm correction within each family "
         "(*** p<0.001, ** p<0.01, * p<0.05, ns not significant). Red rows: a single operator pair "
-        "used alone minus the random mixture."
+        "used alone minus the random mixture. UCB1 with random ties is a post-hoc variant (D-046)."
     )
 
 
 def fig_arm_probability(runs: pd.DataFrame) -> tuple[Figure, str]:
     apply_style()
-    fig, axes = plt.subplots(1, 3, figsize=(14, 4.4), sharey=True)
+    fig, axes = plt.subplots(1, 4, figsize=(17, 4.4), sharey=True)
     palette = [C["blue"], C["sky"], C["green"], C["orange"], C["vermillion"], C["purple"]]
     grid = np.linspace(0, 1, 60)
-    for ax, policy in zip(axes, ["alns_roulette", "alns_epsilon_greedy", "alns_ucb1"], strict=True):
+    policies = ["alns_roulette", "alns_epsilon_greedy", "alns_ucb1", "alns_ucb1_rt"]
+    for ax, policy in zip(axes, policies, strict=True):
         stack = []
         for r in runs[runs["algorithm"] == policy].itertuples():
             trace = np.array(r.info["probability_trace"])
@@ -208,14 +211,16 @@ def fig_arm_probability(runs: pd.DataFrame) -> tuple[Figure, str]:
         ax.set_xlim(0, 1)
         ax.set_ylim(0, 1)
     axes[0].set_ylabel("Probability of choosing the operator pair")
-    axes[2].legend(
+    axes[3].legend(
         fontsize=8, loc="center left", bbox_to_anchor=(1.0, 0.5), title="destroy + repair"
     )
     fig.tight_layout(rect=(0, 0.03, 1, 1))
     return fig, (
         "How the learning policies spread their choices over the six operator pairs during a run (mean "
         "over all read sets). Roulette: its weights; epsilon-greedy: epsilon/6 plus the greedy arm; UCB1: "
-        "the arm it would pick next (one-hot), so the mean shows how often each arm leads."
+        "the arm it would pick next (one-hot), so the mean shows how often each arm leads. UCB1 with "
+        "lowest-index ties collapses onto the first arm once rewards are all zero (D-046); with random "
+        "ties (rightmost) it does not."
     )
 
 

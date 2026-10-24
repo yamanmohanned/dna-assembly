@@ -331,11 +331,9 @@ def test_markdown_table_helper() -> None:
 
 
 def test_adding_tabu_cl_does_not_change_the_other_tuning_trials() -> None:
-    assert (
-        plan.ALGORITHMS_TUNED[-1] == "tabu_cl"
-    )  # appended: earlier random-search seeds are intact
-    for algorithm in plan.ALGORITHMS_TUNED[:-1]:
-        assert plan.ALGORITHMS_TUNED.index(algorithm) < plan.ALGORITHMS_TUNED.index("tabu_cl")
+    # appended in the order they were added: the random-search seeds of earlier ones are intact
+    assert plan.ALGORITHMS_TUNED[-2:] == ["tabu_cl", "alns_ucb1_rt"]
+    assert plan.ALGORITHMS_TUNED[:-2] == [*plan.TUNED, "lkh3"]
     space = CFG["tuning"]["space"]["tabu_cl"]
     trials = plan.trial_list(CFG, "tabu_cl")
     assert trials[0] == plan.default_params(CFG, "tabu_cl")
@@ -386,3 +384,15 @@ def test_missing_tasks_cover_only_the_read_sets_without_a_result() -> None:
     assert {t["group"] for t in scaling} == {"lkh_rerun"}
     assert len(plan.missing_lkh_tasks(CFG, summary, [])) == n_sets
     assert "tabu_cl" in CFG["scaling_solvers"]
+
+
+def test_ucb1_with_random_ties_is_a_registered_post_hoc_variant() -> None:
+    assert "alns_ucb1_rt" in plan.MAIN_ALGORITHMS and "alns_ucb1_rt" not in plan.TUNED
+    assert plan.trial_list(CFG, "alns_ucb1_rt")[0]["policy"] == {
+        "ucb1_rt": {"window": 100, "c": 1.0}
+    }
+    space = CFG["tuning"]["space"]["policy"]
+    assert space["ucb1_rt"] == space["ucb1"]  # the same search space as the original UCB1
+    assert ("alns_ucb1_rt", "alns_random") in analysis.families(CFG, "alns_random")["post_hoc"]
+    kw = plan.default_params(CFG, "alns_ucb1_rt")
+    assert design.alns_kwargs(CFG, kw)["rewards"] == tuple(CFG["reward_presets"]["classical"])

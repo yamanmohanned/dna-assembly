@@ -133,6 +133,8 @@ def families(cfg: dict[str, Any], best_alns: str) -> dict[str, list[tuple[str, s
     }
     if s.get("single_operator_vs_random"):
         out["random_vs_single_operator"] = [("alns_random", a) for a in FIXED_ALGORITHMS]
+    if s.get("post_hoc"):
+        out["post_hoc"] = [tuple(p) for p in s["post_hoc"]]
     return out
 
 
@@ -175,6 +177,7 @@ def summarise(runs: pd.DataFrame, by: list[str]) -> pd.DataFrame:
     out = g["gap"].agg(
         n="count", median="median", q1=lambda x: x.quantile(0.25), q3=lambda x: x.quantile(0.75)
     )
+    out["mean_gap"] = g["gap"].mean()
     out["mean_fitness"] = g["fitness"].mean()
     out["median_seconds"] = g["seconds"].median()
     out["median_evaluations"] = g["evaluations"].median()
@@ -190,10 +193,13 @@ def summarise(runs: pd.DataFrame, by: list[str]) -> pd.DataFrame:
     return out.reset_index()
 
 
-def claim_verdict(tests: pd.DataFrame, alpha: float) -> list[dict[str, Any]]:
-    """The pre-registered claim: bandit selection beats random selection (pooled, Holm)."""
+def claim_verdict(
+    tests: pd.DataFrame, alpha: float, family: str = "primary"
+) -> list[dict[str, Any]]:
+    """The claim: bandit selection beats random selection (pooled, Holm). ``family`` "primary" is
+    the pre-registered one; "post_hoc" holds the comparisons added after the first main run."""
     rows = []
-    for r in tests[(tests["scope"] == "pooled") & (tests["family"] == "primary")].itertuples():
+    for r in tests[(tests["scope"] == "pooled") & (tests["family"] == family)].itertuples():
         zero = "; the median paired difference is 0, the effect is small"
         if r.significant and r.median_diff_pp > 0:
             verdict = "supported"

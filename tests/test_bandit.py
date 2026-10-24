@@ -68,7 +68,7 @@ def test_fixed_policy_always_picks_its_arm() -> None:
     assert {policy.select() for _ in range(20)} == {3} and policy.probabilities()[3] == 1.0
 
 
-@pytest.mark.parametrize("name", ["ucb1", "epsilon_greedy"])
+@pytest.mark.parametrize("name", ["ucb1", "ucb1_rt", "epsilon_greedy"])
 def test_learning_policies_try_every_arm_first(name: str) -> None:
     policy = make_policy(name, 5, rng(4))
     first = []
@@ -79,7 +79,7 @@ def test_learning_policies_try_every_arm_first(name: str) -> None:
     assert sorted(first) == [0, 1, 2, 3, 4]
 
 
-@pytest.mark.parametrize("name", ["ucb1", "epsilon_greedy", "roulette"])
+@pytest.mark.parametrize("name", ["ucb1", "ucb1_rt", "epsilon_greedy", "roulette"])
 def test_learning_policies_favour_the_best_arm(name: str) -> None:
     means = [0.2, 0.5, 0.8]
     counts = play(make_policy(name, 3, rng(5)), means, 4000, rng(6))
@@ -96,7 +96,7 @@ def test_random_policy_does_not_favour_anything_but_learners_beat_it() -> None:
 
 
 def test_sliding_windows_forget_when_the_best_arm_changes() -> None:
-    for name in ("ucb1", "epsilon_greedy"):
+    for name in ("ucb1", "ucb1_rt", "epsilon_greedy"):
         policy = make_policy(name, 2, rng(9), window=50)
         generator = rng(10)
         play(policy, [0.9, 0.1], 800, generator)  # arm 0 is best ...
@@ -141,3 +141,43 @@ def test_policies_are_reproducible_per_seed(seed: int, name: str) -> None:
         return out
 
     assert run() == run()
+
+
+def test_ucb1_with_lowest_index_ties_plays_arm_zero_for_ever_on_a_plateau() -> None:
+    """The defect found in Phase 5 (D-046): equal windows and equal rewards give equal indices."""
+    policy = UCB1(6, rng(12), window=100)
+    picks = []
+    for _ in range(3000):  # no reward at all: a plateau of the search
+        arm = policy.select()
+        policy.update(arm, 0.0)
+        picks.append(arm)
+    assert set(picks[1000:]) == {0}
+
+
+def test_ucb1_with_random_ties_spreads_over_the_arms_on_a_plateau() -> None:
+    policy = make_policy("ucb1_rt", 6, rng(13), window=100)
+    picks = []
+    for _ in range(6000):
+        arm = policy.select()
+        policy.update(arm, 0.0)
+        picks.append(arm)
+    share = np.bincount(picks[1000:], minlength=6) / 5000
+    assert np.all(share > 0.08) and np.all(share < 0.26)  # about 1/6 each
+    p = policy.probabilities()
+    assert p.sum() == pytest.approx(1.0) and np.all(p >= 0)
+
+
+def test_ucb1_with_random_ties_agrees_with_ucb1_when_the_best_index_is_unique() -> None:
+    plain, tied = UCB1(3, rng(1), window=50), make_policy("ucb1_rt", 3, rng(1), window=50)
+    generator = rng(2)
+    unique = 0
+    for _ in range(300):
+        a, b = plain.select(), tied.select()
+        index = plain._index()
+        if np.all(plain.counts() > 0) and np.sum(index >= np.max(index) - 1e-12) == 1:
+            assert a == b
+            unique += 1
+        reward = float(generator.random() < [0.2, 0.5, 0.8][a])
+        plain.update(a, reward)
+        tied.update(a, reward)
+    assert unique > 250  # ties are rare when the rewards differ

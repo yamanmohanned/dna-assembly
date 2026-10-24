@@ -61,6 +61,7 @@ tuning:
       roulette: {segment: 100, reaction: 0.5}
       epsilon_greedy: {window: 100, epsilon: 0.1}
       ucb1: {window: 100, c: 1.0}
+      ucb1_rt: {window: 100, c: 1.0}   # added after the first main run (D-046)
   space:
     tabu:
       tenure_factor: [0.25, 0.5, 1.0, 2.0]
@@ -88,6 +89,7 @@ tuning:
       roulette: {segment: [25, 50, 100, 200], reaction: [0.2, 0.5, 0.8]}
       epsilon_greedy: {window: [25, 50, 100, 200], epsilon: [0.02, 0.05, 0.1, 0.2]}
       ucb1: {window: [25, 50, 100, 200], c: [0.3, 1.0, 2.0]}
+      ucb1_rt: {window: [25, 50, 100, 200], c: [0.3, 1.0, 2.0]}
   lkh_variants:
     default: {}
     nearest6: {CANDIDATE_SET_TYPE: NEAREST-NEIGHBOR, MAX_CANDIDATES: "6"}
@@ -109,6 +111,10 @@ statistics:
   secondary_vs_random: [alns_roundrobin, alns_roulette]
   vs_roulette: [alns_ucb1, alns_epsilon_greedy]   # bandits against the classical adaptive baseline
   single_operator_vs_random: true
+  post_hoc:       # added after the first main run (D-046): UCB1 with random tie-breaking
+    - [alns_ucb1_rt, alns_random]
+    - [alns_ucb1_rt, alns_ucb1]
+    - [alns_ucb1_rt, alns_roulette]
   main_pairs:     # filled with the best ALNS policy chosen on the tuning data (see tuning summary)
     - [alns_best, tabu_cl]
     - [alns_best, lkh3]

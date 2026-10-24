@@ -22,7 +22,10 @@ Policies (``make_policy(name, ...)``):
   windowed mean reward (untried arms first).
 * ``ucb1``: windowed UCB1 (Auer, Cesa-Bianchi and Fischer 2002; citation TODO-VERIFY): choose the
   maximising ``mean + sqrt(2 ln(N) / n)`` where ``n`` is the number of rewards of the arm in its
-  window and ``N`` the total in all windows (untried arms first).
+  window and ``N`` the total in all windows (untried arms first). Ties go to the lowest arm index:
+  when every reward is equal (a plateau of the search) it plays arm 0 for ever, a defect found in
+  Phase 5 and kept in this policy so that the pre-registered results stay reproducible (D-046).
+* ``ucb1_rt``: the same index, but ties are broken uniformly at random (the post-hoc correction).
 * ``fixed``: always the same arm (a "single operator alone" run).
 """
 
@@ -224,12 +227,35 @@ class UCB1(_Windowed):
         return p
 
 
+class UCB1RandomTies(UCB1):
+    """UCB1 that breaks ties between equal indices uniformly at random (decision D-046)."""
+
+    name = "ucb1_rt"
+
+    def _best(self) -> NDArray[np.intp]:
+        counts = self.counts()
+        if (counts == 0).any():
+            return np.flatnonzero(counts == 0)
+        index = self._index()
+        return np.flatnonzero(index >= np.max(index) - 1e-12)
+
+    def select(self) -> int:
+        best = self._best()
+        return int(best[0]) if best.size == 1 else int(self.rng.choice(best))
+
+    def probabilities(self) -> FloatArray:
+        p = np.zeros(self.n_arms)
+        p[self._best()] = 1.0
+        return p / p.sum()
+
+
 POLICIES: dict[str, type[Policy]] = {
     "random": RandomPolicy,
     "roundrobin": RoundRobin,
     "roulette": RouletteWheel,
     "epsilon_greedy": EpsilonGreedy,
     "ucb1": UCB1,
+    "ucb1_rt": UCB1RandomTies,
     "fixed": Fixed,
 }
 

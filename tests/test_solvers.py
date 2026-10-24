@@ -39,7 +39,7 @@ from genomeasm.solvers.tabu import _candidate_lists, tabu_search
 
 ROOT = Path(__file__).resolve().parent.parent
 TOY = ["ATGCG", "GCGTA", "GTACC"]
-POLICIES = ["random", "roundrobin", "roulette", "epsilon_greedy", "ucb1"]
+POLICIES = ["random", "roundrobin", "roulette", "epsilon_greedy", "ucb1", "ucb1_rt"]
 
 
 def toy_problem() -> Problem:

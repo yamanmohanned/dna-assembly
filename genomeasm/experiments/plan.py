@@ -16,7 +16,7 @@ TUNED = [
     *(f"alns_{p}" for p in ("random", "roundrobin", "roulette", "epsilon_greedy", "ucb1")),
 ]
 # tabu_cl comes last so that the random-search seeds of the other algorithms do not change
-ALGORITHMS_TUNED = [*TUNED, "lkh3", "tabu_cl"]
+ALGORITHMS_TUNED = [*TUNED, "lkh3", "tabu_cl", "alns_ucb1_rt"]
 
 
 def default_params(cfg: dict[str, Any], algorithm: str) -> dict[str, Any]:
@@ -170,6 +170,7 @@ MAIN_ALGORITHMS = [
     "tabu",
     "tabu_cl",
     *(f"alns_{p}" for p in ("random", "roundrobin", "roulette", "epsilon_greedy", "ucb1")),
+    "alns_ucb1_rt",
     *FIXED_ALGORITHMS,
     "lkh3",
 ]

@@ -363,6 +363,9 @@ def _analyze(cfg: dict[str, Any], results: Path) -> int:
     info = {
         "best_alns_policy_from_tuning": best,
         "claim_bandit_beats_random": claim,
+        "post_hoc_ucb1_tie_breaking": analysis.claim_verdict(
+            tests, float(cfg["statistics"]["alpha"]), "post_hoc"
+        ),
         "read_sets": int(runs.drop_duplicates(["instance", "seed_index"]).shape[0]),
         "provenance": provenance.collect(cfg, seed=int(cfg["seed"]), repo_dir=Path.cwd()),
     }
