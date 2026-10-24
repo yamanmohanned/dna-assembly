@@ -10,7 +10,7 @@ PYTHON ?= python3
 PY := .venv/bin/python
 endif
 
-.PHONY: help venv test lint format typecheck check app docs
+.PHONY: help venv test lint format typecheck check app docs verify-data reproduce all experiments
 
 help:
 	@echo Targets: venv test lint format typecheck check
@@ -22,6 +22,8 @@ help:
 	@echo check     lint, typecheck and test
 	@echo app       start the interactive application (offline)
 	@echo docs      build the report, the slides and the oral-exam sheet
+	@echo all       venv if missing, rebuild every table, figure and document from results/, then check
+	@echo experiments  rerun the experiments of Phase 5 (hours; not part of all)
 
 venv:
 	$(PYTHON) -m venv .venv
@@ -44,10 +46,34 @@ typecheck:
 
 check: lint typecheck test
 
-# TODO (Phase 8): all, which must reproduce every figure, table, report and deck from raw data.
 
 app:
 	$(PY) -m genomeasm app run
 
 docs:
 	$(PY) -m genomeasm docs build
+
+# Phase 8. all: from a clean checkout to every table, figure, report, deck and audit.
+# The raw runs of Phase 5 (results/phase5/*.jsonl.gz) are committed; rerunning them takes hours.
+$(PY):
+	$(PYTHON) -m venv .venv
+	$(PY) -m pip install -r requirements.lock
+	$(PY) -m pip install -e . --no-deps
+
+verify-data:
+	$(PY) -m genomeasm data verify
+
+reproduce: verify-data
+	$(PY) -m genomeasm simulate figures
+	$(PY) -m genomeasm overlap figures
+	$(PY) -m genomeasm experiments analyze
+	$(PY) -m genomeasm docs build
+	$(PY) -m genomeasm docs verify
+
+all: $(PY) reproduce check
+
+experiments:
+	$(PY) -m genomeasm experiments tune
+	$(PY) -m genomeasm experiments run
+	$(PY) -m genomeasm experiments scale
+	$(PY) -m genomeasm experiments analyze
