@@ -224,7 +224,7 @@ def test_solver_lab_runs_greedy_and_shows_the_lkh3_status_panel() -> None:
 
 
 def test_the_application_forces_left_to_right_sliders_and_blocks_machine_translation() -> None:
-    """Sliders follow the browser language: in an Arabic browser the thumb runs backwards (D-054)."""
+    """Sliders follow the browser language: an Arabic browser mirrors the thumb (D-054)."""
     ui_text = (ROOT / "app" / "ui.py").read_text(encoding="utf-8")
     entry = (ROOT / "app" / "streamlit_app.py").read_text(encoding="utf-8")
     for needle in ('"dir", "ltr"', '"translate", "no"', "notranslate", "languagechange", "en-US"):
