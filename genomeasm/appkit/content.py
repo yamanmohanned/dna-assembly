@@ -1,0 +1,145 @@
+"""Learning content: the glossary, the toy example and a step-by-step greedy assembly.
+
+The glossary is read from ``docs/glossary.yaml``, the single source of definitions shared with the
+report and the slides; the application never retypes a definition.
+"""
+
+from __future__ import annotations
+
+import itertools
+from dataclasses import dataclass
+from typing import Any
+
+import numpy as np
+import yaml
+
+from genomeasm.appkit.paths import GLOSSARY
+from genomeasm.instance import AssemblyInstance
+from genomeasm.solvers.common import IntArray
+
+TOY_READS = ("ATGCG", "GCGTA", "GTACC")
+MAX_TOY_READS = 7  # 7! = 5,040 orders can still be listed and shown
+
+
+# ---- glossary -----------------------------------------------------------------------------------
+
+
+def load_glossary() -> list[dict[str, Any]]:
+    data = yaml.safe_load(GLOSSARY.read_text(encoding="utf-8"))
+    return [dict(t) for t in data["terms"]]
+
+
+def search_glossary(terms: list[dict[str, Any]], query: str) -> list[dict[str, Any]]:
+    """Terms whose name, plain text or precise text contain every word of the query."""
+    words = [w for w in query.lower().split() if w]
+    if not words:
+        return sorted(terms, key=lambda t: str(t["term"]).lower())
+    hits = []
+    for term in terms:
+        text = " ".join(str(term.get(k, "")) for k in ("term", "plain", "precise")).lower()
+        if all(w in text for w in words):
+            hits.append(term)
+    return sorted(hits, key=lambda t: str(t["term"]).lower())
+
+
+# ---- the toy example ----------------------------------------------------------------------------
+
+
+def clean_reads(text: str) -> list[str]:
+    """Reads typed by a visitor: one per line or separated by spaces/commas, letters ACGT only."""
+    pieces = text.replace(",", " ").split()
+    return ["".join(c for c in piece.upper() if c in "ACGT") for piece in pieces if piece.strip()]
+
+
+@dataclass
+class Toy:
+    instance: AssemblyInstance
+    labels: list[str]  # one letter per kept read
+    notes: list[str]
+
+
+def make_toy(reads: list[str], min_overlap: int = 1) -> Toy:
+    """Overlap graph of a handful of reads (exact overlaps, substring-free preprocessing)."""
+    reads = [r for r in reads if r]
+    if not 2 <= len(reads) <= MAX_TOY_READS:
+        raise ValueError(f"use between 2 and {MAX_TOY_READS} reads")
+    if any(len(r) > 40 for r in reads):
+        raise ValueError("a toy read has at most 40 letters")
+    inst = AssemblyInstance.from_sequences(reads, min_overlap=min_overlap)
+    notes = []
+    if inst.n_duplicates:
+        notes.append(f"{inst.n_duplicates} duplicate read(s) were dropped")
+    if inst.n_contained:
+        notes.append(f"{inst.n_contained} read(s) lying inside another read were dropped")
+    labels = [chr(ord("A") + int(k)) for k in inst.kept]
+    return Toy(inst, labels, notes)
+
+
+def all_orders(toy: Toy) -> list[dict[str, Any]]:
+    """Every order of the reads with its fitness F, merged length L and merged text (best first)."""
+    inst = toy.instance
+    rows = []
+    for perm in itertools.permutations(range(inst.n)):
+        order = np.array(perm)
+        merged = " + ".join(inst.assemble(order).sequences)
+        rows.append(
+            {
+                "order": "".join(toy.labels[i] for i in perm),
+                "F": inst.fitness(order),
+                "L": inst.merged_length(order),
+                "merged": merged,
+            }
+        )
+    return sorted(rows, key=lambda r: (-int(r["F"]), str(r["order"])))
+
+
+def order_from_letters(toy: Toy, letters: str) -> IntArray:
+    """The order typed as letters (e.g. ``ABC``); every kept read exactly once."""
+    letters = letters.upper().replace(" ", "")
+    index = {label: i for i, label in enumerate(toy.labels)}
+    if sorted(letters) != sorted(toy.labels) or any(c not in index for c in letters):
+        raise ValueError("use every read exactly once: " + ", ".join(toy.labels))
+    return np.array([index[c] for c in letters], dtype=np.int64)
+
+
+# ---- greedy, one edge at a time -----------------------------------------------------------------
+
+
+def greedy_steps(ov: np.ndarray) -> tuple[list[dict[str, Any]], list[int]]:
+    """Global greedy edge merging, written out edge by edge (mirrors ``solvers.greedy.greedy``).
+
+    Every positive overlap, largest first (ties: smaller ``(i, j)``), is accepted if read ``i``
+    has no successor yet, read ``j`` has no predecessor yet and the edge does not close a cycle.
+    Returns the decisions and the final order (chains joined by their first read).
+    """
+    n = ov.shape[0]
+    src, dst = np.nonzero(ov > 0)
+    keys = np.lexsort((dst, src, -ov[src, dst].astype(np.int64)))
+    succ = [-1] * n
+    pred = [-1] * n
+    head = list(range(n))
+    tail = list(range(n))
+    steps = []
+    for e in keys:
+        i, j = int(src[e]), int(dst[e])
+        if succ[i] != -1:
+            verdict = f"rejected: read {i} already has a successor"
+        elif pred[j] != -1:
+            verdict = f"rejected: read {j} already has a predecessor"
+        elif head[i] == j:
+            verdict = "rejected: it would close a cycle"
+        else:
+            verdict = "accepted"
+            h, t = head[i], tail[j]
+            succ[i], pred[j] = j, i
+            tail[h] = t
+            head[t] = h
+        steps.append({"from": i, "to": j, "overlap": int(ov[i, j]), "verdict": verdict})
+    order: list[int] = []
+    for start in range(n):
+        if pred[start] == -1:
+            node = start
+            while node != -1:
+                order.append(node)
+                node = succ[node]
+    return steps, order
