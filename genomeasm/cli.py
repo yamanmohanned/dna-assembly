@@ -326,13 +326,17 @@ def _cmd_docs(args: argparse.Namespace) -> int:
         report = verify.verify_all(Facts.load())
         _write_json(args.out, report)
         for name, doc in report["documents"].items():
-            print(
-                f"{name}: {doc['numbers_checked']} numbers, unexplained: {doc['unexplained']}"
-            )
+            print(f"{name}: {doc['numbers_checked']} numbers, unexplained: {doc['unexplained']}")
         print("recomputation problems:", report["recomputation_problems"])
         print("figure problems:", report["figure_problems"])
         print("OK" if report["ok"] else "NOT OK")
         return 0 if report["ok"] else 1
+    if args.command == "screenshots":
+        from genomeasm.docgen.screens import take_screenshots
+
+        files = take_screenshots(args.out)
+        print(f"{len(files)} screenshots in {args.out}")
+        return 0 if files else 1
     from genomeasm.docgen.build import build_all
 
     for target, files in build_all(args.only, author=args.author).items():
@@ -539,6 +543,9 @@ def build_parser() -> argparse.ArgumentParser:
     docs_build.add_argument("--only", choices=["report", "slides", "oral"], default=None)
     docs_build.add_argument("--author", default="", help="name on the cover and the title slide")
     docs_build.set_defaults(func=_cmd_docs)
+    docs_shots = docs_sub.add_parser("screenshots", help="pictures of the pages (demo fallback)")
+    docs_shots.add_argument("--out", type=Path, default=Path("reports/screenshots"))
+    docs_shots.set_defaults(func=_cmd_docs)
     docs_verify = docs_sub.add_parser(
         "verify", help="check the numbers in the documents and the charts"
     )

@@ -136,7 +136,7 @@ def document_texts() -> dict[str, str]:
     page = (ROOT / "reports" / "report" / "report.html").read_text(encoding="utf-8")
     page = re.sub(r"<(style|script)[^>]*>.*?</\1>", " ", page, flags=re.S)
     page = re.sub(r"<img[^>]*>", " ", page)
-    body = html.unescape(re.sub(r"<[^>]+>", " ", page))
+    body = " ".join(html.unescape(re.sub(r"<[^>]+>", " ", page)).split())
     start, end = body.find("References All references"), body.find("Appendix A")
     texts["report"] = (
         body[:start] + body[end:] if 0 <= start < end else body
