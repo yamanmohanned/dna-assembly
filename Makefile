@@ -10,7 +10,7 @@ PYTHON ?= python3
 PY := .venv/bin/python
 endif
 
-.PHONY: help venv test lint format typecheck check app
+.PHONY: help venv test lint format typecheck check app docs
 
 help:
 	@echo Targets: venv test lint format typecheck check
@@ -21,6 +21,7 @@ help:
 	@echo typecheck mypy
 	@echo check     lint, typecheck and test
 	@echo app       start the interactive application (offline)
+	@echo docs      build the report, the slides and the oral-exam sheet
 
 venv:
 	$(PYTHON) -m venv .venv
@@ -47,3 +48,6 @@ check: lint typecheck test
 
 app:
 	$(PY) -m genomeasm app run
+
+docs:
+	$(PY) -m genomeasm docs build

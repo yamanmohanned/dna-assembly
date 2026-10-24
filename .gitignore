@@ -23,3 +23,6 @@ tools/*
 .idea/
 Thumbs.db
 desktop.ini
+# intermediate HTML of the generated documents (the PDFs and the pptx are kept)
+reports/report/report.html
+reports/slides/deck.html

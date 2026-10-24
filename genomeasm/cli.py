@@ -317,6 +317,16 @@ def _cmd_app(args: argparse.Namespace) -> int:
     return 0 if result["ok"] else 1
 
 
+def _cmd_docs(args: argparse.Namespace) -> int:
+    """docs build: the PDF report, the slides (pptx and PDF) and docs/ORAL_EXAM.md from results/."""
+    from genomeasm.docgen.build import build_all
+
+    for target, files in build_all(args.only, author=args.author).items():
+        for file in files:
+            print(f"{target}: {file} ({file.stat().st_size:,} bytes)")
+    return 0
+
+
 def _cmd_solve(args: argparse.Namespace) -> int:
     """Simulate reads, build the instance and run one solver (a quick look, not an experiment)."""
     try:
@@ -508,6 +518,13 @@ def build_parser() -> argparse.ArgumentParser:
     solve.add_argument("--seed", type=int, default=0)
     solve.add_argument("--raw-dir", type=Path, default=DEFAULT_RAW_DIR)
     solve.set_defaults(func=_cmd_solve)
+
+    docs = top.add_parser("docs", help="report, slides and oral-exam sheet (Phase 7)")
+    docs_sub = docs.add_subparsers(dest="command", required=True)
+    docs_build = docs_sub.add_parser("build", help="build all three from results/")
+    docs_build.add_argument("--only", choices=["report", "slides", "oral"], default=None)
+    docs_build.add_argument("--author", default="", help="name on the cover and the title slide")
+    docs_build.set_defaults(func=_cmd_docs)
 
     app = top.add_parser("app", help="the interactive application (Phase 6)")
     app_sub = app.add_subparsers(dest="command", required=True)
