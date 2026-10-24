@@ -493,3 +493,49 @@ terms:
     precise: >-
       The record stored with every result: configuration hash, git commit and whether the code
       was modified, random seed, library versions, machine information and a timestamp.
+
+  - term: candidate list
+    phase: 5
+    plain: >-
+      A short list of the most promising partners for each piece, so the search tries the good
+      moves first instead of guessing among all of them.
+    precise: >-
+      For every read the k reads with the largest overlap into it (predecessors) and out of it
+      (successors). In tabu_cl a sampled insert move puts a read next to one of its candidates
+      with probability candidate_fraction (decision D-045).
+
+  - term: tie-breaking
+    phase: 5
+    plain: >-
+      What a chooser does when two options look exactly equally good: always take the first one, or
+      flip a coin.
+    precise: >-
+      UCB1 as first implemented took the lowest arm index among equal indices. With all rewards
+      equal it then played arm 0 for ever (a defect, decision D-046); ucb1_rt breaks ties
+      uniformly at random.
+
+  - term: plateau
+    phase: 5
+    plain: A stretch of the search in which nothing gets better any more.
+    precise: >-
+      A phase of an ALNS run in which no move improves the current solution, so every reward is
+      zero and every arm looks equally good to a bandit.
+
+  - term: post-hoc variant
+    phase: 5
+    plain: >-
+      A version of a method that was added after seeing the first results. Its results are
+      reported, but they count as exploration and never as a confirmation.
+    precise: >-
+      An algorithm or analysis not fixed in the configuration before the first main run:
+      tabu_cl (D-045) and alns_ucb1_rt (D-046). Its tests form a separate family and are not
+      merged into the pre-registered one.
+
+  - term: winner's curse
+    phase: 5
+    plain: >-
+      If you pick the best of many noisy trials, the best one usually looks better than it really is.
+    precise: >-
+      The selection bias of choosing the configuration with the smallest mean regret among 24
+      random trials on a small tuning set: its tuning regret is optimistic. All algorithms are
+      tuned with the same number of trials, so the bias is similar for all.
