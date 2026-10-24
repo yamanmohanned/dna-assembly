@@ -12,6 +12,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import streamlit as st  # noqa: E402
+import ui  # noqa: E402
 
 st.set_page_config(
     page_title="Genome assembly as TSP",
@@ -21,7 +22,8 @@ st.set_page_config(
 )
 
 pages = [
-    st.Page("views/learn.py", title="Learn", icon=":material/school:", default=True),
+    st.Page("views/guide.py", title="Guide", icon=":material/menu_book:", default=True),
+    st.Page("views/learn.py", title="Learn", icon=":material/school:"),
     st.Page("views/data.py", title="Data", icon=":material/database:"),
     st.Page("views/simulator.py", title="Simulator", icon=":material/tune:"),
     st.Page("views/overlap_graph.py", title="Overlap Graph", icon=":material/hub:"),
@@ -30,6 +32,7 @@ pages = [
     st.Page("views/assembly_viewer.py", title="Assembly Viewer", icon=":material/scatter_plot:"),
     st.Page("views/reproducibility.py", title="Reproducibility", icon=":material/verified:"),
 ]
+ui.logo()
 navigation = st.navigation(pages)
 st.sidebar.caption(
     "Offline application. Genomes: NCBI RefSeq (phiX174, lambda). Live runs end in under 30 s; "

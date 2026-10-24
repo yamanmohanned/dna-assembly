@@ -9,7 +9,7 @@ import numpy as np
 import pytest
 
 from genomeasm.appkit import content, figs, lab, repro, results_view
-from genomeasm.appkit.paths import GENOMES, RESULTS
+from genomeasm.appkit.paths import GENOMES, RESULTS, ROOT
 from genomeasm.solver_validation import random_matrix_problem
 from genomeasm.solvers.greedy import greedy
 from genomeasm.solvers.lkh import LkhError
@@ -205,6 +205,8 @@ def test_every_chart_renders_and_exports_as_svg_and_png(built: Any) -> None:
         figs.gc_profile(lab.window_of(SMALL), 100),
         figs.base_counts(card),
         figs.pipeline_diagram(),
+        figs.dna_helix(lab.window_of(SMALL)[:24]),
+        figs.dna_helix(lab.window_of(SMALL)[:24], rna=True),
         depth_fig,
         figs.read_map(reads),
         figs.overlap_heatmap(built.instance, max_n=60),
@@ -283,3 +285,20 @@ def test_reproducibility_information_is_complete_and_checksums_verify() -> None:
     assert any(f["file"] == "results/phase5/tuning_summary.json" for f in files)
     assert all(re.fullmatch(r"[0-9a-f]{64}", f["sha256"]) for f in files)
     assert RESULTS.is_dir()
+
+
+def test_guide_and_glossary_documents_are_in_sync_with_their_sources() -> None:
+    sections = content.guide_sections()
+    assert [title.split(".")[0] for title, _ in sections] == [str(k) for k in range(1, 10)]
+    assert all(len(body) > 300 for _, body in sections)
+    generated = content.glossary_markdown(content.load_glossary())
+    assert (ROOT / "docs" / "GLOSSARY.md").read_text(encoding="utf-8") == generated
+    assert generated.count(chr(10) + "## ") == len(content.load_glossary())
+
+
+def test_helix_letters_are_the_requested_sequence() -> None:
+    fig = figs.dna_helix("ACGTTGCA" * 4)
+    letters = [t.get_text() for t in fig.axes[0].texts if len(t.get_text()) == 1]
+    assert letters.count("A") + letters.count("T") == 24 and len(letters) == 48
+    rna = figs.dna_helix("ACGT", rna=True)
+    assert [t.get_text() for t in rna.axes[0].texts if len(t.get_text()) == 1] == list("ACGU")

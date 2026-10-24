@@ -103,3 +103,12 @@ measured, `TODO-VERIFY`).
   else yet.
 * Questions still open: Q3 (program that opens the .pptx), Q5 (is this the presenting laptop).
 * Decisions: D-047 to D-050 (50 decisions in total, D-001 to D-050).
+
+## 7. Added after your first review (D-051)
+
+* Box plots are horizontal (the labels overlapped).
+* New default page **Guide** (nine pages now) with `docs/GUIDE.md`: background for readers who know no
+  biology, the genomes and examples, the techniques, findings in plain words, how to use each page, a
+  15-minute presentation script with checklist and fallback, expected questions. `docs/GLOSSARY.md` (all terms)
+  is generated from `docs/glossary.yaml`.
+* DNA and RNA pictures drawn from real genome letters: banner, sidebar logo, Learn tab "DNA and RNA".

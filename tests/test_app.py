@@ -12,11 +12,12 @@ from pathlib import Path
 import pytest
 from streamlit.testing.v1 import AppTest
 
-from genomeasm.appkit import content
+from genomeasm.appkit import content, lab
 
 ROOT = Path(__file__).resolve().parents[1]
 VIEWS = ROOT / "app" / "views"
 PAGES = [
+    "guide",
     "learn",
     "data",
     "simulator",
@@ -39,8 +40,8 @@ def test_every_page_runs_without_an_error(name: str) -> None:
     assert len(at.title) == 1 and at.title[0].value
 
 
-def test_the_eight_pages_of_the_master_prompt_exist() -> None:
-    assert len(PAGES) == 8
+def test_the_eight_pages_of_the_master_prompt_and_the_guide_exist() -> None:
+    assert len(PAGES) == 9
     assert all((VIEWS / f"{p}.py").is_file() for p in PAGES)
     entry = (ROOT / "app" / "streamlit_app.py").read_text(encoding="utf-8")
     for page in PAGES:
@@ -166,4 +167,25 @@ def test_reproducibility_page_reports_the_commit_and_clean_checksums() -> None:
 def test_the_entry_point_defines_the_navigation_with_every_page() -> None:
     at = AppTest.from_file(str(ROOT / "app" / "streamlit_app.py"), default_timeout=120).run()
     assert not at.exception, [e.value for e in at.exception]
-    assert len(at.title) == 1 and at.title[0].value.startswith("Learn")
+    assert len(at.title) == 1 and at.title[0].value.startswith("Guide")
+
+
+def test_guide_page_has_every_section_and_a_searchable_glossary() -> None:
+    at = run_page("guide")
+    sections = content.guide_sections()
+    assert len(sections) == 9 and len(at.tabs) == len(sections) + 1
+    assert [t.label for t in at.tabs][-1] == "Glossary"
+    box = next(t for t in at.text_input if t.label == "Search the glossary")
+    box.set_value("helix").run()
+    hits = content.search_glossary(content.load_glossary(), "helix")
+    assert any(f"{len(hits)} of" in m.value for m in at.markdown)
+
+
+def test_learn_page_draws_dna_and_rna_from_the_real_genome() -> None:
+    at = run_page("learn")
+    assert not at.exception
+    next(n for n in at.number_input if n.label == "Start").set_value(100).run()
+    assert not at.exception, [e.value for e in at.exception]
+    code = " ".join(c.value for c in at.code)
+    sequence = lab.genome_sequence("NC_001422.1")[100:124]
+    assert sequence in code

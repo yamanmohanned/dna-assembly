@@ -11,14 +11,54 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import streamlit as st  # noqa: E402
 import ui  # noqa: E402
 
-from genomeasm.appkit import content, figs  # noqa: E402
+from genomeasm.appkit import content, figs, lab  # noqa: E402
+from genomeasm.appkit.paths import GENOMES  # noqa: E402
+
+PAIR = {"A": "T", "T": "A", "G": "C", "C": "G"}
 
 st.title("Learn: putting a genome back together")
 st.caption("Everything on this page is computed live; no internet is needed.")
 
-story, toy_tab, objective, glossary = st.tabs(
-    ["The story", "Toy example", "The objective", "Glossary"]
+ui.banner()
+story, dna_tab, toy_tab, objective, glossary = st.tabs(
+    ["The story", "DNA and RNA", "Toy example", "The objective", "Glossary"]
 )
+
+with dna_tab:
+    st.subheader("What the letters are")
+    st.markdown(
+        "**DNA** is a very long word written with four letters (bases): **A, C, G, T**. In a cell it is a "
+        "**double helix**, two strands glued together by *base pairs*: **A pairs with T, G pairs with C**, so "
+        "one strand tells you the other. **RNA** is a close relative: usually **one strand**, with **U** "
+        "instead of T. Cells copy stretches of DNA into RNA to carry instructions. This project reads "
+        "only the order of the letters, so a string of A, C, G, T is all it needs."
+    )
+    c1, c2, c3 = st.columns([3, 1, 2])
+    accession = c1.selectbox(
+        "Genome", list(GENOMES), format_func=lambda a: f"{a}: {GENOMES[a]}", key="helix-genome"
+    )
+    sequence = lab.genome_sequence(accession)
+    start = int(c2.number_input("Start", 0, len(sequence) - 24, 0, 1, key="helix-start"))
+    kind = c3.segmented_control(
+        "Show as",
+        ["DNA double helix", "RNA single strand"],
+        default="DNA double helix",
+        key="helix-kind",
+    )
+    piece = sequence[start : start + 24]
+    rna = kind == "RNA single strand"
+    ui.show_figure(
+        figs.dna_helix(piece, rna=rna),
+        "rna_strand" if rna else "dna_double_helix",
+        caption=f"Letters {start + 1} to {start + 24} of {accession}, a real stretch of the genome.",
+    )
+    second = piece.replace("T", "U") if rna else "".join(PAIR[b] for b in piece)
+    label = "RNA copy    : " if rna else "other strand: "
+    st.code("this strand : " + piece + chr(10) + label + second, language=None)
+    st.caption(
+        "Colours: A green, T red, G orange, C blue, U purple. The same colours are used in the whole application."
+    )
+
 
 with story:
     st.subheader("A shredded book")

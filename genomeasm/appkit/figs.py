@@ -14,6 +14,7 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
+from matplotlib.collections import LineCollection
 from matplotlib.figure import Figure
 from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangle
 
@@ -615,11 +616,12 @@ def tour_blocks(
 def box_by_algorithm(
     data: dict[str, np.ndarray], ylabel: str, title: str, log: bool = False
 ) -> Figure:
-    """One box per algorithm (quartiles, 1.5 x IQR whiskers); the number of values is stated."""
-    fig, ax = _fig(max(6.5, 0.9 * len(data) + 3), 4.8)
+    """One horizontal box per algorithm (quartiles, 1.5 x IQR whiskers); n is in the label."""
     names = list(data)
+    fig, ax = _fig(8.5, max(3.2, 0.62 * len(names) + 1.6))
     box = ax.boxplot(
         [data[a] for a in names],
+        orientation="horizontal",
         patch_artist=True,
         widths=0.6,
         flierprops={"markersize": 3, "alpha": 0.4},
@@ -627,16 +629,12 @@ def box_by_algorithm(
     for patch, k in zip(box["boxes"], range(len(names)), strict=True):
         patch.set_facecolor(PALETTE[k % 6])
         patch.set_alpha(0.65)
-    ax.set_xticks(
-        range(1, len(names) + 1),
-        [f"{a}\n(n = {len(data[a])})" for a in names],
-        fontsize=9,
-        rotation=0,
-    )
+    ax.set_yticks(range(1, len(names) + 1), [f"{a}  (n = {len(data[a])})" for a in names])
+    ax.invert_yaxis()
     if log:
-        ax.set_yscale("symlog", linthresh=0.01)
+        ax.set_xscale("symlog", linthresh=0.01)
         ylabel += " (symlog scale)"
-    ax.set_ylabel(ylabel)
+    ax.set_xlabel(ylabel)
     ax.set_title(title)
     return fig
 
@@ -645,3 +643,78 @@ def runs_frame_to_series(
     frame: pd.DataFrame, algorithms: Sequence[str], column: str
 ) -> dict[str, np.ndarray]:
     return {a: frame[frame["algorithm"] == a][column].to_numpy(dtype=float) for a in algorithms}
+
+
+# ---- DNA and RNA pictures -----------------------------------------------------------------------
+
+BASE_COLOUR = {
+    "A": C["green"],
+    "T": C["vermillion"],
+    "G": C["orange"],
+    "C": C["blue"],
+    "U": C["purple"],
+}
+COMPLEMENT = {"A": "T", "T": "A", "G": "C", "C": "G"}
+
+
+def dna_helix(sequence: str, *, rna: bool = False, title: str | None = None) -> Figure:
+    """A short stretch of real sequence as a double helix (DNA) or as a single strand (RNA).
+
+    DNA: the second strand is the complement (A with T, G with C), ten and a half letters per turn.
+    RNA: one strand in which every T is written U.
+    """
+    seq = "".join(c for c in sequence.upper() if c in "ACGT")[:24]
+    n = len(seq)
+    apply_style()
+    fig = Figure(figsize=(max(6.0, 0.42 * n + 1.5), 2.6), layout="constrained")
+    ax = fig.subplots()
+    ax.axis("off")
+    ax.set_xlim(-1.0, n)
+    if rna:
+        ax.set_ylim(-1.9, 1.3)
+        xs = np.linspace(-0.5, n - 0.5, 30 * n)
+        ys = 0.3 * np.sin(2 * np.pi * xs / 4.0)
+        ax.plot(xs, ys, color="#5b6b7b", lw=5, solid_capstyle="round", zorder=1)
+        for i, base in enumerate(seq):
+            letter = "U" if base == "T" else base
+            y0 = 0.3 * np.sin(2 * np.pi * i / 4.0)
+            ax.plot([i, i], [y0, y0 - 0.9], color="#5b6b7b", lw=2, zorder=2)
+            ax.scatter(i, y0 - 1.0, s=330, color=BASE_COLOUR[letter], zorder=3, edgecolor="white")
+            ax.text(
+                i,
+                y0 - 1.0,
+                letter,
+                ha="center",
+                va="center",
+                color="white",
+                weight="bold",
+                zorder=4,
+            )
+        ax.set_title(title or "RNA: a single strand, U instead of T", fontsize=11)
+        return fig
+    ax.set_ylim(-1.5, 1.5)
+    xs = np.linspace(-0.5, n - 0.5, 30 * n)
+    phase = 2 * np.pi * xs / 10.5
+    for sign, colour in ((1, "#2f4b66"), (-1, "#8a5a1f")):
+        y = sign * np.sin(phase)
+        front = sign * np.cos(phase)  # > 0: this strand passes in front of the other one
+        points = np.column_stack([xs, y]).reshape(-1, 1, 2)
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        ax.add_collection(
+            LineCollection(
+                list(segments), colors=colour, linewidths=2.0 + 2.6 * (front[:-1] > 0), zorder=2
+            )
+        )
+    for i, base in enumerate(seq):
+        p = 2 * np.pi * i / 10.5
+        y_top, other = np.sin(p), COMPLEMENT[base]
+        z = 5 if np.cos(p) > 0 else 3
+        ax.plot([i, i], [y_top, 0], color=BASE_COLOUR[base], lw=4, zorder=z - 1, alpha=0.85)
+        ax.plot([i, i], [0, -y_top], color=BASE_COLOUR[other], lw=4, zorder=z - 1, alpha=0.85)
+        for y, letter in ((y_top, base), (-y_top, other)):
+            ax.scatter(i, y, s=300, color=BASE_COLOUR[letter], zorder=z, edgecolor="white")
+            ax.text(
+                i, y, letter, ha="center", va="center", color="white", weight="bold", zorder=z + 1
+            )
+    ax.set_title(title or "DNA: two strands, A pairs with T and G with C", fontsize=11)
+    return fig

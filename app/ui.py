@@ -41,7 +41,7 @@ def show_figure(
     fig: Figure, name: str, caption: str | None = None, footer: str | None = None
 ) -> None:
     """Draw a chart with SVG and PNG download buttons (the files are made only on click)."""
-    st.pyplot(fig, width="stretch")
+    st.pyplot(fig, width="stretch", alt=caption or name.replace("_", " "))
     c1, c2, _ = st.columns([1, 1, 5])
     for column, fmt, mime in ((c1, "svg", "image/svg+xml"), (c2, "png", "image/png")):
         column.download_button(
@@ -56,6 +56,24 @@ def show_figure(
         )
     if caption:
         st.caption(caption)
+
+
+@st.cache_data(show_spinner=False)
+def _helix_png(letters: int, rna: bool) -> bytes:
+    sequence = lab.genome_sequence("NC_001422.1")[:letters]
+    return figs.live_frame(figs.dna_helix(sequence, rna=rna, title=" "), dpi=110)
+
+
+def banner() -> None:
+    """A strip of real phiX174 DNA (the first 24 letters) as a double helix."""
+    st.image(
+        _helix_png(24, False), width="stretch",
+        alt="Double helix drawn from the first 24 letters of the phiX174 genome",
+    )  # fmt: skip
+
+
+def logo() -> None:
+    st.logo(_helix_png(12, False), size="large")
 
 
 def live_badge(text: str = "Live run on this computer") -> None:
