@@ -291,7 +291,7 @@ def _cmd_solvers_validate(args: argparse.Namespace) -> int:
 
 
 def _cmd_app(args: argparse.Namespace) -> int:
-    """app run: start the Streamlit application; app benchmark: time its worst interactive runs."""
+    """app run: start the application; app benchmark: time its worst runs; app lecture: the deck."""
     import subprocess
 
     from genomeasm.appkit.paths import ROOT
@@ -303,6 +303,14 @@ def _cmd_app(args: argparse.Namespace) -> int:
             "--browser.gatherUsageStats", "false",
         ]  # fmt: skip
         return subprocess.call(command, cwd=ROOT)
+    if args.command == "lecture":
+        from genomeasm.appkit import lecture
+
+        path = lecture.write(args.out, args.author)
+        print(
+            f"wrote {path} ({path.stat().st_size / 1024:.0f} kB): double-click it, F = full screen"
+        )
+        return 0
     from genomeasm.appkit import timing
 
     result = timing.measure()
@@ -563,6 +571,12 @@ def build_parser() -> argparse.ArgumentParser:
         "--out", type=Path, default=Path("results/phase6/interactive_timing.json")
     )
     app_bench.set_defaults(func=_cmd_app)
+    app_lecture = app_sub.add_parser(
+        "lecture", help="write the lecture as one HTML file that needs no application"
+    )
+    app_lecture.add_argument("--out", type=Path, default=Path("reports/lecture/dna_lecture.html"))
+    app_lecture.add_argument("--author", default="", help="name printed on the title slide")
+    app_lecture.set_defaults(func=_cmd_app)
 
     overlap = top.add_parser("overlap", help="validate the overlap graph against the ground truth")
     overlap_sub = overlap.add_subparsers(dest="command", required=True)

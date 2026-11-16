@@ -218,3 +218,80 @@ def build_instance(params: lab.InstanceParams) -> Any | None:
 
 
 ProgressFn = Callable[[dict[str, Any]], None]
+
+
+# ---- molecular-biology pages ----------------------------------------------------------------------
+
+
+def studio(html: str, height: int, alt: str) -> None:
+    """Show a self-contained DNA Studio document (3D viewer, animation, lecture) in a frame."""
+    st.iframe(html, height=height, alt=alt)
+
+
+def key_facts(items: list[tuple[str, str, str]]) -> None:
+    """A row of prominent numbers: (label, value, where the value comes from)."""
+    with st.container(horizontal=True):  # wraps on a narrow window instead of cutting the values
+        for label, value, source in items:
+            st.metric(label, value, border=True, help=source, width="content")
+
+
+def fact_item(key: str) -> tuple[str, str, str]:
+    """A quoted fact as a key-fact card: label, value and the source with how it was checked."""
+    from genomeasm.molbio import library
+
+    fact = library.facts()[key]
+    source = f"{library.cite(str(fact['source']))}: {library.CHECK_LABELS[str(fact['check'])]}"
+    return str(fact["label"]), str(fact["value"]), source
+
+
+def takeaway(text: str) -> None:
+    st.info(text, title="Key point", icon=":material/key:")
+
+
+def sources(*keys: str) -> None:
+    """Short citations under a section; the full references are on the References page."""
+    from genomeasm.molbio import library
+
+    st.caption("Sources: " + " · ".join(library.cite(k) for k in keys) + ". Full list: References.")
+
+
+def diagram(svg: str, alt: str, caption: str | None = None) -> None:
+    st.image(svg, width="stretch", alt=alt)
+    if caption:
+        st.caption(caption)
+
+
+def quiz(topic: str) -> None:
+    """Multiple-choice questions with immediate, explained feedback."""
+    from genomeasm.molbio import quiz as bank
+
+    questions = bank.by_topic(topic)
+    score = 0
+    answered = 0
+    for number, question in enumerate(questions, 1):
+        with st.container(border=True):
+            choice = st.radio(
+                f"{number}. {question.text}", question.options, index=None,
+                key=f"quiz-{topic}-{number}",
+            )  # fmt: skip
+            if choice is None:
+                continue
+            answered += 1
+            if question.options.index(choice) == question.answer:
+                score += 1
+                st.success(question.why, title="Correct", icon=":material/check_circle:")
+            else:
+                st.error(
+                    f"The answer is: {question.options[question.answer]}. {question.why}",
+                    title="Not quite", icon=":material/cancel:",
+                )  # fmt: skip
+    if answered:
+        st.caption(f"{score} of {answered} answered questions correct ({len(questions)} in total).")
+
+
+def section_picker(label: str, options: list[str], key: str) -> str:
+    """Section switch of a page: only the chosen section is computed and drawn."""
+    choice = st.segmented_control(
+        label, options, default=options[0], key=key, label_visibility="collapsed", required=True
+    )
+    return str(choice or options[0])

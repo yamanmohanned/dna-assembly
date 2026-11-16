@@ -1,0 +1,24 @@
+# Protein-coding genes of bacteriophage phiX174 (NCBI RefSeq NC_001422.1).
+# Coordinates (1-based, inclusive) and products were read from the NCBI feature table of the record
+# on 2026-11-14 (efetch, rettype=ft). The one-letter gene names are the classical names of the
+# literature (Sanger et al. 1977; A* and K were recognised later); NCBI itself names only K.
+# The genome is circular: genes A, A* and B run over the end of the linear record and continue at
+# position 1. tests/test_molbio.py re-checks every gene against the sequence in data/raw: a start
+# codon, whole codons, exactly one stop codon, at the end.
+accession: NC_001422.1
+source: "NCBI RefSeq NC_001422.1 feature table, read 2026-11-14"
+transcripts:
+  - {name: "major transcript", start: 358, end: 3975}
+  - {name: "minor transcript", start: 358, end: 991}
+genes:
+  - {name: "A", parts: [[3981, 5386], [1, 136]], product: "DNA replication initiation", protein_id: NP_040703.1}
+  - {name: "A*", parts: [[4497, 5386], [1, 136]], product: "shut-off of host DNA synthesis", protein_id: NP_040704.1}
+  - {name: "B", parts: [[5075, 5386], [1, 51]], product: "head morphogenesis (scaffolding)", protein_id: NP_040705.1}
+  - {name: "K", parts: [[51, 221]], product: "protein K", protein_id: NP_040706.1}
+  - {name: "C", parts: [[133, 393]], product: "DNA maturation", protein_id: NP_040707.1}
+  - {name: "D", parts: [[390, 848]], product: "head morphogenesis (scaffolding)", protein_id: NP_040708.1}
+  - {name: "E", parts: [[568, 843]], product: "cell lysis", protein_id: NP_040709.1}
+  - {name: "J", parts: [[848, 964]], product: "DNA condensation (core protein)", protein_id: NP_040710.1}
+  - {name: "F", parts: [[1001, 2284]], product: "major coat protein", protein_id: NP_040711.1}
+  - {name: "G", parts: [[2395, 2922]], product: "major spike protein", protein_id: NP_040712.1}
+  - {name: "H", parts: [[2931, 3917]], product: "minor spike protein (DNA pilot)", protein_id: NP_040713.1}

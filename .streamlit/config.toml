@@ -14,6 +14,22 @@ toolbarMode = "minimal"
 base = "light"
 primaryColor = "#0072B2"
 backgroundColor = "#ffffff"
-secondaryBackgroundColor = "#f2f5f8"
-textColor = "#1d2733"
+secondaryBackgroundColor = "#f3f6f9"
+textColor = "#10243b"
+borderColor = "#d9e1ea"
+linkColor = "#0072B2"
 font = "sans serif"
+headingFont = "serif"
+headingFontWeights = [700, 700, 600, 600, 600, 600]
+baseRadius = "0.6rem"
+metricValueFontSize = "1.7rem"
+metricValueFontWeight = 700
+showWidgetBorder = true
+
+[theme.sidebar]
+backgroundColor = "#0f2238"
+secondaryBackgroundColor = "#1a3351"
+textColor = "#e8eef6"
+borderColor = "#274262"
+primaryColor = "#56b4e9"
+linkColor = "#8fd0ff"

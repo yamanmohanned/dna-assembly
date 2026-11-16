@@ -26,6 +26,11 @@ PAGES = [
     "experiments",
     "assembly_viewer",
     "reproducibility",
+    "presentation",
+    "dna_structure",
+    "central_dogma",
+    "genome",
+    "references",
 ]
 
 
@@ -40,8 +45,8 @@ def test_every_page_runs_without_an_error(name: str) -> None:
     assert len(at.title) == 1 and at.title[0].value
 
 
-def test_the_eight_pages_of_the_master_prompt_and_the_guide_exist() -> None:
-    assert len(PAGES) == 9
+def test_the_eight_pages_of_the_master_prompt_the_guide_and_the_biology_pages_exist() -> None:
+    assert len(PAGES) == 14
     assert all((VIEWS / f"{p}.py").is_file() for p in PAGES)
     entry = (ROOT / "app" / "streamlit_app.py").read_text(encoding="utf-8")
     for page in PAGES:
@@ -231,3 +236,96 @@ def test_the_application_forces_left_to_right_sliders_and_blocks_machine_transla
         assert needle in ui_text, needle
     assert "unsafe_allow_javascript=True" in ui_text
     assert entry.index("ui.force_left_to_right()") < entry.index("navigation.run()")
+
+
+# ---- molecular-biology pages (D-055) -------------------------------------------------------------
+
+
+def _section(at: AppTest, name: str) -> AppTest:
+    next(b for b in at.button_group if b.label in ("Section", "View")).set_value(name).run()
+    assert not at.exception, [e.value for e in at.exception]
+    return at
+
+
+def _frames(at: AppTest) -> int:
+    return sum(1 for e in at.main if e.type == "iframe")
+
+
+def test_structure_page_shows_measured_numbers_and_every_section_runs() -> None:
+    from genomeasm.molbio import library
+
+    at = run_page("dna_structure")
+    m = library.measured_helix()
+    metrics = {x.label: x.value for x in at.metric}
+    assert metrics["Rise per base pair"] == f"{m['rise_mean']:.2f} Å"
+    assert metrics["Base pairs per turn"] == f"{m['bp_per_turn']:.1f}"
+    assert _frames(at) == 1  # the 3D viewer
+    for name in (
+        "Nucleotide",
+        "Base pairs",
+        "Helix in numbers",
+        "Chargaff's rule",
+        "Check yourself",
+    ):
+        _section(at, name)
+    answers = at.radio[0]
+    answers.set_value(answers.options[2]).run()  # the reverse complement is option 3
+    assert any("antiparallel" in s.value for s in at.success)
+    answers.set_value(answers.options[0]).run()
+    assert any("The answer is" in e.value for e in at.error)
+
+
+def test_structure_page_draws_the_teaching_model_of_a_chosen_stretch() -> None:
+    at = run_page("dna_structure")
+    next(b for b in at.button_group if b.label == "Model").set_value(
+        "Teaching model of any sequence"
+    ).run()
+    next(n for n in at.number_input if n.label == "First letter").set_value(101).run()
+    assert not at.exception, [e.value for e in at.exception]
+    piece = lab.genome_sequence("NC_001422.1")[100:132]
+    assert any(piece in c.value for c in at.code) and _frames(at) == 1
+
+
+def test_dna_to_protein_page_runs_every_section_and_translates_a_typed_sequence() -> None:
+    at = run_page("central_dogma")
+    for name in ("Replication", "Transcription", "Genetic code", "Translation"):
+        _section(at, name)
+        assert _frames(at) == 1, name  # one animation (or the code table) per section
+    _section(at, "Try it")
+    assert {x.label: x.value for x in at.metric}["Amino acids"] == "38"  # gene J by default
+    next(x for x in at.text_input if x.label.startswith("or type")).set_value("ATGGCCAAGTAA").run()
+    assert not at.exception
+    assert {x.label: x.value for x in at.metric}["Amino acids"] == "3"
+    assert any("MAK" in c.value for c in at.code)
+    _section(at, "Check yourself")
+    assert len(at.radio) == 5
+
+
+def test_mutation_lab_classifies_a_change_of_the_real_gene() -> None:
+    at = _section(run_page("genome"), "Mutation lab")
+    # default: letter 7 of gene J, A -> C: AAA (Lys) -> CAA (Gln)
+    assert any("AAA (Lys) becomes CAA (Gln)" in x.value for x in at.markdown)
+    next(b for b in at.button_group if b.label == "Kind of mutation").set_value("deletion").run()
+    assert not at.exception, [e.value for e in at.exception]
+    assert any("not a multiple of 3" in x.value for x in at.markdown)
+    for name in ("Genomes", "Packaging", "Gene map of phiX174", "Biotechnology", "Sequencing"):
+        _section(at, name)
+
+
+def test_references_page_lists_searches_and_shows_the_open_items() -> None:
+    from genomeasm.molbio import library
+
+    at = run_page("references")
+    refs = library.references()
+    assert {x.label: x.value for x in at.metric}["References"] == str(len(refs))
+    box = next(x for x in at.text_input if x.label == "Search the references")
+    box.set_value("Sanger 1977").run()
+    assert any("2 of" in c.value for c in at.caption)
+    _section(at, "Quoted facts")
+    _section(at, "How things were checked")
+    assert any("TODO-VERIFY" in x.value for x in at.markdown)
+
+
+def test_presentation_page_embeds_the_deck() -> None:
+    at = run_page("presentation")
+    assert _frames(at) == 1 and len(at.text_input) == 1

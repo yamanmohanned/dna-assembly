@@ -280,7 +280,7 @@ def test_reproducibility_information_is_complete_and_checksums_verify() -> None:
     env = repro.environment()
     assert env["git"]["commit"] and env["libraries"]["numpy"] and env["machine"]["python"]
     sums = repro.verify_checksums()
-    assert len(sums) == 2 and all(row["ok"] for row in sums)
+    assert len(sums) == 3 and all(row["ok"] for row in sums)  # 2 genomes + 1BNA
     first, last, count = repro.decision_range()
     assert (first, last) == ("D-001", f"D-{count:03d}") and count >= 50
     files = repro.result_files()

@@ -1,0 +1,16 @@
+{
+  "citation": "Drew HR, Wing RM, Takano T, Broka C, Tanaka S, Itakura K, Dickerson RE (1981). Structure of a B-DNA dodecamer: conformation and dynamics. Proc Natl Acad Sci USA 78: 2179-2183. doi:10.1073/pnas.78.4.2179",
+  "downloaded_utc": "2026-11-14",
+  "experiment": "X-ray diffraction, resolution 1.90 angstrom",
+  "file": "1BNA.pdb",
+  "licence": "PDB data are in the public domain (CC0 1.0)",
+  "molecule": "DNA dodecamer 5'-d(CGCGAATTCGCG)-3', two chains (A, B), 486 DNA atoms, 80 water molecules",
+  "pdb_id": "1BNA",
+  "provenance": {
+    "email_sent": "no",
+    "tool": "curl"
+  },
+  "sha256": "df42f1506792f191b957227b061360652adcf6f813eb69d9ec553067ea584670",
+  "source": "RCSB Protein Data Bank",
+  "url": "https://files.rcsb.org/download/1BNA.pdb"
+}

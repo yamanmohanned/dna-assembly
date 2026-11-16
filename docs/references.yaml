@@ -1,0 +1,543 @@
+# Academic references of the application, the lecture and the molecular-biology pages.
+# Journal articles: title, journal, volume, pages, year and authors were compared with the Crossref
+# record of the DOI on 2026-11-14 (check: crossref). 'pmid' is set where the PubMed record was read
+# as well. Books and databases cannot be checked that way and say so (check: not-checked).
+# A number quoted from a source is listed in docs/molbio_facts.yaml with how it was checked.
+references:
+  - key: watson1953
+    topic: structure
+    authors: ["Watson JD", "Crick FHC"]
+    et_al: false
+    year: 1953
+    title: "Molecular Structure of Nucleic Acids: A Structure for Deoxyribose Nucleic Acid"
+    journal: "Nature"
+    volume: "171"
+    pages: "737-738"
+    doi: "10.1038/171737a0"
+    pmid: null
+    check: crossref
+  - key: wilkins1953
+    topic: structure
+    authors: ["Wilkins MHF", "Stokes AR", "Wilson HR"]
+    et_al: false
+    year: 1953
+    title: "Molecular Structure of Nucleic Acids: Molecular Structure of Deoxypentose Nucleic Acids"
+    journal: "Nature"
+    volume: "171"
+    pages: "738-740"
+    doi: "10.1038/171738a0"
+    pmid: null
+    check: crossref
+  - key: franklin1953
+    topic: structure
+    authors: ["Franklin RE", "Gosling RG"]
+    et_al: false
+    year: 1953
+    title: "Molecular Configuration in Sodium Thymonucleate"
+    journal: "Nature"
+    volume: "171"
+    pages: "740-741"
+    doi: "10.1038/171740a0"
+    pmid: null
+    check: crossref
+  - key: chargaff1950
+    topic: structure
+    authors: ["Chargaff E"]
+    et_al: false
+    year: 1950
+    title: "Chemical specificity of nucleic acids and mechanism of their enzymatic degradation"
+    journal: "Experientia"
+    volume: "6"
+    pages: "201-209"
+    doi: "10.1007/bf02173653"
+    pmid: null
+    check: crossref
+  - key: avery1944
+    topic: genetic material
+    authors: ["Avery OT", "MacLeod CM", "McCarty M"]
+    et_al: false
+    year: 1944
+    title: "Studies on the chemical nature of the substance inducing transformation of pneumococcal types"
+    journal: "Journal of Experimental Medicine"
+    volume: "79"
+    pages: "137-158"
+    doi: "10.1084/jem.79.2.137"
+    pmid: null
+    check: crossref
+  - key: hershey1952
+    topic: genetic material
+    authors: ["Hershey AD", "Chase M"]
+    et_al: false
+    year: 1952
+    title: "Independent functions of viral protein and nucleic acid in growth of bacteriophage"
+    journal: "Journal of General Physiology"
+    volume: "36"
+    pages: "39-56"
+    doi: "10.1085/jgp.36.1.39"
+    pmid: null
+    check: crossref
+  - key: meselson1958
+    topic: replication
+    authors: ["Meselson M", "Stahl FW"]
+    et_al: false
+    year: 1958
+    title: "The replication of DNA in Escherichia coli"
+    journal: "Proceedings of the National Academy of Sciences"
+    volume: "44"
+    pages: "671-682"
+    doi: "10.1073/pnas.44.7.671"
+    pmid: "16590258"
+    check: crossref
+  - key: crick1970
+    topic: gene expression
+    authors: ["Crick F"]
+    et_al: false
+    year: 1970
+    title: "Central Dogma of Molecular Biology"
+    journal: "Nature"
+    volume: "227"
+    pages: "561-563"
+    doi: "10.1038/227561a0"
+    pmid: null
+    check: crossref
+  - key: crick1961
+    topic: gene expression
+    authors: ["Crick FHC", "Barnett L", "Brenner S", "Watts-Tobin RJ"]
+    et_al: false
+    year: 1961
+    title: "General Nature of the Genetic Code for Proteins"
+    journal: "Nature"
+    volume: "192"
+    pages: "1227-1232"
+    doi: "10.1038/1921227a0"
+    pmid: null
+    check: crossref
+  - key: nirenberg1961
+    topic: gene expression
+    authors: ["Nirenberg MW", "Matthaei JH"]
+    et_al: false
+    year: 1961
+    title: "The dependence of cell-free protein synthesis in E. coli upon naturally occurring or synthetic polyribonucleotides"
+    journal: "Proceedings of the National Academy of Sciences"
+    volume: "47"
+    pages: "1588-1602"
+    doi: "10.1073/pnas.47.10.1588"
+    pmid: null
+    check: crossref
+  - key: okazaki1968
+    topic: replication
+    authors: ["Okazaki R", "Okazaki T", "Sakabe K", "Sugimoto K", "Sugino A"]
+    et_al: false
+    year: 1968
+    title: "Mechanism of DNA chain growth. I. Possible discontinuity and unusual secondary structure of newly synthesized chains"
+    journal: "Proceedings of the National Academy of Sciences"
+    volume: "59"
+    pages: "598-605"
+    doi: "10.1073/pnas.59.2.598"
+    pmid: "4967086"
+    check: crossref
+  - key: sanger1977seq
+    topic: sequencing and assembly
+    authors: ["Sanger F", "Nicklen S", "Coulson AR"]
+    et_al: false
+    year: 1977
+    title: "DNA sequencing with chain-terminating inhibitors"
+    journal: "Proceedings of the National Academy of Sciences"
+    volume: "74"
+    pages: "5463-5467"
+    doi: "10.1073/pnas.74.12.5463"
+    pmid: "271968"
+    check: crossref
+  - key: sanger1977phix
+    topic: genomes
+    authors: ["Sanger F", "Air GM", "Barrell BG"]
+    et_al: true
+    year: 1977
+    title: "Nucleotide sequence of bacteriophage φX174 DNA"
+    journal: "Nature"
+    volume: "265"
+    pages: "687-695"
+    doi: "10.1038/265687a0"
+    pmid: "870828"
+    check: crossref
+  - key: barrell1976
+    topic: genomes
+    authors: ["Barrell BG", "Air GM", "Hutchison CA"]
+    et_al: false
+    year: 1976
+    title: "Overlapping genes in bacteriophage φX174"
+    journal: "Nature"
+    volume: "264"
+    pages: "34-41"
+    doi: "10.1038/264034a0"
+    pmid: "1004533"
+    check: crossref
+  - key: sanger1982
+    topic: genomes
+    authors: ["Sanger F", "Coulson AR", "Hong GF", "Hill DF", "Petersen GB"]
+    et_al: false
+    year: 1982
+    title: "Nucleotide sequence of bacteriophage λ DNA"
+    journal: "Journal of Molecular Biology"
+    volume: "162"
+    pages: "729-773"
+    doi: "10.1016/0022-2836(82)90546-0"
+    pmid: "6221115"
+    check: crossref
+  - key: wang1979
+    topic: structure
+    authors: ["Wang JC"]
+    et_al: false
+    year: 1979
+    title: "Helical repeat of DNA in solution"
+    journal: "Proceedings of the National Academy of Sciences"
+    volume: "76"
+    pages: "200-203"
+    doi: "10.1073/pnas.76.1.200"
+    pmid: "284332"
+    check: crossref
+  - key: drew1981
+    topic: structure
+    authors: ["Drew HR", "Wing RM", "Takano T", "Broka C", "Tanaka S", "Itakura K", "Dickerson RE"]
+    et_al: false
+    year: 1981
+    title: "Structure of a B-DNA dodecamer: conformation and dynamics"
+    journal: "Proceedings of the National Academy of Sciences"
+    volume: "78"
+    pages: "2179-2183"
+    doi: "10.1073/pnas.78.4.2179"
+    pmid: "6941276"
+    check: crossref
+  - key: luger1997
+    topic: genomes
+    authors: ["Luger K", "Mäder AW", "Richmond RK", "Sargent DF", "Richmond TJ"]
+    et_al: false
+    year: 1997
+    title: "Crystal structure of the nucleosome core particle at 2.8 Å resolution"
+    journal: "Nature"
+    volume: "389"
+    pages: "251-260"
+    doi: "10.1038/38444"
+    pmid: "9305837"
+    check: crossref
+  - key: kornberg1974
+    topic: genomes
+    authors: ["Kornberg RD"]
+    et_al: false
+    year: 1974
+    title: "Chromatin Structure: A Repeating Unit of Histones and DNA"
+    journal: "Science"
+    volume: "184"
+    pages: "868-871"
+    doi: "10.1126/science.184.4139.868"
+    pmid: "4825889"
+    check: crossref
+  - key: ihgsc2001
+    topic: genomes
+    authors: ["International Human Genome Sequencing Consortium"]
+    et_al: false
+    year: 2001
+    title: "Initial sequencing and analysis of the human genome"
+    journal: "Nature"
+    volume: "409"
+    pages: "860-921"
+    doi: "10.1038/35057062"
+    pmid: "11237011"
+    check: crossref
+  - key: ihgsc2004
+    topic: genomes
+    authors: ["International Human Genome Sequencing Consortium"]
+    et_al: false
+    year: 2004
+    title: "Finishing the euchromatic sequence of the human genome"
+    journal: "Nature"
+    volume: "431"
+    pages: "931-945"
+    doi: "10.1038/nature03001"
+    pmid: "15496913"
+    check: crossref
+  - key: nurk2022
+    topic: genomes
+    authors: ["Nurk S", "Koren S", "Rhie A"]
+    et_al: true
+    year: 2022
+    title: "The complete sequence of a human genome"
+    journal: "Science"
+    volume: "376"
+    pages: "44-53"
+    doi: "10.1126/science.abj6987"
+    pmid: "35357919"
+    check: crossref
+  - key: blattner1997
+    topic: genomes
+    authors: ["Blattner FR", "Plunkett G", "Bloch CA"]
+    et_al: true
+    year: 1997
+    title: "The Complete Genome Sequence of Escherichia coli K-12"
+    journal: "Science"
+    volume: "277"
+    pages: "1453-1462"
+    doi: "10.1126/science.277.5331.1453"
+    pmid: "9278503"
+    check: crossref
+  - key: goffeau1996
+    topic: genomes
+    authors: ["Goffeau A", "Barrell BG", "Bussey H"]
+    et_al: true
+    year: 1996
+    title: "Life with 6000 Genes"
+    journal: "Science"
+    volume: "274"
+    pages: "546-567"
+    doi: "10.1126/science.274.5287.546"
+    pmid: "8849441"
+    check: crossref
+  - key: lander1988
+    topic: sequencing and assembly
+    authors: ["Lander ES", "Waterman MS"]
+    et_al: false
+    year: 1988
+    title: "Genomic mapping by fingerprinting random clones: A mathematical analysis"
+    journal: "Genomics"
+    volume: "2"
+    pages: "231-239"
+    doi: "10.1016/0888-7543(88)90007-9"
+    pmid: "3294162"
+    check: crossref
+  - key: ingram1957
+    topic: mutation and biotechnology
+    authors: ["Ingram VM"]
+    et_al: false
+    year: 1957
+    title: "Gene Mutations in Human Hæmoglobin: the Chemical Difference Between Normal and Sickle Cell Hæmoglobin"
+    journal: "Nature"
+    volume: "180"
+    pages: "326-328"
+    doi: "10.1038/180326a0"
+    pmid: "13464827"
+    check: crossref
+  - key: saiki1988
+    topic: mutation and biotechnology
+    authors: ["Saiki RK", "Gelfand DH", "Stoffel S", "Scharf SJ", "Higuchi R", "Horn GT", "Mullis KB", "Erlich HA"]
+    et_al: false
+    year: 1988
+    title: "Primer-Directed Enzymatic Amplification of DNA with a Thermostable DNA Polymerase"
+    journal: "Science"
+    volume: "239"
+    pages: "487-491"
+    doi: "10.1126/science.2448875"
+    pmid: "2448875"
+    check: crossref
+  - key: jinek2012
+    topic: mutation and biotechnology
+    authors: ["Jinek M", "Chylinski K", "Fonfara I", "Hauer M", "Doudna JA", "Charpentier E"]
+    et_al: false
+    year: 2012
+    title: "A Programmable Dual-RNA–Guided DNA Endonuclease in Adaptive Bacterial Immunity"
+    journal: "Science"
+    volume: "337"
+    pages: "816-821"
+    doi: "10.1126/science.1225829"
+    pmid: "22745249"
+    check: crossref
+  - key: bondi1964
+    topic: structure
+    authors: ["Bondi A"]
+    et_al: false
+    year: 1964
+    title: "van der Waals Volumes and Radii"
+    journal: "The Journal of Physical Chemistry"
+    volume: "68"
+    pages: "441-451"
+    doi: "10.1021/j100785a001"
+    pmid: null
+    check: crossref
+  - key: helsgaun2000
+    topic: optimisation
+    authors: ["Helsgaun K"]
+    et_al: false
+    year: 2000
+    title: "An effective implementation of the Lin–Kernighan traveling salesman heuristic"
+    journal: "European Journal of Operational Research"
+    volume: "126"
+    pages: "106-130"
+    doi: "10.1016/s0377-2217(99)00284-2"
+    pmid: null
+    check: crossref
+  - key: ropke2006
+    topic: optimisation
+    authors: ["Ropke S", "Pisinger D"]
+    et_al: false
+    year: 2006
+    title: "An Adaptive Large Neighborhood Search Heuristic for the Pickup and Delivery Problem with Time Windows"
+    journal: "Transportation Science"
+    volume: "40"
+    pages: "455-472"
+    doi: "10.1287/trsc.1050.0135"
+    pmid: null
+    check: crossref
+  - key: auer2002
+    topic: optimisation
+    authors: ["Auer P", "Cesa-Bianchi N", "Fischer P"]
+    et_al: false
+    year: 2002
+    title: "Finite-time Analysis of the Multiarmed Bandit Problem"
+    journal: "Machine Learning"
+    volume: "47"
+    pages: "235-256"
+    doi: "10.1023/a:1013689704352"
+    pmid: null
+    check: crossref
+  - key: glover1989
+    topic: optimisation
+    authors: ["Glover F"]
+    et_al: false
+    year: 1989
+    title: "Tabu Search—Part I"
+    journal: "ORSA Journal on Computing"
+    volume: "1"
+    pages: "190-206"
+    doi: "10.1287/ijoc.1.3.190"
+    pmid: null
+    check: crossref
+  - key: berman2000
+    topic: structure
+    authors: ["Berman HM"]
+    et_al: true
+    year: 2000
+    title: "The Protein Data Bank"
+    journal: "Nucleic Acids Research"
+    volume: "28"
+    pages: "235-242"
+    doi: "10.1093/nar/28.1.235"
+    pmid: null
+    check: crossref
+  - key: nissen2000
+    topic: gene expression
+    authors: ["Nissen P", "Hansen J", "Ban N", "Moore PB", "Steitz TA"]
+    et_al: false
+    year: 2000
+    title: "The Structural Basis of Ribosome Activity in Peptide Bond Synthesis"
+    journal: "Science"
+    volume: "289"
+    pages: "920-930"
+    doi: "10.1126/science.289.5481.920"
+    pmid: "10937990"
+    check: crossref
+  - key: maeshima2010
+    topic: genomes
+    authors: ["Maeshima K", "Hihara S", "Eltsov M"]
+    et_al: false
+    year: 2010
+    title: "Chromatin structure: does the 30-nm fibre exist in vivo?"
+    journal: "Current Opinion in Cell Biology"
+    volume: "22"
+    pages: "291-297"
+    doi: "10.1016/j.ceb.2010.03.001"
+    pmid: "20346642"
+    check: crossref
+  - key: ou2017
+    topic: genomes
+    authors: ["Ou HD", "Phan S", "Deerinck TJ", "Thor A", "Ellisman MH", "O’Shea CC"]
+    et_al: false
+    year: 2017
+    title: "ChromEMT: Visualizing 3D chromatin structure and compaction in interphase and mitotic cells"
+    journal: "Science"
+    volume: "357"
+    pages: ""
+    doi: "10.1126/science.aag0025"
+    pmid: "28751582"
+    check: crossref
+  - key: myers2000
+    topic: sequencing and assembly
+    authors: ["Myers EW", "Sutton GG", "Delcher AL"]
+    et_al: true
+    year: 2000
+    title: "A Whole-Genome Assembly of Drosophila"
+    journal: "Science"
+    volume: "287"
+    pages: "2196-2204"
+    doi: "10.1126/science.287.5461.2196"
+    pmid: null
+    check: crossref
+  - key: fleischmann1995
+    topic: sequencing and assembly
+    authors: ["Fleischmann RD", "Adams MD", "White O"]
+    et_al: true
+    year: 1995
+    title: "Whole-Genome Random Sequencing and Assembly of Haemophilus influenzae Rd"
+    journal: "Science"
+    volume: "269"
+    pages: "496-512"
+    doi: "10.1126/science.7542800"
+    pmid: "7542800"
+    check: crossref
+  - key: alberts2022
+    topic: textbook
+    authors: ["Alberts B", "Heald R", "Johnson A", "Morgan D", "Raff M", "Roberts K", "Walter P"]
+    et_al: false
+    year: 2022
+    title: "Molecular Biology of the Cell, 7th edition"
+    journal: "W. W. Norton, New York (book)"
+    volume: ""
+    pages: ""
+    doi: ""
+    pmid: null
+    check: not-checked
+    note: "Standard textbook. Values quoted from it are marked 'textbook value' in docs/molbio_facts.yaml: the book could not be opened here, so they are TODO-VERIFY against the printed text."
+  - key: pdb1bna
+    topic: data
+    short: "PDB 1BNA"
+    authors: ["Drew HR", "Wing RM", "Takano T", "Broka C", "Tanaka S", "Itakura K", "Dickerson RE"]
+    et_al: false
+    year: 1981
+    title: "PDB entry 1BNA: structure of a B-DNA dodecamer (coordinate file)"
+    journal: "RCSB Protein Data Bank, https://www.rcsb.org/structure/1BNA"
+    volume: ""
+    pages: ""
+    doi: "10.2210/pdb1BNA/pdb"
+    pmid: null
+    check: file
+    note: "File data/raw/1BNA.pdb, downloaded 2026-11-14 from files.rcsb.org, SHA-256 in data/raw/SHA256SUMS. PDB data are in the public domain (CC0)."
+  - key: refseq_phix174
+    topic: data
+    short: "NCBI NC_001422.1"
+    authors: ["NCBI Reference Sequence Database"]
+    et_al: false
+    year: 2023
+    title: "Escherichia phage phiX174, complete genome, accession NC_001422.1 (sequence and feature table)"
+    journal: "NCBI Nucleotide, https://www.ncbi.nlm.nih.gov/nuccore/NC_001422.1"
+    volume: ""
+    pages: ""
+    doi: ""
+    pmid: null
+    check: file
+    note: "Sequence in data/raw (SHA-256 checked). Gene coordinates in configs/phix174_genes.yaml were read from the feature table on 2026-11-14 and are re-checked against the sequence by a test."
+  - key: refseq_lambda
+    topic: data
+    short: "NCBI NC_001416.1"
+    authors: ["NCBI Reference Sequence Database"]
+    et_al: false
+    year: 2023
+    title: "Enterobacteria phage lambda, complete genome, accession NC_001416.1"
+    journal: "NCBI Nucleotide, https://www.ncbi.nlm.nih.gov/nuccore/NC_001416.1"
+    volume: ""
+    pages: ""
+    doi: ""
+    pmid: null
+    check: file
+    note: "Sequence in data/raw (SHA-256 checked)."
+  - key: ncbi_gencode
+    topic: data
+    short: "NCBI genetic codes"
+    authors: ["National Center for Biotechnology Information"]
+    et_al: false
+    year: 0
+    title: "The Genetic Codes (translation tables 1 and 11)"
+    journal: "NCBI Taxonomy, https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi"
+    volume: ""
+    pages: ""
+    doi: ""
+    pmid: null
+    check: software
+    note: "The codon table of this project is compared by a test with the copy of these tables shipped in Biopython (Bio.Data.CodonTable)."

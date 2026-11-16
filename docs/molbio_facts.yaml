@@ -1,0 +1,202 @@
+# Numbers and statements quoted from the literature in the molecular-biology pages and the lecture.
+# 'source' is a key of docs/references.yaml. 'check' says how the value was checked:
+#   abstract      the value was read in the abstract of the paper (PubMed record) on 2026-11-14
+#   corroborated  classic value of the cited paper, not re-read there, but it agrees with a
+#                 measurement this program makes on real data (the measurement is shown next to it)
+#   textbook      standard textbook value, not re-read at the source: TODO-VERIFY
+# Values measured by the program itself (helix geometry of 1BNA, base composition, the codon
+# table, the genes of phiX174) are not listed here: they are computed when the page is drawn.
+facts:
+  - key: rise
+    topic: structure
+    label: "Rise per base pair"
+    value: "0.34 nm"
+    source: watson1953
+    check: corroborated
+    statement: "Neighbouring base pairs are stacked 0.34 nm (3.4 angstrom) apart along the helix axis."
+  - key: repeat_fibre
+    topic: structure
+    label: "Base pairs per turn, B-form fibre"
+    value: "10.0"
+    source: wang1979
+    check: abstract
+    statement: "The classic fibre model of B-DNA has 10.0 base pairs per turn."
+  - key: repeat_solution
+    topic: structure
+    label: "Base pairs per turn in solution"
+    value: "10.4 ± 0.1"
+    source: wang1979
+    check: abstract
+    statement: "In solution under physiological conditions the helix repeats every 10.4 base pairs."
+  - key: repeat_crystal
+    topic: structure
+    label: "Centre of the 1BNA crystal"
+    value: "36.9° per step"
+    source: drew1981
+    check: abstract
+    statement: "In the centre of the 1BNA dodecamer the mean rotation is 36.9 degrees per step (9.8 base pairs per turn); the helix axis is bent by 19 degrees."
+  - key: diameter
+    topic: structure
+    label: "Diameter of the double helix"
+    value: "about 2 nm"
+    source: watson1953
+    check: corroborated
+    statement: "The phosphorus atoms lie about 1 nm from the axis, so the helix is about 2 nm (20 angstrom) wide."
+  - key: genetic_material
+    topic: structure
+    label: "DNA is the genetic material"
+    value: "1944 and 1952"
+    source: avery1944
+    check: textbook
+    statement: "Avery, MacLeod and McCarty (1944) and Hershey and Chase (1952) showed that DNA, not protein, carries hereditary information."
+  - key: semiconservative
+    topic: replication
+    label: "Replication is semiconservative"
+    value: "1 old + 1 new strand"
+    source: meselson1958
+    check: textbook
+    statement: "Each daughter double helix keeps one old strand and receives one new strand (Meselson and Stahl 1958)."
+  - key: okazaki
+    topic: replication
+    label: "Okazaki fragments"
+    value: "1,000 to 2,000 nt (bacteria)"
+    source: alberts2022
+    check: textbook
+    statement: "The lagging strand is made in short pieces (Okazaki et al. 1968): about 1,000 to 2,000 nucleotides in bacteria and 100 to 200 in eukaryotes."
+  - key: fork_speed
+    topic: replication
+    label: "Speed of a bacterial replication fork"
+    value: "up to about 1,000 nt per second"
+    source: alberts2022
+    check: textbook
+    statement: "A bacterial replication fork copies up to about 1,000 nucleotides per second."
+  - key: fidelity
+    topic: replication
+    label: "Fidelity of replication"
+    value: "about 1 error per 10⁹ to 10¹⁰ nt"
+    source: alberts2022
+    check: textbook
+    statement: "Base pairing, proofreading by the polymerase and mismatch repair together leave about one error per billion to ten billion nucleotides copied."
+  - key: ribozyme
+    topic: gene expression
+    label: "The ribosome is a ribozyme"
+    value: "RNA makes the peptide bond"
+    source: nissen2000
+    check: abstract
+    statement: "The peptide bond is made by ribosomal RNA: no protein side chain is closer than about 1.8 nm to the bond being formed."
+  - key: central_dogma
+    topic: gene expression
+    label: "Central dogma"
+    value: "DNA → RNA → protein"
+    source: crick1970
+    check: textbook
+    statement: "Sequence information flows from nucleic acid to protein and never back from protein to nucleic acid."
+  - key: triplet
+    topic: gene expression
+    label: "The code is read in triplets"
+    value: "3 nucleotides = 1 amino acid"
+    source: crick1961
+    check: textbook
+    statement: "The code is read three nucleotides at a time from a fixed start, without commas and without overlap (Crick et al. 1961)."
+  - key: phix_first
+    topic: genomes
+    label: "First DNA genome sequenced"
+    value: "phiX174, 1977"
+    source: sanger1977phix
+    check: abstract
+    statement: "Bacteriophage phiX174 was the first DNA genome to be sequenced; the 1977 paper reported about 5,375 nucleotides (the reference sequence used here has 5,386)."
+  - key: phix_overlap
+    topic: genomes
+    label: "Overlapping genes"
+    value: "one DNA stretch, two proteins"
+    source: sanger1977phix
+    check: abstract
+    statement: "In phiX174 two pairs of genes are coded by the same region of DNA in different reading frames."
+  - key: hinfluenzae
+    topic: genomes
+    label: "Haemophilus influenzae Rd"
+    value: "1,830,137 bp"
+    number: 1830137
+    source: fleischmann1995
+    check: abstract
+    statement: "The first genome of a free-living organism, obtained by whole-genome shotgun sequencing and assembly (1995)."
+  - key: ecoli
+    topic: genomes
+    label: "Escherichia coli K-12"
+    value: "4,639,221 bp"
+    number: 4639221
+    source: blattner1997
+    check: abstract
+    statement: "The genome of the laboratory bacterium E. coli K-12, with 4,288 annotated protein-coding genes."
+  - key: yeast
+    topic: genomes
+    label: "Saccharomyces cerevisiae (yeast)"
+    value: "12,068 kb"
+    number: 12068000
+    source: goffeau1996
+    check: abstract
+    statement: "The first sequenced genome of a eukaryote: 16 chromosomes, 5,885 potential protein-coding genes."
+  - key: human
+    topic: genomes
+    label: "Human genome (T2T-CHM13)"
+    value: "3.055 billion bp"
+    number: 3055000000
+    source: nurk2022
+    check: abstract
+    statement: "The first complete, gapless sequence of a human genome (one haploid set of chromosomes)."
+  - key: human_genes
+    topic: genomes
+    label: "Human protein-coding genes"
+    value: "20,000 to 25,000"
+    source: ihgsc2004
+    check: abstract
+    statement: "The human genome encodes only 20,000 to 25,000 protein-coding genes."
+  - key: nucleosome
+    topic: genomes
+    label: "Nucleosome core particle"
+    value: "146 bp around 8 histones"
+    source: luger1997
+    check: abstract
+    statement: "In eukaryotes 146 base pairs of DNA are wound around an octamer of histone proteins."
+  - key: chromatin_fibre
+    topic: genomes
+    label: "Chromatin in the cell"
+    value: "a disordered chain, 5 to 24 nm"
+    source: ou2017
+    check: abstract
+    statement: "The regular 30-nm fibre of the classic hierarchical model is seen in vitro; in intact cells chromatin is a disordered chain 5 to 24 nm in diameter (Ou et al. 2017; Maeshima et al. 2010)."
+  - key: chromosomes_human
+    topic: genomes
+    label: "Human chromosomes"
+    value: "46 (23 pairs)"
+    source: alberts2022
+    check: textbook
+    statement: "A human body cell carries two sets of 23 chromosomes."
+  - key: sickle
+    topic: mutation and biotechnology
+    label: "Sickle-cell haemoglobin"
+    value: "glutamate → valine"
+    source: ingram1957
+    check: textbook
+    statement: "A single base substitution in the beta-globin gene replaces one glutamate by valine and causes sickle-cell disease (Ingram 1957)."
+  - key: pcr
+    topic: mutation and biotechnology
+    label: "Polymerase chain reaction"
+    value: "more than 10 million-fold"
+    source: saiki1988
+    check: abstract
+    statement: "With the heat-stable DNA polymerase of Thermus aquaticus a single-copy sequence is amplified more than ten million times."
+  - key: crispr
+    topic: mutation and biotechnology
+    label: "CRISPR-Cas9"
+    value: "an RNA-guided DNA cut"
+    source: jinek2012
+    check: abstract
+    statement: "The protein Cas9 cuts both strands of DNA at the site that pairs with its guide RNA, and the guide can be programmed."
+  - key: sanger_method
+    topic: sequencing and assembly
+    label: "Chain-termination sequencing"
+    value: "Sanger, 1977"
+    source: sanger1977seq
+    check: abstract
+    statement: "Dideoxynucleotides stop DNA polymerase at a known letter; the lengths of the stopped copies spell the sequence."

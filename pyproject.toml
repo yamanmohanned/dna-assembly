@@ -56,6 +56,11 @@ select = ["E", "F", "I", "UP", "B", "SIM", "NPY"]
 "genomeasm/appkit/figs.py" = ["E501"]
 # generated documents: long sentences and formulas
 "genomeasm/docgen/*.py" = ["E501"]
+# lecture, diagrams and animation scenarios: long sentences of slide and caption text
+"genomeasm/appkit/lecture.py" = ["E501"]
+"genomeasm/appkit/biology.py" = ["E501"]
+"genomeasm/molbio/diagrams.py" = ["E501"]
+"genomeasm/molbio/processes.py" = ["E501"]
 
 [tool.mypy]
 python_version = "3.11"
